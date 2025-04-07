@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from '../context/CartContextProv';
+import { useCart } from '../Context/CartContext';
 
 const Cart = ({ onClose }) => {
     const { cart, updateQuantity } = useCart();
