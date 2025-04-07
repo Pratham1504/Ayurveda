@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Headings */
+.blog-content h1 {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.blog-content h2 {
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-bottom: 1.25rem;
+}
+
+.blog-content h3 {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+/* Paragraph */
+.blog-content p {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  margin-bottom: 0.8rem;
+}
+
+/* Unordered List */
+.blog-content ul {
+  list-style-type: disc; /* Bullet points */
+  padding-left: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.blog-content ul li {
+  margin-bottom: 0.5rem; /* Space between list items */
+  font-size: 0.8rem;
+}
+
+/* Ordered List */
+.blog-content ol {
+  list-style-type: decimal; /* Numbered list */
+  padding-left: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.blog-content ol li {
+  margin-bottom: 0.5rem;
+}
+
+/* Blockquote */
+.blog-content blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #555;
+  margin: 1.5rem 1.5rem;
+}
+
+/* Anchor Links */
+.blog-content a {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.blog-content a:hover {
+  color: #0056b3;
+}
+
+/* Images */
+.blog-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Horizontal Rule */
+.blog-content hr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 2rem 0;
+}
