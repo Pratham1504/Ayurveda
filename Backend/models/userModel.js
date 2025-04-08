@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const addressSchema = require('./addressModel');
+const Address = require("./addressModel");
 
 // Define user schema
 const userSchema = new mongoose.Schema({
@@ -36,7 +36,10 @@ const userSchema = new mongoose.Schema({
       ref : "Orders"
     }
   ],
-  address: [addressSchema] 
+  address: [{
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "Address"
+  }] 
 });
 
 const User = mongoose.model("User", userSchema);

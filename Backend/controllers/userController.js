@@ -75,13 +75,11 @@ exports.verifyotp = async (req, res) => {
       return res.status(400).json({
         message: "Wrong Otp",
       });
-      // TODO: FIX the Address working part : Address ka data idhar sahi se nhi aa rha
     await User.create({
       email: verify.user.email,
       password: verify.user.password,
       fullName: verify.user.fullName,
       mobileNo: verify.user.mobileNo,
-      //address: verify.user.address,
     });
 
     res.status(201).json({
@@ -111,10 +109,9 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-// TODO: Save the token in Cookies-> add cookie parser and all
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email, role: user.role },
+      { _id: user._id},
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -139,14 +136,14 @@ exports.login = async (req, res) => {
 
 exports.profile = async (req, res) => {
   try {
-    const user = await User.findbyId(req.user?.userId);
+    const user = await User.findById(req.user?._id).populate("address");;
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     return res.status(200).json({ message: "User fetched ", user });
   } catch (error) {
-    console.error("error");
+    console.error(error);
     return res.status(500).json({ message: "Error in fetching profile" });
   }
 };
