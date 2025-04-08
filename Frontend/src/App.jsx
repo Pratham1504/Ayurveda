@@ -1,35 +1,35 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Pages & Components
-import Home from './pages/Home';
-import BlogPage from './pages/Blogs';
-import Products from './pages/Products'; // Import the Products page
-import Navbar from './components/Navbars';
+import Home from './Pages/Home';
+import BlogPage from './Pages/Blogs';
+import Products from './Pages/Products'; // Import the Products page
+import Navbar from './Components/Navbar';
 import Footer from './components/Footer';
 import BlogDetail from './components/BlogDetail';
-import Cart from './components/cartComponent'; // Import the Cart component
-import { CartProvider } from './context/CartContextProv'; // Import CartProvider
+import Cart from './components/Cart'; // Import the Cart component
+import { CartProvider } from './Context/CartContext'; // Import CartProvider
 import ProdDetail from './components/ProdDetail';
 import { useState } from 'react';
-import AdminBlogs from './pages/AdminBlogs';
-import AdminProduct from './pages/AdminProduct';
-import AdminEbooks from './pages/AdminEbooks';
-import Admin from './pages/AdminPage';
+import AdminBlogs from './Pages/AdminBlogs';
+import AdminProduct from './Pages/AdminProduct';
+import AdminEbooks from './Pages/AdminEbooks';
+import Admin from './Pages/AdminPage';
 import BlogEditor from './components/BlogEditor';
 import CreateEbook from './components/CreateEbook';
 import { NotificationProvider } from './context/NotificationContext';
-import Ebook from './pages/ebooks';
+import Ebook from './Pages/ebooks';
 
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
 
   return (
-    <div className="App">
+    <div className="App w-full lg:w-3/4 mx-auto">
       <BrowserRouter>
         <CartProvider> {/* Wrap with CartProvider */}
           <NotificationProvider>
             <Navbar />
-            <div className="pages">
+            <div className="Pages">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/blogs" element={<BlogPage />} />

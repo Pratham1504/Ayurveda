@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+// import ReactQuill from 'react-quill';
+// import 'react-quill/dist/quill.snow.css';
 import { NotificationContext } from '../context/NotificationContext';
 
 const BlogEditor = () => {
@@ -100,12 +100,12 @@ const BlogEditor = () => {
 
         <div className="mb-10">
           <label className="block font-bold mb-4">Description</label>
-          <ReactQuill
+          {/* <ReactQuill
             value={formData.description}
             onChange={handleDescriptionChange}
             className="w-full h-64 p-2"
             theme="snow"
-          />
+          /> */}
         </div>
 
         <div className="mb-4">

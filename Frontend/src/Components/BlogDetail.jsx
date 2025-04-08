@@ -5,8 +5,8 @@ import moment from 'moment';
 import twitterIcon from '../Images/Icons/X.webp';
 import whatsappIcon from '../Images/Icons/Whatsapp-logo.webp';
 import instagramIcon from '../Images/Icons/Instagram.webp';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+// import ReactQuill from 'react-quill';
+// import 'react-quill/dist/quill.snow.css';
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -95,12 +95,12 @@ const BlogDetail = () => {
             <span className="text-sm">{new Date(blog.createdAt).toLocaleDateString()}</span>
           </div>
 
-          <ReactQuill
+          {/* <ReactQuill
             value={blog.description}
             readOnly={true}
             theme="bubble"
             className="text-gray-600 mb-4 blog-content"
-          />
+          /> */}
 
           <div className="flex items-center space-x-4 mb-4">
             <button
