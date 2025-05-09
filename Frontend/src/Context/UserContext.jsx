@@ -13,7 +13,7 @@ export const UserContextProvider = ({ children }) => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  async function loginUser(email, password, navigate, fetchMyCourse) {
+  async function loginUser(email, password, navigate) {
     setBtnLoading(true);
     try {
       const { data } = await axios.post(`${server}/api/user/login`, {
@@ -30,7 +30,6 @@ export const UserContextProvider = ({ children }) => {
       setIsAuth(true);
       setBtnLoading(false);
       navigate("/");
-      fetchMyCourse();
     } catch (error) {
       setBtnLoading(false);
       setIsAuth(false);
@@ -38,13 +37,14 @@ export const UserContextProvider = ({ children }) => {
     }
   }
 
-  async function registerUser(name, email, password, navigate) {
+  async function registerUser(fullName, email, mobileNo, password,  navigate) {
     setBtnLoading(true);
     try {
       const { data } = await axios.post(`${server}/api/user/signup`, {
-        name,
+        fullName,
         email,
         password,
+        mobileNo
       });
 
       toast.success(data.message);

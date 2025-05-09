@@ -6,7 +6,7 @@ const { sendMail, sendForgotMail } = require("../middleware/sendMail");
 // Register Controller
 exports.signup = async (req, res) => {
   try {
-    const { email, password, fullName, mobileNo, address } = req.body;
+    const { email, password, fullName, mobileNo } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
