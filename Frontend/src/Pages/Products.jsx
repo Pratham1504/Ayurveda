@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useCart } from '../Context/CartContext';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { SlidersHorizontal } from 'lucide-react';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const { cart, addToCart, updateQuantity } = useCart(); // Using cart context
+    const [companyFilter, setCompanyFilter] = useState('');
+    const [ratingFilter, setRatingFilter] = useState(0);
+    const [priceRange, setPriceRange] = useState([0, 10000]);
+    const [showFilters, setShowFilters] = useState(false);
+    const { cart, addToCart, updateQuantity } = useCart();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/products'); // Adjust URL if necessary
+                const response = await axios.get('http://localhost:4000/api/products');
                 setProducts(response.data);
             } catch (err) {
                 console.error(err);
@@ -21,102 +27,166 @@ const Products = () => {
         fetchProducts();
     }, []);
 
-    // Filter products based on the search term (by name or description)
-    const filteredProducts = products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const companies = [...new Set(products.map(p => p.company))];
 
-    // Get product quantity from the cart for a specific product
+    const filteredProducts = products.filter(product => {
+        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.description.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCompany = !companyFilter || product.company === companyFilter;
+        const matchesRating = (product.ratings.reduce((acc, r) => acc + r.rating, 0) / (product.ratings.length || 1)) >= ratingFilter;
+        const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+        return matchesSearch && matchesCompany && matchesRating && matchesPrice;
+    });
+
     const getProductQuantity = (_productId) => {
         const cartItem = cart.find(item => item._id === _productId);
         return cartItem ? cartItem.quantity : 0;
     };
 
-    // Calculate discount percentage and discounted price
     const calculateDiscount = (price, MRP) => {
         const discount = ((MRP - price) / MRP) * 100;
-        return discount.toFixed(0); // Returns discount as a percentage
+        return discount.toFixed(0);
     };
 
     return (
-        <div className="container px-4 mx-auto max-w-screen-xl lg:py-8 lg:px-6">
-            <h1 className="text-3xl font-bold text-center mb-6">Products</h1>
+        <div className="font-sans container px-4 mx-auto max-w-screen-xl lg:py-10 lg:px-6 font-sans text-black">
+            <h1 className="text-4xl font-semibold text-center mb-10 text-black">Browse Our Products</h1>
 
-            {/* Search Input */}
-            <input
-                type="text"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="border border-gray-300 rounded-md p-3 mb-6 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="flex items-center mb-6 gap-4">
+                <input
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="border border-sky-300 rounded-md px-4 py-2 w-3/4 focus:outline-none focus:ring-2 focus:ring-sky-400"
+                />
+                <button
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="w-1/4 flex justify-center items-center gap-2 border border-sky-300 px-3 py-2 rounded-md text-sky-700 hover:bg-sky-50"
+                >
+                    <SlidersHorizontal size={16} /> Filters
+                </button>
+            </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            {showFilters && (
+                <div className="mb-10 p-4 bg-white rounded-lg shadow-sm border border-sky-100 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="flex flex-col gap-2">
+                        <span className="text-sm text-gray-700 font-medium">Company</span>
+                        <select
+                            value={companyFilter}
+                            onChange={(e) => setCompanyFilter(e.target.value)}
+                            className="border border-sky-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-sky-400"
+                        >
+                            <option value="">All Companies</option>
+                            {companies.map(company => <option key={company} value={company}>{company}</option>)}
+                        </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <span className="text-sm text-gray-700 font-medium">Ratings</span>
+                        <select
+                            value={ratingFilter}
+                            onChange={(e) => setRatingFilter(parseFloat(e.target.value))}
+                            className="border border-sky-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-sky-400"
+                        >
+                            <option value={0}>All Ratings</option>
+                            <option value={4}>4 Stars & up</option>
+                            <option value={3}>3 Stars & up</option>
+                            <option value={2}>2 Stars & up</option>
+                        </select>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <span className="text-sm text-gray-700 font-medium">Price Range (₹)</span>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="number"
+                                min="0"
+                                max="10000"
+                                value={priceRange[0]}
+                                onChange={(e) => setPriceRange([+e.target.value, priceRange[1]])}
+                                className="border border-sky-300 rounded-md p-2 w-full focus:outline-none"
+                                placeholder="Min ₹"
+                            />
+                            <input
+                                type="number"
+                                min="0"
+                                max="10000"
+                                value={priceRange[1]}
+                                onChange={(e) => setPriceRange([priceRange[0], +e.target.value])}
+                                className="border border-sky-300 rounded-md p-2 w-full focus:outline-none"
+                                placeholder="Max ₹"
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
                 {filteredProducts.map(product => {
-                    const quantity = getProductQuantity(product._id); // Get the current quantity for this product
-
-                    // Calculate the discount percentage and final price
+                    const quantity = getProductQuantity(product._id);
                     const discount = calculateDiscount(product.price, product.MRP);
 
                     return (
-                        <Link key={product._id} to={`/products/${product._id}`}>
-                            <div key={product._id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between h-full relative">
-                                {/* Discount Badge */}
-                                {discount > 0 && (
-                                    <span className="absolute top-2 left-2 bg-blue-500 text-white text-sm px-2 py-1 rounded">
-                                        {discount}% off
-                                    </span>
-                                )}
+                        <div
+                            key={product._id}
+                            className="bg-white rounded-xl shadow hover:shadow-lg transition duration-300 transform hover:-translate-y-1 p-5 flex flex-col cursor-pointer border border-sky-100 relative"
+                            onClick={() => navigate(`/products/${product._id}`)}
+                        >
+                            {discount > 0 && (
+                                <span className="absolute top-2 left-2 bg-sky-200 text-black text-xs px-2 py-1 rounded">
+                                    {discount}% OFF
+                                </span>
+                            )}
 
-                                {/* Product Image */}
-                                <img src={product.image} alt={product.name} className="mb-4 w-full h-40 object-cover rounded" />
+                            <img src={product.image} alt={product.name} className="mb-3 w-full h-40 object-cover rounded" />
 
-                                {/* Product Title */}
-                                <h2 className="text-l font-bold ">{product.name}</h2>
+                            <h2 className="font-sans text-base font-medium text-black mb-1 truncate">{product.name}</h2>
+                            <p className="text-sky-600 text-sm mb-1">{product.company}</p>
 
-                                {/* Company Name */}
-                                <p className="text-gray-600 text-sm">{product.company}</p>
-
-                                {/* Rating */}
-                                <div className="flex items-center">
-                                    <span className="text-yellow-500 mr-1">&#9733;</span>
-                                    <span className="text-sm">{(product.ratings.length > 0 ? (product.ratings.reduce((acc, r) => acc + r.rating, 0) / product.ratings.length).toFixed(1) : 'No Ratings')}</span>
-                                    <span className="text-gray-500 text-xs ml-1">({product.ratings.length})</span>
-                                </div>
-
-                                {/* Price */}
-                                <div className="flex items-center mt-auto">
-                                    <span className="text-xl font-semibold">₹{product.price}</span>
-                                    <span className="line-through text-gray-500 text-sm ml-2">₹{product.MRP}</span>
-                                </div>
-
-                                <div className="mt-auto">
-                                    {/* If product is added, show quantity control, else show Add to Cart button */}
-                                    {quantity > 0 ? (
-                                        <div className="flex items-center justify-between mt-2">
-                                            <button
-                                                onClick={() => updateQuantity(product._id, -1)}
-                                                className="bg-blue-500 text-white px-3 py-1 rounded-l-md transition duration-300 hover:bg-blue-600 text-sm">
-                                                -
-                                            </button>
-                                            <span className="px-3 py-1 text-lg">{quantity}</span>
-                                            <button
-                                                onClick={() => updateQuantity(product._id, 1)}
-                                                className="bg-blue-500 text-white px-3 py-1 rounded-r-md transition duration-300 hover:bg-blue-600 text-sm">
-                                                +
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <button
-                                            onClick={() => addToCart(product)}
-                                            className="bg-green-500 text-white px-4 py-2 rounded-md transition duration-300 hover:bg-green-600 w-full text-center text-sm mt-2">
-                                            Add to Cart
-                                        </button>
-                                    )}
-                                </div>
+                            <div className="flex items-center justify-between text-sm text-black mt-1 mb-2">
+                                <p className="text text-gray-600 line-through">₹{product.MRP}</p>
+                                <p className='text-xl'>₹{product.price}</p>
                             </div>
-                        </Link>
+
+                            <div className="flex items-center text-sm text-black mb-2">
+                                <span className="mr-1">★</span>
+                                <span>{(product.ratings.length > 0 ? (product.ratings.reduce((acc, r) => acc + r.rating, 0) / product.ratings.length).toFixed(1) : 'No Ratings')}</span>
+                                <span className="text-black-300 ml-1">({product.ratings.length})</span>
+                            </div>
+
+                            {quantity > 0 ? (
+                                <div className="flex items-center justify-between mt-auto">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            updateQuantity(product._id, -1);
+                                        }}
+                                        className="bg-sky-600 text-white px-3 py-1 rounded-l-md hover:bg-sky-700 text-sm"
+                                    >
+                                        -
+                                    </button>
+                                    <span className="px-3 py-1 text-lg">{quantity}</span>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            updateQuantity(product._id, 1);
+                                        }}
+                                        className="bg-sky-600 text-white px-3 py-1 rounded-r-md hover:bg-sky-700 text-sm"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        addToCart(product);
+                                    }}
+                                    className="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition mt-auto text-sm"
+                                >
+                                    Add to Cart
+                                </button>
+                            )}
+                        </div>
                     );
                 })}
             </div>
