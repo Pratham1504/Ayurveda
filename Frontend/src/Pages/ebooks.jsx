@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ArrowDownTrayIcon } from '@heroicons/react/24/solid'; // Download icon
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/solid'; // Chevron icons
+import { ArrowDownTrayIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
 const Ebooks = () => {
     const [ebooks, setEbooks] = useState([]);
@@ -10,87 +9,94 @@ const Ebooks = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [expandedRow, setExpandedRow] = useState(null);
 
-    // Fetch all ebooks
     useEffect(() => {
         const fetchEbooks = async () => {
-            setLoading(true);
             try {
                 const response = await axios.get('http://localhost:4000/api/ebooks');
                 setEbooks(response.data);
-                setLoading(false);
             } catch (err) {
                 console.error("Error fetching ebooks:", err);
                 setError('Failed to fetch ebooks.');
+            } finally {
                 setLoading(false);
             }
         };
         fetchEbooks();
     }, []);
 
-    // Filter ebooks based on search term
     const filteredEbooks = ebooks.filter(ebook =>
         ebook.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         ebook.author.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Handle row expansion
     const handleRowClick = (id) => {
         setExpandedRow(expandedRow === id ? null : id);
     };
 
-    if (loading) return <div className="text-center">Loading...</div>;
-    if (error) return <div className="text-red-500">{error}</div>;
+    if (loading) return <div className="text-center text-gray-500">Loading...</div>;
+    if (error) return <div className="text-red-500 text-center">{error}</div>;
 
     return (
-        <div className="p-6 bg-white py-8 px-4 mx-auto max-w-screen-xl lg:py-8 lg:px-6">
-            <h2 className="text-2xl font-bold text-green-700 mb-4">| Ebooks</h2>
+        <div className="bg-white py-10 px-6 mx-auto max-w-screen-xl font-sans">
+            <h2 className="text-3xl font-bold text-sky-600 mb-6 border-b-2 border-sky-200 inline-block">Ebooks</h2>
+
             <input
                 type="text"
                 placeholder="Search ebooks..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="mb-4 p-2 border border-gray-300 rounded w-full"
+                className="mb-6 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-sky-500"
             />
-            <table className="min-w-full bg-white border border-gray-200">
-                <thead>
-                    <tr>
-                        <th className="py-2 px-4 border-b text-center">Title</th>
-                        <th className="py-2 px-4 border-b text-center">Author</th>
-                        <th className="py-2 px-4 border-b" /> {/* Empty header for download icon */}
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredEbooks.map((ebook, index) => (
-                        <React.Fragment key={ebook._id}>
-                            <tr onClick={() => handleRowClick(ebook._id)} className={`cursor-pointer hover:bg-gray-100 ${index % 2 === 1 ? 'bg-gray-50' : ''}`} style={{ minHeight: '56px' }}>
-                                <td className="py-2 px-4 border-b flex items-center">
-                                    {/* Display expansion icon fixed to the left */}
-                                    {expandedRow === ebook._id ? (
-                                        <ChevronDownIcon className="h-5 w-5 text-black mr-2" />
-                                    ) : (
-                                        <ChevronRightIcon className="h-5 w-5 text-black mr-2" />
-                                    )}
-                                    <span className="flex-grow text-center text-sm lg:text-base">{ebook.title}</span>
-                                </td>
-                                <td className="py-2 px-4 border-b text-center text-sm lg:text-base">{ebook.author}</td>
-                                <td className="py-2 px-4 border-b text-right">
-                                    <a href={`http://localhost:4000/api/ebooks/download/${ebook.fileName}`} target="_blank" rel="noopener noreferrer">
-                                        <ArrowDownTrayIcon className="h-5 w-5 text-blue-500 inline" />
-                                    </a>
-                                </td>
-                            </tr>
-                            {expandedRow === ebook._id && (
-                                <tr>
-                                    <td colSpan="3" className="text-xs lg:text-sm text-gray-500 bg-gray-100 py-2 px-4 border-b">
-                                        <p><strong>Description:</strong> {ebook.description}</p>
-                                        <p><strong>Uploaded At:</strong> {new Date(ebook.uploadedAt).toLocaleDateString()}</p>
+
+            <div className="overflow-x-auto shadow rounded-lg border border-gray-200">
+                <table className="min-w-full bg-white">
+                    <thead className="bg-sky-50">
+                        <tr>
+                            <th className="py-3 px-4 text-left text-gray-700 text-sm font-semibold">Title</th>
+                            <th className="py-3 px-4 text-left text-gray-700 text-sm font-semibold">Author</th>
+                            <th className="py-3 px-4 text-right text-gray-700 text-sm font-semibold">Download</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredEbooks.map((ebook, index) => (
+                            <React.Fragment key={ebook._id}>
+                                <tr
+                                    onClick={() => handleRowClick(ebook._id)}
+                                    className={`cursor-pointer transition hover:bg-sky-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                                >
+                                    <td className="py-3 px-4 flex items-center gap-2 text-gray-800">
+                                        {expandedRow === ebook._id ? (
+                                            <ChevronDownIcon className="h-5 w-5 text-sky-600" />
+                                        ) : (
+                                            <ChevronRightIcon className="h-5 w-5 text-sky-600" />
+                                        )}
+                                        {ebook.title}
+                                    </td>
+                                    <td className="py-3 px-4 text-gray-700">{ebook.author}</td>
+                                    <td className="py-3 px-4 text-right">
+                                        <a
+                                            href={`http://localhost:4000/api/ebooks/download/${ebook.fileName}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center justify-center bg-sky-500 hover:bg-sky-600 text-white p-1.5 rounded-md"
+                                        >
+                                            <ArrowDownTrayIcon className="h-5 w-5" />
+                                        </a>
                                     </td>
                                 </tr>
-                            )}
-                        </React.Fragment>
-                    ))}
-                </tbody>
-            </table>
+                                {expandedRow === ebook._id && (
+                                    <tr className="bg-sky-50">
+                                        <td colSpan="3" className="py-4 px-6 text-sm text-gray-700">
+                                            <p><span className="font-semibold">Description:</span> {ebook.description}</p>
+                                            <p><span className="font-semibold">Uploaded At:</span> {new Date(ebook.uploadedAt).toLocaleDateString()}</p>
+                                        </td>
+                                    </tr>
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
