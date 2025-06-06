@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import improveImmunityImg from "../Images/Improves-immunity.webp";
-import naturalHealingImg from "../Images/Natural-healing.webp";
-import balanceBodyMindImg from "../Images/Balance-body-mind.webp";
 
 const Home = () => {
     const [products, setProducts] = useState([]);
@@ -44,9 +41,8 @@ const Home = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentSlide((prevSlide) => (prevSlide + 1) % blogs.length);
-        }, 5000); // Change slide every 5 seconds
-
-        return () => clearInterval(interval); // Cleanup interval on unmount
+        }, 5000);
+        return () => clearInterval(interval);
     }, [blogs]);
 
     const handleNextSlide = () => {
@@ -57,129 +53,85 @@ const Home = () => {
         setCurrentSlide((prevSlide) => (prevSlide - 1 + blogs.length) % blogs.length);
     };
 
-    // Function to truncate HTML description
     const truncateHtml = (html, maxLength) => {
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = html;
-
-        // Remove HTML tags
         const textContent = tempDiv.textContent || tempDiv.innerText || "";
-
-        // Truncate to maxLength
         return textContent.length > maxLength 
             ? textContent.substring(0, maxLength) + '...' 
             : textContent;
     };
 
-    // Function to calculate discount percentage
     const calculateDiscount = (price, MRP) => {
-        if (!MRP || price >= MRP) return 0; // Return 0 if no MRP or price is equal to or greater than MRP
+        if (!MRP || price >= MRP) return 0;
         const discount = ((MRP - price) / MRP) * 100;
-        return discount.toFixed(0); // Returns discount as a percentage
+        return discount.toFixed(0);
     };
 
-    if (loading) return <div className="text-center">Loading...</div>;
-    if (error) return <div className="text-red-500">Error fetching data: {error.message}</div>;
+    if (loading) return <div className="text-center py-20 text-gray-500 text-xl">Loading...</div>;
+    if (error) return <div className="text-red-500 text-center py-20">Error fetching data: {error.message}</div>;
 
     return (
-        <div className="scrollable-home">
-            {/* Benefits of Ayurveda Section */}
-            <section className="py-4 ">
-                <div className="bg-green-100 px-4 mx-auto max-w-screen-xl lg:py-8 lg:px-6">
-                    <h2 className="text-3xl font-bold text-green-600 mb-6">| Benefits of Ayurveda</h2>
+        <div className="font-sans text-[#333] bg-white">
+            <section className="py-16 border-b">
+                <div className="max-w-7xl mx-auto px-6">
+                    <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12">Why Choose Us?</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="benefit-card">
-                            <img
-                                src={naturalHealingImg}
-                                alt="Natural Healing"
-                                className="mx-auto mb-4 rounded-md shadow-md"
-                            />
-                            <h3 className="text-xl font-semibold text-gray-700">Natural Healing</h3>
-                            <p className="text-gray-600">Ayurveda focuses on holistic, natural treatments using herbs and oils.</p>
-                        </div>
-                        <div className="benefit-card">
-                            <img
-                                src={improveImmunityImg}
-                                alt="Improves Immunity"
-                                className="mx-auto mb-4 rounded-md shadow-md"
-                            />
-                            <h3 className="text-xl font-semibold text-gray-700">Improves Immunity</h3>
-                            <p className="text-gray-600">It strengthens the body's immune system to fight off diseases.</p>
-                        </div>
-                        <div className="benefit-card">
-                            <img
-                                src={balanceBodyMindImg}
-                                alt="Balance Body and Mind"
-                                className="mx-auto mb-4 rounded-md shadow-md"
-                            />
-                            <h3 className="text-xl font-semibold text-gray-700">Balances Body and Mind</h3>
-                            <p className="text-gray-600">Ayurveda helps in maintaining a balanced body, mind, and spirit.</p>
-                        </div>
+                        {[
+                            {
+                                title: "Pure & Natural",
+                                desc: "Products crafted with ingredients rooted in Ayurveda for authentic healing."
+                            },
+                            {
+                                title: "Doctor-Approved",
+                                desc: "Every product is reviewed and validated by Ayurvedic professionals."
+                            },
+                            {
+                                title: "Delivered with Care",
+                                desc: "Eco-friendly packaging and fast delivery to your doorstep."
+                            },
+                        ].map((item, idx) => (
+                            <div key={idx} className="bg-[#f9fafb] border border-gray-200 p-6 rounded-xl text-center shadow-sm hover:shadow-md transition">
+                                <h3 className="text-lg font-medium text-[#1a1a1a] mb-2">{item.title}</h3>
+                                <p className="text-gray-500 text-sm">{item.desc}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* Blog Topics Section */}
-            <section className="py-4">
-                <div className="bg-gray-100 px-4 mx-auto max-w-screen-xl lg:py-8 lg:px-6">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-3xl font-bold text-green-600">| Blogs</h2>
-                        <Link to="/blogs" className="text-lg text-green-500 hover:text-green-700">Show All</Link>
+            <section className="py-16">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex justify-between items-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-semibold">Latest Blogs</h2>
+                        <Link to="/blogs" className="text-blue-600 hover:underline text-base">View All</Link>
                     </div>
-
-                    {/* Blog Slider with Left and Right Navigation */}
                     {blogs.length > 0 && (
-                        <div className="relative flex items-center justify-center">
-                            {/* Left Navigation Button */}
+                        <div className="relative overflow-hidden rounded-xl border border-gray-200">
                             <button
                                 onClick={handlePrevSlide}
-                                className="absolute left-0 bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600 z-10"
+                                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-gray-600 p-2 rounded-full z-10"
                             >
                                 &lt;
                             </button>
 
-                            {/* Blog Content Box */}
-                            <Link
-                                to={`/blogs/${blogs[currentSlide]._id}`}
-                                className="bg-white p-6 rounded-lg shadow-lg max-w-screen-lg w-full lg:w-1/2 md:w-4/5 mx-auto transition-transform duration-500"
-                                style={{ height: '450px' }} // Increase height to fit content
-                            >
-                                {/* Blog content */}
-                                <div className="flex justify-between items-center mb-4">
-                                    {/* Blog Title */}
-                                    <h3 className="font-bold text-gray-700">
-                                        {blogs[currentSlide].title}
-                                    </h3>
-                                    {/* Created Date */}
-                                    <p className="text-sm text-gray-500">
-                                        {new Date(blogs[currentSlide].createdAt).toLocaleDateString()}
-                                    </p>
-                                </div>
-
-                                {/* Blog Topic */}
-                                <div className="flex items-center mb-4 text-sm text-green-500">
-                                    {blogs[currentSlide].topic}
-                                </div>
-
-                                {/* Blog Description */}
-                                <div className="bg-gray-200 p-4 rounded-md mb-4" style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                                    <p className="text-sm text-gray-600">
-                                        {truncateHtml(blogs[currentSlide].description, 500)} {/* Truncate to 500 characters */}
-                                    </p>
-                                </div>
-
-                                {/* Like and Dislike counts (fixed at the bottom) */}
-                                <div className="flex justify-between items-center border-t pt-4 mt-4">
-                                    <div className="flex items-center text-sm text-gray-600">
-                                        {blogs[currentSlide].likes} like(s) | {blogs[currentSlide].dislikes} dislike(s) | {blogs[currentSlide].comments.length} Comment(s)
+                            <div className="p-9 bg-white ml-3">
+                                <Link to={`/blogs/${blogs[currentSlide]._id}`}>
+                                    <h3 className="text-xl font-semibold  text-[#111827]">{blogs[currentSlide].title}</h3>
+                                    <span className="bg-sky-100 text-sky-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mb-1">
+              {blogs[currentSlide].topic}
+            </span>
+                                    <p className="text-xs text-gray-400 mb-3">{new Date(blogs[currentSlide].createdAt).toLocaleDateString()}</p>
+                                    <p className="text-gray-600 mb-4 text-sm leading-relaxed">{truncateHtml(blogs[currentSlide].description, 500)}</p>
+                                    <div className="text-xs text-gray-500">
+                                        {blogs[currentSlide].likes} Likes | {blogs[currentSlide].dislikes} Dislikes | {blogs[currentSlide].comments.length} Comments
                                     </div>
-                                </div>
-                            </Link>
+                                </Link>
+                            </div>
 
-                            {/* Right Navigation Button */}
                             <button
                                 onClick={handleNextSlide}
-                                className="absolute right-0 bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600 z-10"
+                                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-gray-600 p-2 rounded-full z-10"
                             >
                                 &gt;
                             </button>
@@ -188,44 +140,44 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Product Previews Section */}
-            <section className="py-4">
-                <div className="px-4 mx-auto max-w-screen-xl lg:py-8 lg:px-6">
-                    <h2 className="text-3xl font-bold text-green-600 mb-6">| Our Products</h2>
+            <section className="py-16 bg-[#f9f9f9]">
+                <div className="max-w-7xl mx-auto px-6">
+                    <h2 className="text-3xl md:text-4xl font-semibold mb-10">Featured Products</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         {products.slice(0, 8).map((product) => {
                             const discount = calculateDiscount(product.price, product.MRP);
-
                             return (
-                                <Link
-                                    key={product._id}
-                                    to={`/products/${product._id}`}
-                                    className="product-card p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow relative block"
-                                >
-                                    {/* Discount Badge */}
-                                    {discount > 0 && (
-                                        <span className="absolute top-2 left-2 bg-blue-500 text-white text-sm px-2 py-1 rounded">
-                                            {discount}% off
-                                        </span>
-                                    )}
-                                    <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="w-full h-48 object-cover mb-4 rounded-md"
-                                    />
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="text-lg font-semibold text-gray-700">{product.name}</h3>
-                                        <p className="text-lg font-bold text-black">₹{product.price}</p>
-                                    </div>
-                                    <p className="text-sm text-gray-500">{truncateHtml(product.description, 100)}</p>
-                                </Link>
+                                <div
+                            key={product._id}
+                            className="bg-white rounded-xl shadow hover:shadow-lg transition duration-300 transform hover:-translate-y-1 p-5 flex flex-col cursor-pointer border border-sky-100 relative"
+                            onClick={() => navigate(`/products/${product._id}`)}
+                        >
+                            {discount > 0 && (
+                                <span className="absolute top-2 left-2 bg-sky-200 text-black text-xs px-2 py-1 rounded">
+                                    {discount}% OFF
+                                </span>
+                            )}
+
+                            <img src={product.image} alt={product.name} className="mb-3 w-full h-40 object-cover rounded" />
+
+                            <h2 className="font-sans text-base font-medium text-black mb-1 truncate">{product.name}</h2>
+                            <p className="text-sky-600 text-sm mb-1">{product.company}</p>
+
+                            <div className="flex items-center justify-between text-sm text-black mt-1 mb-2">
+                                <p className="text text-gray-600 line-through">₹{product.MRP}</p>
+                                <p className='text-xl'>₹{product.price}</p>
+                            </div>
+
+                            <div className="flex items-center text-sm text-black mb-2">
+                                <span className="mr-1">★</span>
+                                <span>{(product.ratings.length > 0 ? (product.ratings.reduce((acc, r) => acc + r.rating, 0) / product.ratings.length).toFixed(1) : 'No Ratings')}</span>
+                                <span className="text-black-300 ml-1">({product.ratings.length})</span>
+                            </div>
+
+                            
+                        </div>
                             );
                         })}
-                    </div>
-                    <div className="text-center mt-8">
-                        <Link to="/products" className="bg-green-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-green-600">
-                            Show More Products
-                        </Link>
                     </div>
                 </div>
             </section>

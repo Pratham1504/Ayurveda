@@ -84,23 +84,18 @@ const BlogDetail = () => {
   if (!blog) return <div className="text-red-500">Blog not found</div>;
 
   return (
-    <section className="py-4 px-4 mx-auto max-w-screen-xl lg:py-4 lg:px-6">
+    <section className="font-sans py-4 px-4 mx-auto max-w-screen-xl lg:py-4 lg:px-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-gray-100 p-3 rounded-lg border border-gray-200 shadow-md">
           <h1 className="text-2xl font-bold mb-4">{blog.title}</h1>
           <div className="flex justify-between items-center mb-5 text-gray-500">
-            <span className="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded">
+            <span className="bg-sky-100 text-sky-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded">
               {blog.topic}
             </span>
             <span className="text-sm">{new Date(blog.createdAt).toLocaleDateString()}</span>
           </div>
 
-          {/* <ReactQuill
-            value={blog.description}
-            readOnly={true}
-            theme="bubble"
-            className="text-gray-600 mb-4 blog-content"
-          /> */}
+          <div className=" max-w-none text-black-200 mb-4" dangerouslySetInnerHTML={{ __html: blog.description }} />
 
           <div className="flex items-center space-x-4 mb-4">
             <button
@@ -220,7 +215,6 @@ const BlogDetail = () => {
               <h2 className="text-xl font-semibold mb-4">Watch Video:</h2>
               <iframe
                 width="100%"
-                height="315"
                 src={blog.youtubeLink.replace("watch?v=", "embed/")}
                 title="YouTube video player"
                 frameBorder="0"
