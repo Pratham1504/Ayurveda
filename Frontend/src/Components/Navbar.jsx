@@ -4,22 +4,31 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow-lg">
+    <nav className="bg-white shadow-lg mb-1">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
+        <div className="flex justify-around h-16 ">
+          <div className="w-full items-center flex justify-between ">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
-              <a href="/" className="text-xl font-bold text-sky-600">Ayurveda Clinic</a>
+              <a href="/" className="text-xl font-bold text-sky-600 ">
+                Ayurveda Clinic
+              </a>
             </div>
             {/* Links for larger screens */}
-            <div className="hidden md:flex space-x-4 ml-10">
+            <div className="hidden md:flex ">
               <a href="/" className="text-gray-800 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
               <a href="/products" className="text-gray-800 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Products</a>
               <a href="/consulting" className="text-gray-800 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Consulting</a>
               <a href="/blogs" className="text-gray-800 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">Blogs</a>
               <a href="/ebooks" className="text-gray-800 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">E-Books</a>
               <a href="/about" className="text-gray-800 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+            </div>
+
+            {/* Login Button */}
+            <div>
+              <a href="/login" className="hidden md:inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition duration-200 ml-10">
+                Login
+              </a>
             </div>
           </div>
 

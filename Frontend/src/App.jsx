@@ -23,13 +23,13 @@ import Ebook from './Pages/ebooks';
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
 
-  return ( 
+  return (
+    <div className="App min-h-screen flex flex-col">
       <BrowserRouter>
         <CartProvider> {/* Wrap with CartProvider */}
           <NotificationProvider>
-            <div className="App w-full lg:w-3/4 mx-auto">
             <Navbar />
-            <div className="Pages">
+            <div className="Pages flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/blogs" element={<BlogPage />} />
@@ -46,8 +46,7 @@ function App() {
                 <Route path="/ebooks" element={<Ebook />} />
               </Routes>
             </div>
-            </div>
-            <Footer />
+            <Footer/>
             <button
               className="fixed bottom-4 right-4 bg-green-400 text-white p-2 rounded-full shadow-lg"
               onClick={() => setCartVisible(!cartVisible)} // Toggle cart visibility
@@ -61,9 +60,9 @@ function App() {
             )}
           </NotificationProvider>
         </CartProvider>
-      </BrowserRouter>   
+      </BrowserRouter>
+    </div>
   );
 }
 
 export default App;
-  
