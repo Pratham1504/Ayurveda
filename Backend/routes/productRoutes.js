@@ -1,12 +1,13 @@
 const express = require('express');
 const multer = require('multer');
-const upload = multer({ dest: './uploads/' }); // Temporary storage
+const upload = require('../middleware/multerMiddleware') // Temporary storage
 const { createProduct, getProduct, getAllProducts, updateProduct, deleteProduct, addRating, getRatings } = require('../controllers/productController');
+const { isAuth, isAdmin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
 // POST /products - Create a new product
-router.post('/', upload.single('image'), createProduct);
+router.post('/',isAuth, isAdmin, upload.single('image'), createProduct); //admin
 
 // GET /products/:id - Get a single product by ID
 router.get('/:id', getProduct);
@@ -15,10 +16,10 @@ router.get('/:id', getProduct);
 router.get('/', getAllProducts);
 
 // PUT /products/:id - Update a product by ID
-router.put('/:id', upload.single('image'), updateProduct);
+router.put('/:id',isAuth, isAdmin, upload.single('image'), updateProduct); //admin
 
 // DELETE /products/:id - Delete a product by ID
-router.delete('/:id', deleteProduct);
+router.delete('/:id',isAuth, isAdmin, deleteProduct); //admin
 
 // POST /products/:id/rating - Add a rating to a product
 router.post('/:id/rating', addRating);

@@ -1,13 +1,18 @@
 const Product = require('../models/productModel');
-const cloudinary = require('../cloudinaryConfig');
+// const cloudinary = require('../cloudinaryConfig');
 const fs = require('fs');
+const { uploadFile } = require('../middleware/cloudinary');
 
 // Create a new product
 const createProduct = async (req, res) => {
   try {
-    console.log(req.file.path)
+    // console.log(req.file.path)
     // Upload the image to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path);
+    if (!req.file){
+      res.status(400).json({ message: 'No file uploaded' });
+      return;
+    }
+    const result = await uploadFile(req.file.path);
     const product = new Product({
       ...req.body,
       image: result.secure_url // Store the Cloudinary URL

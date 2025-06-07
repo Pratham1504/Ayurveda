@@ -4,6 +4,7 @@ const router = express.Router();
 const ebookController = require('../controllers/ebookController');
 const multer = require('multer');
 const axios = require('axios'); // Import axios for B2 authorization
+const { isAuth, isAdmin } = require('../middleware/authMiddleware');
 
 const upload = multer({ dest: 'uploads/' }); // Temporary storage
 
@@ -24,7 +25,7 @@ const getB2AuthToken = async () => {
 };
 
 // Route to create a new ebook
-router.post('/', upload.single('file'), ebookController.createEbook); // Ensure that the field name matches
+router.post('/',isAuth, isAdmin, upload.single('file'), ebookController.createEbook); //admin// Ensure that the field name matches
 
 // Route to get all eBooks
 router.get('/', ebookController.getAllEbooks);
@@ -63,6 +64,6 @@ router.get('/download/:fileName', async (req, res) => {
 });
 
 // Route to delete an eBook by ID
-router.delete('/:id', ebookController.deleteEbook);
+router.delete('/:id',isAuth, isAdmin, ebookController.deleteEbook);//admin
 
 module.exports = router;
