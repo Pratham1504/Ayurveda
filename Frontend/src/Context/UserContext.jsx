@@ -58,6 +58,7 @@ export const UserContextProvider = ({ children }) => {
   }
 
   async function verifyOtp(otp, navigate) {
+    console.log(typeof otp);
     setBtnLoading(true);
     const activationToken = localStorage.getItem("activationToken");
     try {
@@ -93,6 +94,14 @@ export const UserContextProvider = ({ children }) => {
     }
   }
 
+  function logoutUser() {
+    localStorage.clear();
+    // sessionStorage.clear(); // if used
+    setIsAuth(false);
+    setUser([]);
+    setIsAdmin(false);
+  }
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -109,6 +118,7 @@ export const UserContextProvider = ({ children }) => {
         registerUser,
         verifyOtp,
         fetchUser,
+        logoutUser
       }}
     >
       {children}

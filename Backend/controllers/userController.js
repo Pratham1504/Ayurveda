@@ -25,7 +25,7 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
       fullName,
       mobileNo,
-      address, // embedded address array
+      // address, // embedded address array
     };
 
     const otp = Math.floor(Math.random() * 1000000);
