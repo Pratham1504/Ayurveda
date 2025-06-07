@@ -9,6 +9,8 @@ const ebookRoutes = require('./routes/ebookRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
+
 
 // express app
 const app = express()
@@ -32,6 +34,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/ebooks', ebookRoutes);
 app.use('/api/user',userRoutes);
+app.use('/api/appointment',appointmentRoutes);
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
 
