@@ -94,6 +94,14 @@ export const UserContextProvider = ({ children }) => {
     }
   }
 
+  function logoutUser() {
+    localStorage.clear();
+    // sessionStorage.clear(); // if used
+    setIsAuth(false);
+    setUser([]);
+    setIsAdmin(false);
+  }
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -110,6 +118,7 @@ export const UserContextProvider = ({ children }) => {
         registerUser,
         verifyOtp,
         fetchUser,
+        logoutUser
       }}
     >
       {children}
