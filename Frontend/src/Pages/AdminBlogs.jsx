@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { NotificationContext } from '../context/NotificationContext'; // Import context
+import { NotificationContext } from '../Context/NotificationContext'; // Import context
 
 const AdminBlogs = () => {
     const [blogs, setBlogs] = useState([]);

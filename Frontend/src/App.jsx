@@ -5,19 +5,19 @@ import Home from './Pages/Home';
 import BlogPage from './Pages/Blogs';
 import Products from './Pages/Products'; // Import the Products page
 import Navbar from './Components/Navbar';
-import Footer from './components/Footer';
-import BlogDetail from './components/BlogDetail';
-import Cart from './components/Cart'; // Import the Cart component
+import Footer from './Components/Footer';
+import BlogDetail from './Components/BlogDetail';
+import Cart from './Components/Cart'; // Import the Cart component
 import { CartProvider } from './Context/CartContext'; // Import CartProvider
-import ProdDetail from './components/ProdDetail';
+import ProdDetail from './Components/ProdDetail';
 import { useState } from 'react';
 import AdminBlogs from './Pages/AdminBlogs';
 import AdminProduct from './Pages/AdminProduct';
 import AdminEbooks from './Pages/AdminEbooks';
 import Admin from './Pages/AdminPage';
-import BlogEditor from './components/BlogEditor';
-import CreateEbook from './components/CreateEbook';
-import { NotificationProvider } from './context/NotificationContext';
+import BlogEditor from './Components/BlogEditor';
+import CreateEbook from './Components/CreateEbook';
+import { NotificationProvider } from './Context/NotificationContext';
 import Ebook from './Pages/ebooks';
 
 function App() {

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // import ReactQuill from 'react-quill';
 // import 'react-quill/dist/quill.snow.css';
-import { NotificationContext } from '../context/NotificationContext';
+import { NotificationContext } from '../Context/NotificationContext';
 
 const BlogEditor = () => {
   const { id } = useParams();
