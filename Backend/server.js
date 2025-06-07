@@ -8,6 +8,7 @@ const blogRoutes = require('./routes/blogRoutes');
 const ebookRoutes = require('./routes/ebookRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 // express app
 const app = express()
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 })
 
 // Routes
+app.use('/api/orders', orderRoutes);
 app.use('/api/cart',cartRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/blogs', blogRoutes);
