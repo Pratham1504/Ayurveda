@@ -19,6 +19,8 @@ import BlogEditor from './Components/BlogEditor';
 import CreateEbook from './Components/CreateEbook';
 import { NotificationProvider } from './Context/NotificationContext';
 import Ebook from './Pages/ebooks';
+import Appointment from './Pages/consulting';
+import AdminAppointments from './Pages/AdminAppointment'
 
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
@@ -42,8 +44,10 @@ function App() {
                 <Route path="/admin/blogs/create" element={<BlogEditor />} />
                 <Route path="/admin/blogs/edit/:id" element={<BlogEditor />} />
                 <Route path="/admin/ebooks/" element={<AdminEbooks />} />
+                <Route path="/admin/appointments/" element={<AdminAppointments />} />
                 <Route path="/admin/ebooks/create" element={<CreateEbook />} />
                 <Route path="/ebooks" element={<Ebook />} />
+                <Route path="/consulting" element={<Appointment />} />
               </Routes>
             </div>
             <Footer/>
