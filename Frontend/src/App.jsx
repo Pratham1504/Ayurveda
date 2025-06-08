@@ -19,6 +19,7 @@ import BlogEditor from './Components/BlogEditor';
 import CreateEbook from './Components/CreateEbook';
 import { NotificationProvider } from './Context/NotificationContext';
 import Ebook from './Pages/ebooks';
+import MyOrders from './Pages/MyOrders';
 
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
@@ -28,7 +29,8 @@ function App() {
       <BrowserRouter>
         <CartProvider> {/* Wrap with CartProvider */}
           <NotificationProvider>
-            <Navbar />
+            <Navbar setCartVisible={setCartVisible} />
+            {cartVisible && <Cart onClose={() => setCartVisible(false)} />}
             <div className="Pages flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -44,20 +46,23 @@ function App() {
                 <Route path="/admin/ebooks/" element={<AdminEbooks />} />
                 <Route path="/admin/ebooks/create" element={<CreateEbook />} />
                 <Route path="/ebooks" element={<Ebook />} />
+                <Route path="/my-orders" element={<MyOrders />} />
               </Routes>
             </div>
             <Footer/>
-            <button
+
+            {/* FLOATING CART -- Removed */}
+            {/* <button
               className="fixed bottom-4 right-4 bg-green-400 text-white p-2 rounded-full shadow-lg"
               onClick={() => setCartVisible(!cartVisible)} // Toggle cart visibility
             >
               Cart
-            </button>
-            {cartVisible && (
+            </button> */}
+            {/* {cartVisible && (
               <div className="fixed top-0 right-0 h-full w-80 bg-gray-100 shadow-lg transition-transform transform translate-x-0">
                 <Cart onClose={() => setCartVisible(false)} />
               </div>
-            )}
+            )} */}
           </NotificationProvider>
         </CartProvider>
       </BrowserRouter>

@@ -6,14 +6,16 @@ import { UserData } from '../Context/UserContext';
 
 Modal.setAppElement('#root'); // Make sure your root element id is 'root'
 
-const Navbar = () => {
+const Navbar = ({ setCartVisible }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true); // true = login, false = signup
   const [otpModalOpen, setOtpModalOpen] = useState(false);
 
 
-  const { isAuth, loginUser, registerUser, verifyOtp, btnLoading, logoutUser } = UserData();
+  const { isAuth, loginUser, registerUser, verifyOtp, btnLoading, logoutUser, user } = UserData();
+
+  const [profileCardOpen, setProfileCardOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -28,6 +30,12 @@ const Navbar = () => {
   const [signupError, setSignupError] = useState('');
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
+
+  // Forgot Password states
+  const [forgotModalOpen, setForgotModalOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotMsg, setForgotMsg] = useState('');
+  const [forgotError, setForgotError] = useState('');
 
   // Handle login
   const handleLogin = (e) => {
@@ -121,10 +129,47 @@ const Navbar = () => {
             ) : (
               <div className='cart-user-logout flex items-center gap-4 ml-10'>
                 <div>
-                  <ShoppingCartIcon className="h-6 w-6" />
+                  <ShoppingCartIcon
+                    className="h-6 w-6 cursor-pointer"
+                    onClick={() => setCartVisible(true)}
+                  />
                 </div>
-                <div>
-                  <UserCircleIcon className="h-6 w-6" />
+                <div className="relative inline-block">
+                  <UserCircleIcon
+                    className="h-6 w-6 cursor-pointer"
+                    onClick={() => setProfileCardOpen((open) => !open)}
+                  />
+                  {profileCardOpen && (
+                    <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50 border">
+                      <button
+                        className="absolute top-2 right-2 text-gray-400 hover:text-black font-bold"
+                        onClick={() => setProfileCardOpen(false)}
+                        aria-label="Close"
+                      >
+                        &times;
+                      </button>
+                      <div className="space-y-2 mt-2">
+                        <div>
+                          <span className="font-semibold">Name:</span> {user.fullName || '-'}
+                        </div>
+                        <div>
+                          <span className="font-semibold">Email:</span> {user.email || '-'}
+                        </div>
+                        <div>
+                          <span className="font-semibold">Mobile:</span> {user.mobileNo || '-'}
+                        </div>
+                        <button
+                          className="mt-4 w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700 transition"
+                          onClick={() => {
+                            setProfileCardOpen(false);
+                            navigate('/my-orders');
+                          }}
+                        >
+                          My Orders
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <button
@@ -225,6 +270,21 @@ const Navbar = () => {
                 className="w-full border px-3 py-2 rounded-md"
                 required
               />
+              <div className="text-right">
+                <button
+                  type="button"
+                  className="text-sky-600 text-sm hover:underline"
+                  onClick={() => {
+                    setModalIsOpen(false);
+                    setForgotModalOpen(true);
+                    setForgotMsg('');
+                    setForgotError('');
+                    setForgotEmail('');
+                  }}
+                >
+                  Forgot Password?
+                </button>
+              </div>
               <button
                 type="submit"
                 className="w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
@@ -328,6 +388,67 @@ const Navbar = () => {
               disabled={btnLoading}
             >
               {btnLoading ? 'Verifying...' : 'Verify OTP'}
+            </button>
+          </form>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={forgotModalOpen}
+        onRequestClose={() => setForgotModalOpen(false)}
+        contentLabel="Forgot Password"
+        className="max-w-md mx-auto bg-white px-10 py-12 rounded-2xl shadow-lg outline-none"
+        overlayClassName="fixed inset-0 bg-black/60 flex items-center justify-center backdrop-blur-lg z-50"
+      >
+        <div>
+          <div className="flex justify-between mb-4">
+            <h2 className="text-xl font-bold">Forgot Password</h2>
+            <button
+              onClick={() => setForgotModalOpen(false)}
+              className="ml-auto text-gray-500 hover:text-black font-bold text-3xl leading-none"
+              aria-label="Close modal"
+            >
+              &times;
+            </button>
+          </div>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setForgotMsg('');
+              setForgotError('');
+              try {
+                const res = await fetch('http://localhost:4000/api/user/forgot', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email: forgotEmail }),
+                });
+                const data = await res.json();
+                if (res.ok) {
+                  setForgotMsg('Reset link sent to your email.');
+                } else {
+                  setForgotError(data.message || 'Something went wrong.');
+                }
+              } catch {
+                setForgotError('Something went wrong.');
+              }
+            }}
+            className="space-y-4"
+          >
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={forgotEmail}
+              onChange={e => setForgotEmail(e.target.value)}
+              className="w-full border px-3 py-2 rounded-md"
+              required
+            />
+            {forgotMsg && <div className="text-green-600 text-sm">{forgotMsg}</div>}
+            {forgotError && <div className="text-red-500 text-sm">{forgotError}</div>}
+            <button
+              type="submit"
+              className="w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
+            >
+              Send Reset Link
             </button>
           </form>
         </div>
