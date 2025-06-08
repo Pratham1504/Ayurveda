@@ -49,6 +49,8 @@ function App() {
                 <Route path="/admin/appointments/" element={<AdminAppointments />} />
                 <Route path="/admin/ebooks/create" element={<CreateEbook />} />
                 <Route path="/ebooks" element={<Ebook />} />
+                <Route path="/my-orders" element={<MyOrders />} />
+                <Route path="/consulting" element={<Appointment />} />
               </Routes>
             </div>
             <Footer/>
