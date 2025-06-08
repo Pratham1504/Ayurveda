@@ -120,24 +120,10 @@ const updateGmeetLink = async (req, res) => {
     }
 };
 
-// Get appointments by user ID
-const getAppointmentsByUser = async (req, res) => {
-  const userId = req.params.userId;
-
-  try {
-    const appointments = await Appointment.find({ user_id: userId }).sort({ preferred_date: -1, preferred_time: -1 });
-    res.json(appointments);
-  } catch (error) {
-    console.error('Error fetching appointments:', error);
-    res.status(500).json({ message: 'Server error fetching appointments' });
-  }
-};
-
 module.exports = {
     createAppointment,
     getAppointmentById,
     getAllAppointments,
     updateAppointmentStatus,
     updateGmeetLink,
-    getAppointmentsByUser,
 };

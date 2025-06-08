@@ -51,7 +51,9 @@ const appointmentSchema = new mongoose.Schema({
     },
     gmeet_link: {
         type: String,
-        required: false,
+        required: function () {
+            return this.communication_mode === 'gmeet';
+        },
     },
 });
 
