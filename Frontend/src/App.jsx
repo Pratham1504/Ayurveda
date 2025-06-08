@@ -19,6 +19,8 @@ import BlogEditor from './Components/BlogEditor';
 import CreateEbook from './Components/CreateEbook';
 import { NotificationProvider } from './Context/NotificationContext';
 import Ebook from './Pages/ebooks';
+import Appointment from './Pages/consulting';
+import AdminAppointments from './Pages/AdminAppointment'
 import MyOrders from './Pages/MyOrders';
 
 function App() {
@@ -44,9 +46,9 @@ function App() {
                 <Route path="/admin/blogs/create" element={<BlogEditor />} />
                 <Route path="/admin/blogs/edit/:id" element={<BlogEditor />} />
                 <Route path="/admin/ebooks/" element={<AdminEbooks />} />
+                <Route path="/admin/appointments/" element={<AdminAppointments />} />
                 <Route path="/admin/ebooks/create" element={<CreateEbook />} />
                 <Route path="/ebooks" element={<Ebook />} />
-                <Route path="/my-orders" element={<MyOrders />} />
               </Routes>
             </div>
             <Footer/>
