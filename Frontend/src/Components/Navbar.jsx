@@ -30,6 +30,7 @@ const Navbar = ({ setCartVisible }) => {
   const [signupError, setSignupError] = useState('');
   const [otp, setOtp] = useState('');
   const [otpError, setOtpError] = useState('');
+  const [loginError, setLoginError] = useState('');
 
   // Forgot Password states
   const [forgotModalOpen, setForgotModalOpen] = useState(false);
@@ -38,20 +39,27 @@ const Navbar = ({ setCartVisible }) => {
   const [forgotError, setForgotError] = useState('');
 
   // Handle login
-  // const handleLogin = (e) => {
-  //   e.preventDefault();
-  //   loginUser(loginEmail, loginPassword, () => setModalIsOpen(false));
-  // };
-
-  const handleLogin = (e) => {
+    const handleLogin = (e) => {
     e.preventDefault();
-    let loginValue = loginEmail;
-    // If input is all digits and length is 10, treat as phone number
-    if (/^\d{10}$/.test(loginEmail)) {
-      loginValue = parseInt(loginEmail, 10);
+    setLoginError('');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\d{10}$/;
+
+    let loginData = {};
+    if (phoneRegex.test(loginEmail)) {
+      loginData = { mobileNumber: loginEmail, password: loginPassword };
+    } else if (emailRegex.test(loginEmail)) {
+      loginData = { email: loginEmail, password: loginPassword };
+    } else {
+      setLoginError('Please enter a valid email or 10-digit mobile number.');
+      return;
     }
-    loginUser(loginValue, loginPassword, () => setModalIsOpen(false));
+
+    // Only pass loginData and callback!
+    loginUser(loginData, () => setModalIsOpen(false));
   };
+
+
 
   // Handle logout
   const handleLogout = () => {
@@ -286,7 +294,7 @@ const Navbar = ({ setCartVisible }) => {
           {isLogin ? (
             <form onSubmit={handleLogin} className="">
               <input
-                type="email"
+                type="text"
                 placeholder="Email or Mobile Number"
                 value={loginEmail}
                 onChange={e => setLoginEmail(e.target.value)}
@@ -301,6 +309,9 @@ const Navbar = ({ setCartVisible }) => {
                 className="w-full border px-3 py-2 rounded-md my-2"
                 required
               />
+              {loginError && (
+                <div className="text-red-500 text-sm text-center mb-2">{loginError}</div>
+              )}
               <button
                 type="submit"
                 className="w-full mt-4 bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
