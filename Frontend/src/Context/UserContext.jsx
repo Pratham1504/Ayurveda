@@ -96,6 +96,7 @@ export const UserContextProvider = ({ children }) => {
 
   function logoutUser() {
     localStorage.clear();
+    toast.success("Logged out successfully");
     // sessionStorage.clear(); // if used
     setIsAuth(false);
     setUser([]);

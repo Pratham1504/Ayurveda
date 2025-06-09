@@ -226,40 +226,61 @@ const Navbar = ({ setCartVisible }) => {
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
         contentLabel="Login/Signup Modal"
-        className="max-w-md mx-auto  bg-white px-10 py-12 rounded-2xl shadow-lg outline-none"
+        className="max-w-md mx-auto h-[70vh] flex flex-col justify-center bg-white px-10 py-12 rounded-2xl shadow-lg outline-none relative"
         overlayClassName="fixed inset-0 bg-black/60 flex items-center justify-center backdrop-blur-lg z-50"
         bodyOpenClassName="modal-open"
       >
-        <div>
-          <div className="flex justify-between mb-4">
-            <button
-              className={`px-4 py-2 rounded ${isLogin ? 'bg-sky-600 text-white' : 'bg-gray-200'}`}
-              onClick={() => setIsLogin(true)}
-            >
-              Login
-            </button>
-            <button
-              className={`px-4 py-2 rounded ${!isLogin ? 'bg-sky-600 text-white' : 'bg-gray-200'}`}
-              onClick={() => setIsLogin(false)}
-            >
-              Sign Up
-            </button>
+        <div className="flex-shrink-0 flex items-center justify-center m-10">
+          <a href="/" className="text-4xl font-bold text-sky-600 ">
+            Ayurveda Clinic
+          </a>
+        </div>
+        <div className=''>
+          <div className="flex flex-col justify-center items-center mb-4">
+
+            
+            
+            {/* <div className="login-signup-buttons flex justify-center mb-4">
+              <button
+                className={`px-4 py-2 rounded ${isLogin ? 'bg-sky-600 text-white' : 'bg-gray-200'}`}
+                onClick={() => setIsLogin(true)}
+              >
+                Login
+              </button>
+              <button
+                className={`px-4 py-2 rounded ${!isLogin ? 'bg-sky-600 text-white' : 'bg-gray-200'}`}
+                onClick={() => setIsLogin(false)}
+              >
+                Sign Up
+              </button>
+            </div> */}
+            {isLogin ? (
+              <div className='text-2xl font-semibold'>
+                Sign in to your account
+              </div>
+            ) : (
+              <div className='text-2xl font-semibold'>
+                Create a new account
+              </div>
+            ) }
+          </div>
+          <div className='cross-button'>
             <button
               onClick={() => setModalIsOpen(false)}
-              className="ml-auto text-gray-500 hover:text-black font-bold text-3xl leading-none"
+              className="absolute top-2 right-3 text-gray-500 hover:text-black font-bold text-3xl leading-none z-10"
               aria-label="Close modal"
             >
               &times;
             </button>
           </div>
           {isLogin ? (
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="">
               <input
                 type="email"
                 placeholder="Email"
                 value={loginEmail}
                 onChange={e => setLoginEmail(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md"
+                className="w-full border px-3 py-2 rounded-md my-2"
                 required
               />
               <input
@@ -267,13 +288,20 @@ const Navbar = ({ setCartVisible }) => {
                 placeholder="Password"
                 value={loginPassword}
                 onChange={e => setLoginPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md"
+                className="w-full border px-3 py-2 rounded-md my-2"
                 required
               />
-              <div className="text-right">
+              <button
+                type="submit"
+                className="w-full mt-4 bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
+                disabled={btnLoading}
+              >
+                {btnLoading ? 'Logging in...' : 'Login'}
+              </button>
+              <div className="text-center">
                 <button
                   type="button"
-                  className="text-sky-600 text-sm hover:underline"
+                  className="text-sky-600 text-md hover:underline m-0 mt-8"
                   onClick={() => {
                     setModalIsOpen(false);
                     setForgotModalOpen(true);
@@ -285,13 +313,16 @@ const Navbar = ({ setCartVisible }) => {
                   Forgot Password?
                 </button>
               </div>
-              <button
-                type="submit"
-                className="w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
-                disabled={btnLoading}
-              >
-                {btnLoading ? 'Logging in...' : 'Login'}
-              </button>
+              <div className='mt-2 text-md text-center'>
+                Don't have an account? <span className="text-sky-600 cursor-pointer" onClick={() => { setIsLogin(false); resetAuthForms(); }}>Register here</span>
+              </div>
+              <div className='text-center mt-4'>
+                <button className='types-of-use text-sky-600 text-md hover:underline m-0 mt-6' onClick={() => {
+                  window.open('https://www.example.com/terms-of-use', '_blank');
+                }}>
+                  Terms of Use | Privacy Policy
+                </button>
+              </div>
             </form>
           ) : (
             <form onSubmit={handleSignup} className="space-y-4">
@@ -340,11 +371,25 @@ const Navbar = ({ setCartVisible }) => {
               )}
               <button
                 type="submit"
-                className="w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
+                className="w-full mt-4 bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
                 disabled={btnLoading}
               >
                 {btnLoading ? 'Signing up...' : 'Sign Up'}
               </button>
+              <div className='text-center'>
+                Already have an account? <span className="text-sky-600 cursor-pointer" onClick={() => { setIsLogin(true); resetAuthForms(); }}>Login</span>
+              </div>
+
+              <div className='text-center mt-6'>
+                <div className='text-grey-600'>By signing up, you agree to our </div>
+                <button className='types-of-use text-sky-600 text-md hover:underline m-0 mt-1' onClick={() => {
+                  window.open('https://www.example.com/terms-of-use', '_blank');
+                }}>
+                  
+                  Terms of Use | Privacy Policy
+                </button>
+              </div>
+              
             </form>
           )}
         </div>
