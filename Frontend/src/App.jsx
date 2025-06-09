@@ -51,7 +51,7 @@ function App() {
                 <Route path="/ebooks" element={<Ebook />} />
                 <Route path="/my-orders" element={<MyOrders />} />
                 <Route path="/consulting" element={<Appointment />} />
-                <Route path="/admin/appointment" element={<AdminAppointments />} />
+                <Route path="/admin/appointments" element={<AdminAppointments />} />
                 {/* <Route exact path="/my-orders/:id" element={<OrderDetail />} /> */}
               </Routes>
             </div>
