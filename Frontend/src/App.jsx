@@ -52,6 +52,7 @@ function App() {
                 <Route path="/my-orders" element={<MyOrders />} />
                 <Route path="/consulting" element={<Appointment />} />
                 <Route path="/admin/appointment" element={<AdminAppointments />} />
+                {/* <Route exact path="/my-orders/:id" element={<OrderDetail />} /> */}
               </Routes>
             </div>
             <Footer/>
