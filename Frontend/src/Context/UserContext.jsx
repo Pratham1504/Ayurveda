@@ -84,7 +84,9 @@ export const UserContextProvider = ({ children }) => {
           token: localStorage.getItem("token"),
         },
       });
-      console.log(data);
+      if (data.user.role === 'admin') {
+        setIsAdmin(true);
+      }
       setIsAuth(true);
       setUser(data.user);
       setLoading(false);
@@ -112,6 +114,8 @@ export const UserContextProvider = ({ children }) => {
         setUser,
         setIsAuth,
         isAuth,
+        isAdmin,
+        setIsAdmin,
         loginUser,
         btnLoading,
         loading,

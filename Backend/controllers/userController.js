@@ -96,10 +96,19 @@ exports.verifyotp = async (req, res) => {
 // Login Controller
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email,mobileNumber, password } = req.body;
 
     // Find user
-    const user = await User.findOne({ email });
+    if(!email && !mobileNumber){
+      return res.status(400).json({ message: "Email or Mobile Number is required" });
+    }
+    const query = {
+      $or: [
+        { email: email },
+        { mobileNo: mobileNumber }
+      ]
+    }
+    const user = await User.findOne(query);
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
