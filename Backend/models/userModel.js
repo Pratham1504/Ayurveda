@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Address = require("./addressModel");
 
 // Define user schema
 const userSchema = new mongoose.Schema({

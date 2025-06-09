@@ -19,10 +19,11 @@ import BlogEditor from './Components/BlogEditor';
 import CreateEbook from './Components/CreateEbook';
 import { NotificationProvider } from './Context/NotificationContext';
 import Ebook from './Pages/ebooks';
+import { UserData } from './Context/UserContext';
 
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
-
+  const {isAuth,isAdmin} = UserData();
   return (
     <div className="App min-h-screen flex flex-col">
       <BrowserRouter>
@@ -36,13 +37,13 @@ function App() {
                 <Route path="/blogs/:id" element={<BlogDetail />} />
                 <Route path="/products" element={<Products />} />
                 <Route exact path="/products/:id" element={<ProdDetail />} />
-                <Route path="/admin/blogs" element={<AdminBlogs />} />
-                <Route path="/admin/products" element={<AdminProduct />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/admin/blogs/create" element={<BlogEditor />} />
-                <Route path="/admin/blogs/edit/:id" element={<BlogEditor />} />
-                <Route path="/admin/ebooks/" element={<AdminEbooks />} />
-                <Route path="/admin/ebooks/create" element={<CreateEbook />} />
+                <Route path="/admin/blogs" element={isAdmin ? <AdminBlogs /> : <Products/>} />
+                <Route path="/admin/products" element={isAdmin ? <AdminProduct />: <Products/>} />
+                <Route path="/admin" element={isAdmin ? <Admin />: <Products/>} />
+                <Route path="/admin/blogs/create" element={isAdmin ? <BlogEditor />: <Products/>} />
+                <Route path="/admin/blogs/edit/:id" element={isAdmin ? <BlogEditor />: <Products/>} />
+                <Route path="/admin/ebooks/" element={isAdmin ? <AdminEbooks />: <Products/>} />
+                <Route path="/admin/ebooks/create" element={isAdmin ? <CreateEbook />: <Products/>} />
                 <Route path="/ebooks" element={<Ebook />} />
               </Routes>
             </div>
