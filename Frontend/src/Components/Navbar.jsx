@@ -38,9 +38,19 @@ const Navbar = ({ setCartVisible }) => {
   const [forgotError, setForgotError] = useState('');
 
   // Handle login
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
+  //   loginUser(loginEmail, loginPassword, () => setModalIsOpen(false));
+  // };
+
   const handleLogin = (e) => {
     e.preventDefault();
-    loginUser(loginEmail, loginPassword, () => setModalIsOpen(false));
+    let loginValue = loginEmail;
+    // If input is all digits and length is 10, treat as phone number
+    if (/^\d{10}$/.test(loginEmail)) {
+      loginValue = parseInt(loginEmail, 10);
+    }
+    loginUser(loginValue, loginPassword, () => setModalIsOpen(false));
   };
 
   // Handle logout
@@ -277,7 +287,7 @@ const Navbar = ({ setCartVisible }) => {
             <form onSubmit={handleLogin} className="">
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="Email or Mobile Number"
                 value={loginEmail}
                 onChange={e => setLoginEmail(e.target.value)}
                 className="w-full border px-3 py-2 rounded-md my-2"
