@@ -8,12 +8,11 @@ Modal.setAppElement('#root'); // Make sure your root element id is 'root'
 
 const Navbar = ({ setCartVisible }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true); // true = login, false = signup
   const [otpModalOpen, setOtpModalOpen] = useState(false);
 
 
-  const { isAuth, loginUser, registerUser, verifyOtp, btnLoading, logoutUser, user } = UserData();
+  const { isAuth, loginUser, registerUser, verifyOtp, btnLoading, logoutUser, user, modalIsOpen, setModalIsOpen } = UserData();
 
   const [profileCardOpen, setProfileCardOpen] = useState(false);
 
@@ -119,7 +118,7 @@ const Navbar = ({ setCartVisible }) => {
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
               <a href="/" className="text-xl font-bold text-sky-600 ">
-                Ayurveda Clinic
+                Swasthamana
               </a>
             </div>
             {/* Links for larger screens */}

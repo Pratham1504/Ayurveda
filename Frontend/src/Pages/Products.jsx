@@ -13,6 +13,7 @@ const Products = () => {
     const [showFilters, setShowFilters] = useState(false);
     const { cart, addToCart, updateQuantity } = useCart();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -21,6 +22,8 @@ const Products = () => {
                 setProducts(response.data);
             } catch (err) {
                 console.error(err);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -46,6 +49,21 @@ const Products = () => {
         const discount = ((MRP - price) / MRP) * 100;
         return discount.toFixed(0);
     };
+
+    const ProductSkeletonCard = () => (
+        <div className="bg-white rounded-xl border border-sky-100 p-5 animate-pulse">
+            <div className="bg-gray-200 h-40 w-full rounded mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+            <div className="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
+            <div className="flex justify-between items-center mb-2">
+                <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+            </div>
+            <div className="h-3 bg-gray-200 rounded w-1/2 mb-4"></div>
+            <div className="h-8 bg-gray-300 rounded w-full"></div>
+        </div>
+    );
+
 
     return (
         <div className="font-sans container px-4 mx-auto max-w-screen-xl lg:py-10 lg:px-6 text-black">
@@ -121,74 +139,76 @@ const Products = () => {
             )}
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
-                {filteredProducts.map(product => {
-                    const quantity = getProductQuantity(product._id);
-                    const discount = calculateDiscount(product.price, product.MRP);
+                {loading
+                    ? Array.from({ length: 8 }).map((_, index) => <ProductSkeletonCard key={index} />)
+                    : filteredProducts.map(product => {
+                        const quantity = getProductQuantity(product._id);
+                        const discount = calculateDiscount(product.price, product.MRP);
 
-                    return (
-                        <div
-                            key={product._id}
-                            className="bg-white rounded-xl shadow hover:shadow-lg transition duration-300 transform hover:-translate-y-1 p-5 flex flex-col cursor-pointer border border-sky-100 relative"
-                            onClick={() => navigate(`/products/${product._id}`)}
-                        >
-                            {discount > 0 && (
-                                <span className="absolute top-2 left-2 bg-sky-200 text-black text-xs px-2 py-1 rounded">
-                                    {discount}% OFF
-                                </span>
-                            )}
+                        return (
+                            <div
+                                key={product._id}
+                                className="bg-white rounded-xl shadow hover:shadow-lg transition duration-300 transform hover:-translate-y-1 p-5 flex flex-col cursor-pointer border border-sky-100 relative"
+                                onClick={() => navigate(`/products/${product._id}`)}
+                            >
+                                {discount > 0 && (
+                                    <span className="absolute top-2 left-2 bg-sky-200 text-black text-xs px-2 py-1 rounded">
+                                        {discount}% OFF
+                                    </span>
+                                )}
 
-                            <img src={product.image} alt={product.name} className="mb-3 w-full h-40 object-cover rounded" />
+                                <img src={product.image} alt={product.name} className="mb-3 w-full h-40 object-cover rounded" />
 
-                            <h2 className="font-sans text-base font-medium text-black mb-1 truncate">{product.name}</h2>
-                            <p className="text-sky-600 text-sm mb-1">{product.company}</p>
+                                <h2 className="font-sans text-base font-medium text-black mb-1 truncate">{product.name}</h2>
+                                <p className="text-sky-600 text-sm mb-1">{product.company}</p>
 
-                            <div className="flex items-center justify-between text-sm text-black mt-1 mb-2">
-                                <p className="text text-gray-600 line-through">₹{product.MRP}</p>
-                                <p className='text-xl'>₹{product.price}</p>
-                            </div>
-
-                            <div className="flex items-center text-sm text-black mb-2">
-                                <span className="mr-1">★</span>
-                                <span>{(product.ratings.length > 0 ? (product.ratings.reduce((acc, r) => acc + r.rating, 0) / product.ratings.length).toFixed(1) : 'No Ratings')}</span>
-                                <span className="text-black-300 ml-1">({product.ratings.length})</span>
-                            </div>
-
-                            {quantity > 0 ? (
-                                <div className="flex items-center justify-between mt-auto">
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            updateQuantity(product._id, -1);
-                                        }}
-                                        className="bg-sky-600 text-white px-3 py-1 rounded-l-md hover:bg-sky-700 text-sm"
-                                    >
-                                        -
-                                    </button>
-                                    <span className="px-3 py-1 text-lg">{quantity}</span>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            updateQuantity(product._id, 1);
-                                        }}
-                                        className="bg-sky-600 text-white px-3 py-1 rounded-r-md hover:bg-sky-700 text-sm"
-                                    >
-                                        +
-                                    </button>
+                                <div className="flex items-center justify-between text-sm text-black mt-1 mb-2">
+                                    <p className="text text-gray-600 line-through">₹{product.MRP}</p>
+                                    <p className='text-xl'>₹{product.price}</p>
                                 </div>
-                            ) : (
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        addToCart(product);
-                                    }}
-                                    className="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition mt-auto text-sm"
-                                >
-                                    Add to Cart
-                                </button>
-                            )}
-                        </div>
-                    );
-                })}
+
+                                <div className="flex items-center text-sm text-black mb-2">
+                                    <span className="mr-1">★</span>
+                                    <span>{(product.ratings.length > 0 ? (product.ratings.reduce((acc, r) => acc + r.rating, 0) / product.ratings.length).toFixed(1) : 'No Ratings')}</span>
+                                    <span className="text-black-300 ml-1">({product.ratings.length})</span>
+                                </div>
+
+                                {quantity > 0 ? (
+                                    <div className="flex items-center justify-between mt-auto">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                updateQuantity(product._id, -1);
+                                            }}
+                                            className="bg-sky-600 text-white px-3 py-1 rounded-l-md hover:bg-sky-700 text-sm"
+                                        >
+                                            -
+                                        </button>
+                                        <span className="px-3 py-1 text-lg">{quantity}</span>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                updateQuantity(product._id, 1);
+                                            }}
+                                            className="bg-sky-600 text-white px-3 py-1 rounded-r-md hover:bg-sky-700 text-sm"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            addToCart(product);
+                                        }}
+                                        className="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition mt-auto text-sm"
+                                    >
+                                        Add to Cart
+                                    </button>
+                                )}
+                            </div>
+                        );
+                    })}
             </div>
         </div>
     );

@@ -33,7 +33,52 @@ const Ebooks = () => {
         setExpandedRow(expandedRow === id ? null : id);
     };
 
-    if (loading) return <div className="text-center text-gray-500">Loading...</div>;
+    const EbookSkeletonRow = () => (
+        <>
+            <tr className="animate-pulse bg-white">
+                <td className="py-3 px-4">
+                    <div className="flex items-center gap-2">
+                        <div className="h-5 w-5 bg-gray-200 rounded" />
+                        <div className="h-4 w-3/4 bg-gray-200 rounded" />
+                    </div>
+                </td>
+                <td className="py-3 px-4">
+                    <div className="h-4 w-2/3 bg-gray-200 rounded" />
+                </td>
+                <td className="py-3 px-4 text-right">
+                    <div className="h-6 w-6 bg-gray-200 rounded-md inline-block" />
+                </td>
+            </tr>
+        </>
+    );
+
+    if (loading) {
+        return (
+            <div className="bg-white py-10 px-6 mx-auto max-w-screen-xl font-sans">
+                <h2 className="text-3xl font-bold text-sky-600 mb-6 border-b-2 border-sky-200 inline-block">Ebooks</h2>
+
+                <div className="mb-6 h-10 bg-gray-200 rounded-md w-full animate-pulse" />
+
+                <div className="overflow-x-auto shadow rounded-lg border border-gray-200">
+                    <table className="min-w-full bg-white">
+                        <thead className="bg-sky-50">
+                            <tr>
+                                <th className="py-3 px-4 text-left text-gray-700 text-sm font-semibold">Title</th>
+                                <th className="py-3 px-4 text-left text-gray-700 text-sm font-semibold">Author</th>
+                                <th className="py-3 px-4 text-right text-gray-700 text-sm font-semibold">Download</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <EbookSkeletonRow key={i} />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
+
     if (error) return <div className="text-red-500 text-center">{error}</div>;
 
     return (

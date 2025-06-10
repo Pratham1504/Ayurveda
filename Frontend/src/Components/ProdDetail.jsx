@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../Context/CartContext';
 import { motion } from 'framer-motion';
+import { UserData } from '../Context/UserContext';
+import { Star } from 'lucide-react'; // optional: you can also use your own star SVGs
+import toast from 'react-hot-toast';
 
 const ProdDetail = () => {
     const { id } = useParams();
@@ -11,6 +14,8 @@ const ProdDetail = () => {
     const [relatedProducts, setRelatedProducts] = useState([]);
     const { cart, addToCart, updateQuantity } = useCart();
     const [rating, setRating] = useState({ name: '', email: '', review: '', rating: 0 });
+    const { user, modalIsOpen, setModalIsOpen } = UserData();
+    const [hasRated, setHasRated] = useState(false);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -19,6 +24,13 @@ const ProdDetail = () => {
                 response.data.ratings = response.data.ratings || [];
                 setProduct(response.data);
                 fetchRelated(response.data.company);
+                // Check if user already rated
+                if (user && response.data.ratings.some(r => r.email === user.email)) {
+                    setHasRated(true);
+                } else {
+                    setHasRated(false);
+                }
+
             } catch (err) {
                 console.error('Error fetching product:', err);
             }
@@ -26,51 +38,150 @@ const ProdDetail = () => {
 
         const fetchRelated = async (company) => {
             try {
-                const res = await axios.get(`http://localhost:4000/api/products?company=${company}`);
-                setRelatedProducts(res.data.filter(p => p._id !== id));
+                const res = await axios.get(`http://localhost:4000/api/products`);
+                setRelatedProducts(res.data.filter(p => p._id !== id && p.company === company));
             } catch (err) {
                 console.error('Error fetching related products:', err);
             }
         };
 
         fetchProduct();
-    }, [id]);
+    }, [id, user]);
 
     const getProductQuantity = () => {
         const cartItem = cart.find(item => item._id === product?._id);
         return cartItem ? cartItem.quantity : 0;
     };
 
+    const StarRating = ({ value, onChange }) => {
+        const [hover, setHover] = useState(0);
+
+        return (
+            <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                        type="button"
+                        key={star}
+                        onClick={() => onChange(star)}
+                        onMouseEnter={() => setHover(star)}
+                        onMouseLeave={() => setHover(0)}
+                        className="text-yellow-400"
+                    >
+                        <Star
+                            fill={(hover || value) >= star ? '#facc15' : 'none'}
+                            stroke="#facc15"
+                            className="w-6 h-6 transition-all"
+                        />
+                    </button>
+                ))}
+            </div>
+        );
+    };
+
+
+    useEffect(() => {
+        if (user && user._id) {
+            setRating((prev) => ({
+                ...prev,
+                name: user.fullName || '',
+                email: user.email || '',
+            }));
+        }
+    }, [user]);
+
     const handleReviewChange = (e) => {
         setRating({ ...rating, [e.target.name]: e.target.value });
     };
 
     const submitReview = async () => {
+        if (!rating.review || rating.rating === 0) {
+            toast.error('Please provide both review and rating.');
+            return;
+        }
         try {
             const newReview = { ...rating };
             const response = await axios.post(`http://localhost:4000/api/products/${id}/rating`, newReview);
             setProduct(response.data.product);
             setRating({ name: '', email: '', review: '', rating: 0 });
+            setHasRated(true);
+            toast.success('Thanks For Your Valuable Review!');
         } catch (err) {
             console.error('Error submitting review:', err);
+            toast.error('Something went wrong. Try again later.');
         }
     };
 
-    if (!product) return <p className="text-center mt-20 text-lg animate-pulse">Loading...</p>;
+    if (!product) return (
+        // <p className="text-center mt-20 text-lg animate-pulse">Loading...</p>
+        <div className="bg-gradient-to-br from-white to-sky-50 container mx-auto px-4 max-w-screen-xl py-10 font-sans text-black">
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white rounded-xl shadow-lg p-8 animate-pulse"
+            >
+                {/* Image Skeleton */}
+                <div className="rounded-xl w-full h-[450px] bg-gray-200" />
+
+                {/* Right Side Skeleton */}
+                <div className="space-y-5">
+                    {/* Title */}
+                    <div className="h-8 bg-gray-200 rounded w-3/4" />
+
+                    {/* Company */}
+                    <div className="h-4 bg-gray-200 rounded w-1/2" />
+
+                    {/* Price Row */}
+                    <div className="flex items-center gap-4">
+                        <div className="h-6 w-20 bg-gray-200 rounded" />
+                        <div className="h-4 w-16 bg-gray-200 rounded" />
+                        <div className="h-4 w-16 bg-gray-200 rounded" />
+                    </div>
+
+                    {/* Description */}
+                    <div className="space-y-2">
+                        <div className="h-3 bg-gray-200 rounded w-full" />
+                        <div className="h-3 bg-gray-200 rounded w-5/6" />
+                        <div className="h-3 bg-gray-200 rounded w-4/6" />
+                    </div>
+
+                    {/* Size */}
+                    <div className="h-4 bg-gray-200 rounded w-1/4" />
+
+                    {/* Ingredients */}
+                    <div>
+                        <div className="h-4 bg-gray-200 rounded w-1/3 mb-2" />
+                        <ul className="space-y-2">
+                            <li className="h-3 bg-gray-200 rounded w-2/3" />
+                            <li className="h-3 bg-gray-200 rounded w-1/2" />
+                            <li className="h-3 bg-gray-200 rounded w-3/4" />
+                        </ul>
+                    </div>
+
+                    {/* Button/Quantity Skeleton */}
+                    <div className="h-10 w-3/4 bg-gray-300 rounded-md mt-4" />
+                </div>
+            </motion.div>
+        </div>
+
+
+    );
 
     const quantity = getProductQuantity();
 
+
+
     return (
         <div className="container mx-auto px-4 max-w-screen-xl py-10 font-sans text-black">
-            <motion.div 
-                initial={{ opacity: 0, y: 30 }} 
-                animate={{ opacity: 1, y: 0 }} 
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white rounded-xl shadow-lg p-8"
+                className=" bg-gradient-to-br from-white to-sky-50 grid grid-cols-1 md:grid-cols-2 gap-10 bg-white rounded-xl shadow-lg p-8"
             >
                 <img src={product.image} alt={product.name} className="rounded-xl w-full h-[450px] object-contain border" />
 
-                <div className="space-y-5">
+                <div className="space-y-2">
                     <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
                     <p className="text-gray-600">by <span className="text-sky-700 font-semibold">{product.company}</span></p>
 
@@ -92,66 +203,109 @@ const ProdDetail = () => {
                             )) : <li>No ingredients listed.</li>}
                         </ul>
                     </div>
-
                     {quantity > 0 ? (
-                        <div className="flex items-center border rounded overflow-hidden w-max">
-                            <button onClick={() => updateQuantity(product._id, -1)} className="bg-red-500 text-white px-4 py-2 hover:bg-red-600">-</button>
-                            <span className="px-6 py-2 text-lg bg-gray-100">{quantity}</span>
-                            <button onClick={() => updateQuantity(product._id, 1)} className="bg-green-500 text-white px-4 py-2 hover:bg-green-600">+</button>
+                        <div className="flex items-center justify-between mt-auto w-3/4 position">
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    updateQuantity(product._id, -1);
+                                }}
+                                className="bg-sky-600 text-white px-3 py-2 rounded-l-md hover:bg-sky-700 text-sm"
+                            >
+                                -
+                            </button>
+                            <span className="px-3 py-2 text-lg ">{quantity}</span>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    updateQuantity(product._id, 1);
+                                }}
+                                className="bg-sky-600 text-white px-3 py-2 rounded-r-md hover:bg-sky-700 text-sm"
+                            >
+                                +
+                            </button>
                         </div>
                     ) : (
-                        <button onClick={() => addToCart(product)} className="bg-sky-600 text-white px-6 py-3 rounded-md hover:bg-sky-700 transition">Add to Cart</button>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                addToCart(product);
+                            }}
+                            className="w-3/4 bg-sky-600 text-white px-3 py-2 rounded-md hover:bg-sky-700 transition mt-auto text-sm"
+                        >
+                            Add to Cart
+                        </button>
                     )}
                 </div>
             </motion.div>
 
-            <motion.div 
-                initial={{ opacity: 0, x: 50 }} 
-                whileInView={{ opacity: 1, x: 0 }} 
-                transition={{ duration: 0.5 }}
-                className="mt-10 bg-white p-6 rounded-xl shadow"
+            <div
+                className="mt-10 bg-white p-6 rounded-xl shadow bg-gradient-to-br from-white to-sky-50"
             >
                 <h2 className="text-xl font-semibold mb-4">Customer Reviews</h2>
                 {product.ratings.length > 0 ? product.ratings.map((rev, idx) => (
-                    <motion.div 
-                        key={idx} 
+                    <div
+                        key={idx}
                         className="mb-4 bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition"
-                        initial={{ opacity: 0, y: 10 }} 
-                        whileInView={{ opacity: 1, y: 0 }} 
-                        transition={{ duration: 0.3, delay: idx * 0.1 }}
                     >
                         <div className="flex justify-between items-center">
                             <p className="font-semibold text-gray-800">{rev.name}</p>
                             <span className="text-yellow-500">{'★'.repeat(rev.rating)}</span>
                         </div>
                         <p className="text-gray-600 text-sm mt-1">{rev.review}</p>
-                    </motion.div>
+                    </div>
                 )) : <p className="text-gray-500">No reviews yet.</p>}
-            </motion.div>
+            </div>
 
-            <div 
-                initial={{ opacity: 0 }} 
-                whileInView={{ opacity: 1 }} 
-                transition={{ delay: 0.3 }}
-                className="mt-10 bg-white p-6 rounded-xl shadow"
-            >
+            <div className="mt-10 bg-white p-6 rounded-xl shadow bg-gradient-to-br from-white to-sky-50">
                 <h2 className="text-xl font-semibold mb-4">Submit Your Review</h2>
-                <form onSubmit={(e) => { e.preventDefault(); submitReview(); }} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" name="name" placeholder="Name" value={rating.name} onChange={handleReviewChange} required className="border px-4 py-2 rounded-md focus:ring focus:ring-sky-400" />
-                    <input type="email" name="email" placeholder="Email" value={rating.email} onChange={handleReviewChange} required className="border px-4 py-2 rounded-md focus:ring focus:ring-sky-400" />
-                    <textarea name="review" placeholder="Your review" value={rating.review} onChange={handleReviewChange} required className="col-span-1 md:col-span-2 border px-4 py-2 rounded-md focus:ring focus:ring-sky-400" rows={4}></textarea>
-                    <select name="rating" value={rating.rating} onChange={handleReviewChange} required className="border px-4 py-2 rounded-md focus:ring focus:ring-sky-400">
-                        <option value={0}>Select Rating</option>
-                        {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} Star</option>)}
-                    </select>
-                    <button type="submit" className="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition">Post Review</button>
-                </form>
+
+                {!user || Object.keys(user).length === 0 ? (
+                    <p className="text-red-500 text-sm">
+                        Please <span onClick={() => setModalIsOpen(true)} className="text-sky-600 underline cursor-pointer">log in</span> to submit a review.
+                    </p>
+                ) : hasRated ? (
+                    <p className="text-gray-600 text-sm">✅ You have already submitted a review for this product.</p>
+                ) : (
+                    <form onSubmit={(e) => { e.preventDefault(); submitReview(); }} className="space-y-4">
+                        <div>
+                            <StarRating
+                                value={rating.rating}
+                                onChange={(newRating) => setRating((prev) => ({ ...prev, rating: newRating }))}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
+                            <textarea
+                                name="review"
+                                value={rating.review}
+                                onChange={handleReviewChange}
+                                required
+                                placeholder="Write your thoughts..."
+                                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 resize-none"
+                                rows={4}
+                            ></textarea>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className={`w-full py-2 rounded-lg font-semibold shadow-md transition
+                            ${!rating.review || rating.rating === 0
+                                    ? 'bg-gray-300 cursor-not-allowed text-gray-600'
+                                    : 'bg-sky-600 hover:bg-sky-700 text-white'}
+                                `}>
+                            Submit Review
+                        </button>
+                    </form>
+
+                )}
             </div>
 
             {relatedProducts.length > 0 && (
-                <motion.div 
-                    initial={{ opacity: 0 }} 
-                    whileInView={{ opacity: 1 }} 
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                     className="mt-16"
                 >

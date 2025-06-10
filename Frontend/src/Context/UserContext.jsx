@@ -12,6 +12,7 @@ export const UserContextProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   // async function loginUser(email, password, navigate) {
   //   setBtnLoading(true);
@@ -145,7 +146,9 @@ export const UserContextProvider = ({ children }) => {
         registerUser,
         verifyOtp,
         fetchUser,
-        logoutUser
+        logoutUser,
+        modalIsOpen,
+        setModalIsOpen,
       }}
     >
       {children}

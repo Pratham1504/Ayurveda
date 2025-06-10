@@ -13,7 +13,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
 
 const Appointment = () => {
-    const { user, loading } = UserData();
+    const { user } = UserData();
+    const [applicationload, setapplicationload] = useState(true);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -34,6 +35,7 @@ const Appointment = () => {
         try {
             const response = await axios.get(`http://localhost:4000/api/appointment/user/${user._id}`);
             setAppointments(response.data);
+            setapplicationload(false);
         } catch (error) {
             console.error('Error fetching appointments:', error);
         }
@@ -72,6 +74,7 @@ const Appointment = () => {
                 user_id: user._id,
             });
             toast.success('Appointment request submitted successfully!');
+            setSubmitting(false);
             setFormData({
                 name: user.fullName || '',
                 age: '',
@@ -147,8 +150,9 @@ const Appointment = () => {
                     </div>
                     <div>
                         <p className="font-semibold text-sky-800">Preferred Time</p>
-                        <p>{appointment.preferred_time}</p>
+                        <p>{appointment.preferred_time.charAt(0).toUpperCase() + appointment.preferred_time.slice(1)}</p>
                     </div>
+
                     <div>
                         <p className="font-semibold text-sky-800">Mode</p>
                         <p className="capitalize">{appointment.communication_mode}</p>
@@ -211,14 +215,14 @@ const Appointment = () => {
     const completedOrCanceled = appointments.filter(a => ['completed', 'cancelled'].includes(a.status));
 
     return (
-        <section className="bg-gradient-to-br from-white to-sky-50 py-8 sm:py-10 px-4 sm:px-6 mx-auto max-w-3xl rounded-3xl shadow-xl border border-gray-100 transition-all duration-300 ease-in-out">
+        <section className="bg-gradient-to-br from-white to-sky-50 py-8 sm:py-10 px-4 sm:px-6 mx-auto rounded-3xl shadow-xl border border-gray-100 transition-all duration-300 ease-in-out">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-sky-700 mb-10 tracking-tight">Book an Ayurvedic Consultation</h2>
-            {loading && (
-                <section className="py-12 px-6 max-w-3xl mx-auto">
+            {applicationload && (
+                <section className="mx-auto">
                     <AppointmentSkeleton key={0} />
                 </section>
             )}
-            {!loading && user && confirmedOrPending.length > 0 && (
+            {!applicationload && user && confirmedOrPending.length > 0 && (
                 <div className="space-y-4 mb-10">
                     <h3 className="text-lg sm:text-xl font-semibold text-sky-700">Your Upcoming Appointments</h3>
                     {confirmedOrPending.map(renderAppointmentCard)}
