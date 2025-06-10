@@ -165,6 +165,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { server } from "../main";
+import { Link } from "react-router-dom";
+// import { Toaster } from "react-hot-toast";
+// import { useContext } from "react";
+// import { UserContext } from "../Context/UserContext";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -258,7 +262,7 @@ const MyOrders = () => {
               {/* Right: Actions */}
               <div className="flex flex-col justify-center h-full gap-2 mt-4 md:mt-0 md:ml-8 min-w-[200px]">
                 <button className="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 rounded-full items-center justify-center">
-                  Order Details
+                  <Link to={`/my-orders/${order._id}`}>Order Details</Link>
                 </button>
               </div>
             </div>

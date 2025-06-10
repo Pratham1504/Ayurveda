@@ -21,6 +21,7 @@ import { NotificationProvider } from './Context/NotificationContext';
 import Ebook from './Pages/ebooks';
 import { UserData } from './Context/UserContext';
 import MyOrders from './Pages/MyOrders';
+import OrderDetail from './Pages/OrderDetail';
 import Appointment from './Pages/consulting';
 import AdminAppointments from './Pages/AdminAppointment'
 
@@ -34,7 +35,7 @@ function App() {
           <NotificationProvider>
             <Navbar setCartVisible={setCartVisible} />
             {cartVisible && <Cart onClose={() => setCartVisible(false)} />}
-            <div className="Pages flex-grow">
+            <div className="Pages flex-grow lg:w-3/4 md:w-3/4 mx-auto">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/blogs" element={<BlogPage />} />
@@ -52,7 +53,7 @@ function App() {
                 <Route path="/my-orders" element={<MyOrders />} />
                 <Route path="/consulting" element={<Appointment />} />
                 <Route path="/admin/appointments" element={<AdminAppointments />} />
-                {/* <Route exact path="/my-orders/:id" element={<OrderDetail />} /> */}
+                <Route exact path="/my-orders/:id" element={<OrderDetail />} />
               </Routes>
             </div>
             <Footer/>
