@@ -13,7 +13,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
 
 const Appointment = () => {
-    const { user } = UserData();
+    const { isAuth,user } = UserData();
     const [applicationload, setapplicationload] = useState(true);
 
     const [formData, setFormData] = useState({
@@ -51,7 +51,7 @@ const Appointment = () => {
             }));
             fetchAppointments();
         }
-    }, [user]);
+    }, [isAuth,user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
