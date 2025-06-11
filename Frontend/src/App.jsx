@@ -24,6 +24,7 @@ import MyOrders from './Pages/MyOrders';
 import OrderDetail from './Pages/OrderDetail';
 import Appointment from './Pages/consulting';
 import AdminAppointments from './Pages/AdminAppointment'
+import AboutUs from './Pages/AboutUs';
 
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
@@ -54,6 +55,7 @@ function App() {
                 <Route path="/consulting" element={<Appointment />} />
                 <Route path="/admin/appointments" element={<AdminAppointments />} />
                 <Route exact path="/my-orders/:id" element={<OrderDetail />} />
+                <Route path='/about' element={<AboutUs />} />
               </Routes>
             </div>
             <Footer/>
