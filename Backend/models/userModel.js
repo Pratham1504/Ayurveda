@@ -27,7 +27,9 @@ const userSchema = new mongoose.Schema({
   mobileNo: {
     type: String,
     required: true,
-    match: /^[6-9]\d{9}$/ 
+    match: /^[6-9]\d{9}$/,
+    unique: true,
+    index: true,
   },
   orderHistory : [
     {
