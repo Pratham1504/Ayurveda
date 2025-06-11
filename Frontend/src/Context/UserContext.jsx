@@ -21,7 +21,12 @@ export const UserContextProvider = ({ children }) => {
 
       toast.success(data.message);
       localStorage.setItem("token", data.token);
-      setUser(data.user);
+      const normalizedUser = {  //changing id to _id for uniform use of user
+        ...data.user,
+        _id: data.user._id || data.user.id,
+      };
+      setUser(normalizedUser);
+      console.log(user, data.user);
       if (data.user.role === 'admin') {
         setIsAdmin(true);
       }
