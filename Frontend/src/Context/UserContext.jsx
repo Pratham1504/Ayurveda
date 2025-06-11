@@ -12,19 +12,41 @@ export const UserContextProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  async function loginUser(email, password, navigate) {
+  // async function loginUser(email, password, navigate) {
+  //   setBtnLoading(true);
+  //   try {
+  //     const { data } = await axios.post(`${server}/api/user/login`, {
+  //       email,
+  //       password,
+  //     });
+
+  //     toast.success(data.message);
+  //     localStorage.setItem("token", data.token);
+  //     setUser(data.user);
+  //     if(data.user.role === 'admin'){
+  //       setIsAdmin(true);
+  //     }
+  //     setIsAuth(true);
+  //     setBtnLoading(false);
+  //     navigate("/");
+  //   } catch (error) {
+  //     setBtnLoading(false);
+  //     setIsAuth(false);
+  //     toast.error(error.response.data.message);
+  //   }
+  // }
+
+  async function loginUser(loginData, navigate) {
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${server}/api/user/login`, {
-        email,
-        password,
-      });
+      const { data } = await axios.post(`${server}/api/user/login`, loginData);
 
       toast.success(data.message);
       localStorage.setItem("token", data.token);
       setUser(data.user);
-      if(data.user.role === 'admin'){
+      if (data.user.role === 'admin') {
         setIsAdmin(true);
       }
       setIsAuth(true);
@@ -33,9 +55,10 @@ export const UserContextProvider = ({ children }) => {
     } catch (error) {
       setBtnLoading(false);
       setIsAuth(false);
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Login failed");
     }
   }
+
 
   async function registerUser(fullName, email, mobileNo, password,  navigate) {
     setBtnLoading(true);
@@ -123,7 +146,9 @@ export const UserContextProvider = ({ children }) => {
         registerUser,
         verifyOtp,
         fetchUser,
-        logoutUser
+        logoutUser,
+        modalIsOpen,
+        setModalIsOpen,
       }}
     >
       {children}

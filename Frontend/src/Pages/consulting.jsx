@@ -9,9 +9,12 @@ import {
     LinkIcon,
 } from '@heroicons/react/24/solid';
 import { UserData } from '../Context/UserContext';
+import toast, { Toaster } from 'react-hot-toast';
+import { motion, AnimatePresence } from "framer-motion";
 
 const Appointment = () => {
-    const { user, loading } = UserData();
+    const { user } = UserData();
+    const [applicationload, setapplicationload] = useState(true);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -25,9 +28,6 @@ const Appointment = () => {
     });
 
     const [submitting, setSubmitting] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-
     const [appointments, setAppointments] = useState([]);
 
     const fetchAppointments = async () => {
@@ -35,6 +35,7 @@ const Appointment = () => {
         try {
             const response = await axios.get(`http://localhost:4000/api/appointment/user/${user._id}`);
             setAppointments(response.data);
+            setapplicationload(false);
         } catch (error) {
             console.error('Error fetching appointments:', error);
         }
@@ -60,11 +61,9 @@ const Appointment = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
-        setSuccessMessage('');
-        setErrorMessage('');
 
         if (!user?._id) {
-            setErrorMessage('You must be logged in to request an appointment.');
+            toast.error('You must be logged in to request an appointment.');
             setSubmitting(false);
             return;
         }
@@ -74,7 +73,8 @@ const Appointment = () => {
                 ...formData,
                 user_id: user._id,
             });
-            setSuccessMessage('Appointment request submitted successfully!');
+            toast.success('Appointment request submitted successfully!');
+            setSubmitting(false);
             setFormData({
                 name: user.fullName || '',
                 age: '',
@@ -87,10 +87,9 @@ const Appointment = () => {
             });
             fetchAppointments();
         } catch (error) {
-            setErrorMessage('Failed to submit appointment request.');
-        } finally {
-            setSubmitting(false);
+            toast.error('Failed to submit appointment request.');
         }
+
     };
 
     const handleCancel = async (id) => {
@@ -101,10 +100,28 @@ const Appointment = () => {
             await axios.put(`http://localhost:4000/api/appointment/${id}/status`, {
                 status: 'cancelled',
             });
+            toast.success('Appointment cancelled.');
             fetchAppointments();
         } catch (error) {
             console.error('Failed to cancel appointment:', error);
         }
+    };
+
+    function getTomorrow() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return tomorrow.toISOString().split('T')[0];
+    }
+
+    const [showPastAppointments, setShowPastAppointments] = useState(false);
+    const [pastLoaded, setPastLoaded] = useState(false);
+
+    const handleTogglePast = () => {
+        setShowPastAppointments(prev => {
+            const next = !prev;
+            if (next && !pastLoaded) setPastLoaded(true); // load once
+            return next;
+        });
     };
 
     const renderAppointmentCard = (appointment) => {
@@ -133,8 +150,9 @@ const Appointment = () => {
                     </div>
                     <div>
                         <p className="font-semibold text-sky-800">Preferred Time</p>
-                        <p>{appointment.preferred_time}</p>
+                        <p>{appointment.preferred_time.charAt(0).toUpperCase() + appointment.preferred_time.slice(1)}</p>
                     </div>
+
                     <div>
                         <p className="font-semibold text-sky-800">Mode</p>
                         <p className="capitalize">{appointment.communication_mode}</p>
@@ -146,7 +164,7 @@ const Appointment = () => {
                 </div>
 
                 {/* Show GMeet link if available and status is confirmed*/}
-                {appointment.communication_mode === 'gmeet' && appointment.status ==='confirmed' && appointment.gmeet_link && (
+                {appointment.communication_mode === 'gmeet' && appointment.status === 'confirmed' && appointment.gmeet_link && (
                     <p className="mt-3 text-sm flex items-center gap-1">
                         <LinkIcon className="w-4 h-4 text-blue-500" />
                         <a href={appointment.gmeet_link} target="_blank" rel="noreferrer" className="text-blue-600 underline">
@@ -176,25 +194,37 @@ const Appointment = () => {
             </div>
         );
     };
+    const AppointmentSkeleton = () => (
+        <div className="rounded-xl bg-white shadow-md border border-sky-100 p-4 mb-4 animate-pulse">
+            <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
+                {[...Array(4)].map((_, i) => (
+                    <div key={i}>
+                        <div className="h-4 w-24 bg-sky-200 rounded mb-1" />
+                        <div className="h-4 w-28 bg-gray-200 rounded" />
+                    </div>
+                ))}
+            </div>
 
-
-    if (loading) {
-        return <div className="text-center py-12 text-lg text-gray-600 animate-pulse">Loading user info...</div>;
-    }
+            <div className="mt-3">
+                <div className="h-4 w-60 bg-red-200 rounded" />
+            </div>
+        </div>
+    );
 
     const confirmedOrPending = appointments.filter(a => ['confirmed', 'pending'].includes(a.status));
     const completedOrCanceled = appointments.filter(a => ['completed', 'cancelled'].includes(a.status));
 
     return (
-        <section className="bg-gradient-to-br from-white to-sky-50 py-12 px-6 mx-auto max-w-3xl rounded-3xl shadow-xl border border-gray-100 transition-all duration-300 ease-in-out">
-            <h2 className="text-4xl font-extrabold text-center text-sky-700 mb-10 tracking-tight">Book an Ayurvedic Consultation</h2>
-
-            {successMessage && <p className="text-green-600 text-center mb-4 font-semibold animate-fade-in">{successMessage}</p>}
-            {errorMessage && <p className="text-red-600 text-center mb-4 font-semibold animate-fade-in">{errorMessage}</p>}
-
-            {user && confirmedOrPending.length > 0 && (
+        <section className="bg-gradient-to-br from-white to-sky-50 py-8 sm:py-10 px-4 sm:px-6 mx-auto rounded-3xl shadow-xl border border-gray-100 transition-all duration-300 ease-in-out">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-sky-700 mb-10 tracking-tight">Book an Ayurvedic Consultation</h2>
+            {applicationload && (
+                <section className="mx-auto">
+                    <AppointmentSkeleton key={0} />
+                </section>
+            )}
+            {!applicationload && user && confirmedOrPending.length > 0 && (
                 <div className="space-y-4 mb-10">
-                    <h3 className="text-xl font-semibold text-sky-700">Your Upcoming Appointments</h3>
+                    <h3 className="text-lg sm:text-xl font-semibold text-sky-700">Your Upcoming Appointments</h3>
                     {confirmedOrPending.map(renderAppointmentCard)}
                 </div>
             )}
@@ -203,7 +233,7 @@ const Appointment = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="relative hover:scale-[1.01] transition-transform duration-200 ease-in-out">
                         <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-                        <UserIcon className="h-5 w-5 text-gray-400 absolute top-10 left-3" />
+                        <UserIcon className="w-4 h-4 text-gray-400 absolute top-10 left-3" />
                         <input
                             name="name"
                             id="name"
@@ -227,13 +257,13 @@ const Appointment = () => {
                             min="1"
                             placeholder="Enter your age"
                             required
-                            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-300"
+                            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-300 no-spinner"
                         />
                     </div>
 
                     <div className="relative hover:scale-[1.01] transition-transform duration-200 ease-in-out">
                         <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
-                        <EnvelopeIcon className="h-5 w-5 text-gray-400 absolute top-10 left-3" />
+                        <EnvelopeIcon className="w-4 h-4 text-gray-400 absolute top-10 left-3" />
                         <input
                             name="email"
                             id="email"
@@ -248,12 +278,13 @@ const Appointment = () => {
 
                     <div className="relative hover:scale-[1.01] transition-transform duration-200 ease-in-out">
                         <label htmlFor="phone_number" className="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
-                        <PhoneIcon className="h-5 w-5 text-gray-400 absolute top-10 left-3" />
+                        <PhoneIcon className="w-4 h-4 text-gray-400 absolute top-10 left-3" />
                         <input
                             name="phone_number"
                             id="phone_number"
                             value={formData.phone_number}
                             onChange={handleChange}
+                            pattern="[0-9]{10}"
                             type="tel"
                             placeholder="Enter phone number"
                             required
@@ -263,7 +294,7 @@ const Appointment = () => {
 
                     <div className="relative hover:scale-[1.01] transition-transform duration-200 ease-in-out">
                         <label htmlFor="preferred_date" className="block text-sm font-semibold text-gray-700 mb-1">Preferred Date</label>
-                        <CalendarIcon className="h-5 w-5 text-gray-400 absolute top-10 left-3" />
+                        <CalendarIcon className="w-4 h-4 text-gray-400 absolute top-10 left-3" />
                         <input
                             name="preferred_date"
                             id="preferred_date"
@@ -271,6 +302,7 @@ const Appointment = () => {
                             onChange={handleChange}
                             type="date"
                             required
+                            min={getTomorrow()}
                             className="w-full pl-10 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-300"
                         />
                     </div>
@@ -325,7 +357,7 @@ const Appointment = () => {
                         Reason for Appointment
                     </label>
                     <div className="relative">
-                        <ChatBubbleBottomCenterTextIcon className="h-5 w-5 text-gray-400 absolute top-3 left-3" />
+                        <ChatBubbleBottomCenterTextIcon className="w-4 h-4 text-gray-400 absolute top-3 left-3" />
                         <textarea
                             name="reason_for_appointment"
                             id="reason_for_appointment"
@@ -349,11 +381,42 @@ const Appointment = () => {
             </form>
 
             {user && completedOrCanceled.length > 0 && (
-                <div className="space-y-4 mt-10">
-                    <h3 className="text-xl font-semibold text-gray-700">Your Past Appointments</h3>
-                    {completedOrCanceled.map(renderAppointmentCard)}
+                <div className="mt-10">
+                    <button
+                        onClick={handleTogglePast}
+                        className="w-full flex justify-between items-center bg-gray-100 px-4 py-2 rounded-xl border text-gray-700 hover:bg-gray-200 transition"
+                    >
+                        <span className="text-sm font-medium">Your Past Appointments</span>
+                        <svg
+                            className={`w-4 h-4 transition-transform ${showPastAppointments ? 'rotate-180' : 'rotate-0'}`}
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                        {showPastAppointments && pastLoaded && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                className="overflow-hidden"
+                            >
+                                <div className="space-y-4 mt-4">
+                                    {completedOrCanceled.map(renderAppointmentCard)}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             )}
+
+
         </section>
     );
 };

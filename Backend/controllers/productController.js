@@ -103,6 +103,11 @@ const addRating = async (req, res) => {
       return res.status(404).json({ message: 'Product not found' });
     }
 
+    const alreadyRated = product.ratings.some(r => r.email === email);
+    if (alreadyRated) {
+      throw new Error('You have already rated this product.');
+    }
+
     // Push new rating into the product's ratings array
     product.ratings.push({ name, email, review, rating });
     await product.save();

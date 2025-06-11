@@ -96,7 +96,8 @@ exports.verifyotp = async (req, res) => {
 // Login Controller
 exports.login = async (req, res) => {
   try {
-    const { email,mobileNumber, password } = req.body;
+    const { email, mobileNumber, password } = req.body;
+    console.log(req.body);
 
     // Find user
     if(!email && !mobileNumber){

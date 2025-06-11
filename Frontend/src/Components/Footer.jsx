@@ -72,7 +72,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 text-center text-sm text-gray-400">
-          &copy; 2024 Ayurvedic Clinic. All rights reserved.
+          &copy; 2025 Swasthamana. All rights reserved.
         </div>
       </div>
     </footer>

@@ -32,8 +32,8 @@ const BlogList = () => {
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = html;
         const textContent = tempDiv.textContent || tempDiv.innerText || "";
-        return textContent.length > maxLength 
-            ? textContent.substring(0, maxLength) + '...' 
+        return textContent.length > maxLength
+            ? textContent.substring(0, maxLength) + '...'
             : textContent;
     };
 
@@ -51,7 +51,25 @@ const BlogList = () => {
         return content.includes(searchTerm.toLowerCase());
     });
 
-    if (loading) return <div className="text-center font-sans text-gray-700">Loading...</div>;
+    const SkeletonCard = () => (
+        <div className="p-4 sm:p-6 bg-white rounded-lg border border-gray-200 shadow animate-pulse">
+            <div className="flex justify-between items-center mb-4">
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                <div className="h-4 bg-gray-200 rounded w-16"></div>
+            </div>
+            <div className="h-6 bg-gray-300 rounded w-3/4 mb-3"></div>
+            <div className="space-y-2">
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            </div>
+            <div className="flex justify-between items-center mt-4">
+                <div className="h-4 bg-gray-200 rounded w-36"></div>
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+            </div>
+        </div>
+    );
+
+
     if (error) return <div className="text-red-500 font-sans">Error fetching blogs: {error.message}</div>;
 
     return (
@@ -71,6 +89,17 @@ const BlogList = () => {
                     />
                 </div>
 
+                {loading ? (
+                    <section className="bg-white font-sans text-gray-800">
+                <div className="px-4 mx-auto max-w-screen-xl py-8">
+                    <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
+                        {Array.from({ length: 4 }).map((_, index) => (
+                            <SkeletonCard key={index} />
+                        ))}
+                    </div>
+                </div>
+            </section>
+                ) : (
                 <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
                     {filteredBlogs.map((blog) => (
                         <article key={blog._id} className="p-4 sm:p-6 bg-white rounded-lg border border-gray-200 shadow hover:shadow-md transition">
@@ -101,7 +130,8 @@ const BlogList = () => {
                             </div>
                         </article>
                     ))}
-                </div>  
+                </div>
+                )}
             </div>
         </section>
     );
