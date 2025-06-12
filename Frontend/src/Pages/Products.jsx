@@ -3,9 +3,10 @@ import axios from 'axios';
 import { useCart } from '../Context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { SlidersHorizontal } from 'lucide-react';
+import { useProducts } from '../Context/ProductContext';
 
 const Products = () => {
-    const [products, setProducts] = useState([]);
+    const { products, productLoading } = useProducts();
     const [searchTerm, setSearchTerm] = useState('');
     const [companyFilter, setCompanyFilter] = useState('');
     const [ratingFilter, setRatingFilter] = useState(0);
@@ -14,21 +15,6 @@ const Products = () => {
     const { cart, addToCart, updateQuantity } = useCart();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/products');
-                setProducts(response.data);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProducts();
-    }, []);
 
     const companies = [...new Set(products.map(p => p.company))];
 
@@ -139,7 +125,7 @@ const Products = () => {
             )}
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
-                {loading
+                {productLoading
                     ? Array.from({ length: 8 }).map((_, index) => <ProductSkeletonCard key={index} />)
                     : filteredProducts.map(product => {
                         const quantity = getProductQuantity(product._id);

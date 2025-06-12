@@ -1,27 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useBlogs } from '../Context/BlogContext';
 
 const BlogList = () => {
-    const [blogs, setBlogs] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { blogs, blogLoading, blogError } = useBlogs();
     const [searchTerm, setSearchTerm] = useState('');
-
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/blogs');
-                setBlogs(response.data);
-            } catch (err) {
-                setError(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBlogs();
-    }, []);
 
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -70,7 +53,7 @@ const BlogList = () => {
     );
 
 
-    if (error) return <div className="text-red-500 font-sans">Error fetching blogs: {error.message}</div>;
+    if (blogError) return <div className="text-red-500 font-sans">Error fetching blogs: {blogError.message}</div>;
 
     return (
         <section className="bg-white font-sans text-gray-800">
@@ -89,7 +72,7 @@ const BlogList = () => {
                     />
                 </div>
 
-                {loading ? (
+                {blogLoading ? (
                     <section className="bg-white font-sans text-gray-800">
                 <div className="px-4 mx-auto max-w-screen-xl py-8">
                     <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">

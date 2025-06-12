@@ -1,42 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { useProducts } from '../Context/ProductContext';
+import { useBlogs } from '../Context/BlogContext';
 
 const Home = () => {
-    const [products, setProducts] = useState([]);
-    const [blogs, setBlogs] = useState([]);
+    const { products, productLoading, productError } = useProducts();
+    const { blogs, blogLoading, blogError } = useBlogs();
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/products');
-                setProducts(response.data);
-            } catch (err) {
-                console.error("Error fetching products:", err);
-                setError(err);
-            }
-        };
-
-        const fetchBlogs = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/blogs');
-                setBlogs(response.data);
-            } catch (err) {
-                console.error("Error fetching blogs:", err);
-                setError(err);
-            }
-        };
-
-        const fetchData = async () => {
-            await Promise.all([fetchProducts(), fetchBlogs()]);
-            setLoading(false);
-        };
-
-        fetchData();
-    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -68,8 +38,10 @@ const Home = () => {
         return discount.toFixed(0);
     };
 
-    if (loading) return <div className="text-center py-20 text-gray-500 text-xl">Loading...</div>;
-    if (error) return <div className="text-red-500 text-center py-20">Error fetching data: {error.message}</div>;
+    if (productLoading || blogLoading)
+        return <div className="text-center py-20 text-gray-500 text-xl">Loading...</div>;
+    if (productError || blogError)
+        return <div className="text-red-500 text-center py-20">Error fetching data</div>;
 
     return (
         <div className="font-sans text-[#333] bg-white">
@@ -144,7 +116,7 @@ const Home = () => {
                 <div className="max-w-7xl mx-auto px-6">
                     <h2 className="text-3xl md:text-4xl font-semibold mb-10">Featured Products</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                        {products.slice(0, 8).map((product) => {
+                        {products?.slice(0, 8).map((product) => {
                             const discount = calculateDiscount(product.price, product.MRP);
                             return (
                                 <div

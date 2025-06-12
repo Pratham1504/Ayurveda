@@ -4,12 +4,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../Context/CartContext';
 import { motion } from 'framer-motion';
 import { UserData } from '../Context/UserContext';
-import { Star } from 'lucide-react'; // optional: you can also use your own star SVGs
+import { Star } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useProducts } from '../Context/ProductContext';
 
 const ProdDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { products, productLoading, productError } = useProducts();
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const { cart, addToCart, updateQuantity } = useCart();
@@ -18,35 +20,29 @@ const ProdDetail = () => {
     const [hasRated, setHasRated] = useState(false);
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response = await axios.get(`http://localhost:4000/api/products/${id}`);
-                response.data.ratings = response.data.ratings || [];
-                setProduct(response.data);
-                fetchRelated(response.data.company);
-                // Check if user already rated
-                if (user && response.data.ratings.some(r => r.email === user.email)) {
-                    setHasRated(true);
-                } else {
-                    setHasRated(false);
+        try {
+            if (!productLoading && products.length > 0) {
+                const foundProduct = products.find(p => p._id === id);
+                if (foundProduct) {
+                    setProduct(foundProduct);
+
+                    // Set related products (same company, exclude current)
+                    const related = products.filter(p => p._id !== id && p.company === foundProduct.company);
+                    setRelatedProducts(related);
+
+                    // Check if user has rated
+                    if (user && foundProduct.ratings?.some(r => r.email === user.email)) {
+                        setHasRated(true);
+                    } else {
+                        setHasRated(false);
+                    }
                 }
-
-            } catch (err) {
-                console.error('Error fetching product:', err);
             }
-        };
 
-        const fetchRelated = async (company) => {
-            try {
-                const res = await axios.get(`http://localhost:4000/api/products`);
-                setRelatedProducts(res.data.filter(p => p._id !== id && p.company === company));
-            } catch (err) {
-                console.error('Error fetching related products:', err);
-            }
-        };
-
-        fetchProduct();
-    }, [id, user]);
+        } catch (err) {
+            console.error('Error fetching product:', err);
+        }
+    }, [products, id, user, productLoading]);
 
     const getProductQuantity = () => {
         const cartItem = cart.find(item => item._id === product?._id);
@@ -111,8 +107,10 @@ const ProdDetail = () => {
         }
     };
 
-    if (!product) return (
-        // <p className="text-center mt-20 text-lg animate-pulse">Loading...</p>
+    if (productError) return <div className="text-red-500 text-center py-20">Error loading product: {productError.message}</div>;
+    // if (!product) return <div className="text-center py-20 text-gray-500 text-xl">Product not found.</div>;
+
+    if (!product || productLoading) return (
         <div className="bg-gradient-to-br from-white to-sky-50 container mx-auto px-4 max-w-screen-xl py-10 font-sans text-black">
             <motion.div
                 initial={{ opacity: 0, y: 30 }}

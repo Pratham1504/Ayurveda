@@ -5,12 +5,15 @@ import moment from 'moment';
 import twitterIcon from '../Images/Icons/X.webp';
 import whatsappIcon from '../Images/Icons/Whatsapp-logo.webp';
 import instagramIcon from '../Images/Icons/Instagram.webp';
+import { useBlogs } from '../Context/BlogContext';
+import { useProducts } from '../Context/ProductContext';
 // import ReactQuill from 'react-quill';
 // import 'react-quill/dist/quill.snow.css';
 
 const BlogDetail = () => {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
+  const { blogs, blogLoading, blogError } = useBlogs();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,28 +21,21 @@ const BlogDetail = () => {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [commentText, setCommentText] = useState('');
-  const [products, setProducts] = useState([]);
+  const { products, productLoading } = useProducts();
 
   useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        const response = await axios.get(`http://localhost:4000/api/blogs/${id}`);
-        setBlog(response.data);
-        setComments(response.data.comments);
-        if (response.data.productId) {
-          const productResponse = await axios.get(`http://localhost:4000/api/products/${response.data.productId}`);
-          setProduct(productResponse.data);
-        }
-        const productsResponse = await axios.get(`http://localhost:4000/api/products`);
-        setProducts(productsResponse.data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!blogLoading && blogs.length > 0) {
+      const selectedBlog = blogs.find(b => b._id === id);
+      if (selectedBlog) {
+        setBlog(selectedBlog);
+        setComments(selectedBlog.comments || []);
 
-    fetchBlog();
+        if (!productLoading && selectedBlog.productId && products.length > 0) {
+          const linkedProduct = products.find(p => p._id === selectedBlog.productId);
+          setProduct(linkedProduct || null);
+        }
+      }
+    }
   }, [id]);
 
   const handleLike = async () => {
@@ -79,9 +75,9 @@ const BlogDetail = () => {
     }
   };
 
-  if (loading) return <div className="text-center">Loading...</div>;
-  if (error) return <div className="text-red-500">Error fetching blog: {error.message}</div>;
-  if (!blog) return <div className="text-red-500">Blog not found</div>;
+  if (blogLoading || productLoading) return <div className="text-center py-20 text-gray-500">Loading...</div>;
+  if (blogError || error) return <div className="text-red-500 py-10">Error: {(blogError || error).message}</div>;
+  if (!blog) return <div className="text-gray-600 py-10 text-center">Blog not found</div>;
 
   return (
     <section className="font-sans py-4 px-4 mx-auto max-w-screen-xl lg:py-4 lg:px-6">
