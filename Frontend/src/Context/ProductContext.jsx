@@ -15,7 +15,6 @@ export const ProductProvider = ({ children }) => {
             try {
                 const res = await axios.get('http://localhost:4000/api/products');
                 setProducts(res.data);
-                console.log(res.data);
             } catch (err) {
                 console.error("Error fetching products:", err);
                 setProductError(err);

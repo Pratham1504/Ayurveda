@@ -20,6 +20,10 @@ const commentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 const blogSchema = new mongoose.Schema({
@@ -42,7 +46,7 @@ const blogSchema = new mongoose.Schema({
         type: String,
         trim: true,
         validate: {
-            validator: function(v) {
+            validator: function (v) {
                 return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/.test(v); // Validate YouTube link format
             },
             message: props => `${props.value} is not a valid YouTube URL!`,
@@ -60,6 +64,16 @@ const blogSchema = new mongoose.Schema({
     dislikes: {
         type: Number,
         default: 0,
+    },
+    likedUsers: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User',
+        default: [],
+    },
+    dislikedUsers: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User',
+        default: [],
     },
     comments: [commentSchema], // Array of comments
 }, {

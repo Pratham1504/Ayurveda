@@ -57,54 +57,134 @@ const deleteBlog = async (req, res) => {
 };
 
 // Increment like count
-likeBlog = async (req, res) => {
-    try {
-        const blog = await Blog.findById(req.params.id);
-        if (!blog) return res.status(404).json({ message: 'Blog not found' });
+const likeBlog = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user?._id;
 
-        blog.likes += 1; // Increment like count
-        await blog.save();
-        res.json(blog);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized: Login required" });
+  }
+
+  try {
+    const blog = await Blog.findById(id);
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
     }
+
+    const likedIndex = blog.likedUsers.findIndex(uid => uid.toString() === userId.toString());
+    const dislikedIndex = blog.dislikedUsers.findIndex(uid => uid.toString() === userId.toString());
+
+    if (likedIndex !== -1) {
+      // Already liked → remove like
+      blog.likedUsers.splice(likedIndex, 1);
+    } else {
+      // Add like
+      blog.likedUsers.push(userId);
+      // Remove from dislikes if present
+      if (dislikedIndex !== -1) {
+        blog.dislikedUsers.splice(dislikedIndex, 1);
+      }
+    }
+
+    blog.likes = blog.likedUsers.length;
+    blog.dislikes = blog.dislikedUsers.length;
+
+    await blog.save();
+    res.json(blog);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error liking the blog", error: err.message });
+  }
 };
 
 // Increment dislike count
-dislikeBlog = async (req, res) => {
-    try {
-        const blog = await Blog.findById(req.params.id);
-        if (!blog) return res.status(404).json({ message: 'Blog not found' });
+const dislikeBlog = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user?._id;
 
-        blog.dislikes += 1; // Increment dislike count
-        await blog.save();
-        res.json(blog);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized: Login required" });
+  }
+
+  try {
+    const blog = await Blog.findById(id);
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
     }
+
+    const dislikedIndex = blog.dislikedUsers.findIndex(uid => uid.toString() === userId.toString());
+    const likedIndex = blog.likedUsers.findIndex(uid => uid.toString() === userId.toString());
+
+    if (dislikedIndex !== -1) {
+      // Already disliked → remove dislike
+      blog.dislikedUsers.splice(dislikedIndex, 1);
+    } else {
+      // Add dislike
+      blog.dislikedUsers.push(userId);
+      // Remove from likes if present
+      if (likedIndex !== -1) {
+        blog.likedUsers.splice(likedIndex, 1);
+      }
+    }
+
+    blog.likes = blog.likedUsers.length;
+    blog.dislikes = blog.dislikedUsers.length;
+
+    await blog.save();
+    res.json(blog);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error disliking the blog", error: err.message });
+  }
 };
 
 // Add new comment function
-addComment = async (req, res) => {
-    const { name, age, text } = req.body;
-    const { id } = req.params; // Blog ID
+const addComment = async (req, res) => {
+  const { name, age, text } = req.body;
+  const { id } = req.params;
+  const userId = req.user?.id;
 
-    try {
-        const blog = await Blog.findById(id);
-        if (!blog) {
-            return res.status(404).json({ message: "Blog not found" });
-        }
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized: Login required to comment" });
+  }
 
-        const newComment = { name, age, text, createdAt: new Date() }; // Include createdAt for timestamp
-        blog.comments.push(newComment);
-        await blog.save();
+  if (!text || !name) {
+    return res.status(400).json({ message: "Missing required fields: name and text" });
+  }
 
-        // Return the newly added comment
-        res.status(201).json({ comment: newComment }); // Send back only the new comment
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+  try {
+    const blog = await Blog.findById(id);
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
     }
+
+    // Check if the user already commented
+    const alreadyCommented = blog.comments.some(
+      (comment) => comment.userId?.toString() === userId
+    );
+
+    if (alreadyCommented) {
+      return res.status(400).json({ message: "You have already commented on this blog" });
+    }
+
+    const newComment = {
+      name,
+      age: age || null,
+      text,
+      userId,
+      createdAt: new Date(),
+    };
+
+    blog.comments.push(newComment);
+    await blog.save();
+
+    res.status(201).json({ comment: newComment });
+  } catch (err) {
+    console.error("Error adding comment:", err);
+    res.status(500).json({ message: "Internal server error", error: err.message });
+  }
 };
+
 
 
 
