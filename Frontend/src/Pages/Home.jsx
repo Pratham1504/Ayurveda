@@ -4,6 +4,7 @@ import { useProducts } from '../Context/ProductContext';
 import { useBlogs } from "../Context/BlogContext";
 import HeroSection from "./Home/HeroSection";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
