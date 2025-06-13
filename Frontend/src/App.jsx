@@ -24,6 +24,7 @@ import MyOrders from './Pages/MyOrders';
 import OrderDetail from './Pages/OrderDetail';
 import Appointment from './Pages/consulting';
 import AdminAppointments from './Pages/AdminAppointment'
+import HeroSection from './Pages/Home/HeroSection';
 import AboutUs from './Pages/AboutUs';
 
 function App() {
@@ -36,7 +37,8 @@ function App() {
           <NotificationProvider>
             <Navbar setCartVisible={setCartVisible} />
             {cartVisible && <Cart onClose={() => setCartVisible(false)} />}
-            <div className="Pages flex-grow lg:w-3/4 md:w-3/4 mx-auto">
+            <div className="Pages flex-grow w-full pt-16">
+              {/* <HeroSection /> */}
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/blogs" element={<BlogPage />} />
