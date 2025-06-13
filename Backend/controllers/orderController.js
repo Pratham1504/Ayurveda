@@ -107,11 +107,11 @@ exports.updateOrderStatus = async (req, res) => {
     }
 
     order.orderStatus = status;
+    console.log("Updating order:", orderId, "to:", status);
+
     await order.save();
 
-    res
-      .status(200)
-      .json({ message: "Order status updated successfully", order });
+    res.status(200).json({ message: "Order status updated successfully", order });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
