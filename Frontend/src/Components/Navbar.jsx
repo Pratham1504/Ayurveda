@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Modal from 'react-modal';
 import { UserCircleIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { UserData } from '../Context/UserContext';
@@ -18,6 +18,7 @@ const Navbar = ({ setCartVisible }) => {
   const [profileCardOpen, setProfileCardOpen] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Form states
   const [loginEmail, setLoginEmail] = useState('');
@@ -39,7 +40,7 @@ const Navbar = ({ setCartVisible }) => {
   const [forgotError, setForgotError] = useState('');
 
   // Handle login
-    const handleLogin = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     setLoginError('');
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -111,8 +112,30 @@ const Navbar = ({ setCartVisible }) => {
     setOtpError('');
   };
 
+  // Navbar background color state
+  const [navBg, setNavBg] = useState('bg-[#e7f7fe'); // initial color matches HeroSection
+
+  useEffect(() => {
+  // Only apply scroll effect on Home page
+  if (location.pathname === "/") {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setNavBg('bg-white shadow-lg');
+      } else {
+        setNavBg('bg-[#e7f7fe]');
+      }
+    };
+    // Set initial navbar color on mount
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  } else {
+    setNavBg('bg-white shadow-lg');
+  }
+}, [location.pathname]);
+
   return (
-    <nav className="bg-white shadow-lg mb-1">
+    <nav className={`${navBg} transition-colors duration-300 mb-1 fixed w-full z-50`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-around h-16 ">
           <div className="w-full items-center flex justify-between ">
@@ -196,9 +219,7 @@ const Navbar = ({ setCartVisible }) => {
                   >
                     Logout
                   </button>
-                  {/* <a href="/" className="hidden md:inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition duration-200">
-                    Logout
-                  </a> */}
+                  
                 </div>
               </div>
             )}
@@ -265,164 +286,7 @@ const Navbar = ({ setCartVisible }) => {
       )}
 
       {/* Login/Signup Modal */}
-      {/* <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        contentLabel="Login/Signup Modal"
-        className="max-w-md mx-auto h-[70vh] flex flex-col justify-center bg-white px-10 py-12 rounded-2xl shadow-lg outline-none relative"
-        overlayClassName="fixed inset-0 bg-black/60 flex items-center justify-center backdrop-blur-lg z-50"
-        bodyOpenClassName="modal-open"
-      >
-        <div className="flex-shrink-0 flex items-center justify-center m-10">
-          <a href="/" className="text-4xl font-bold text-sky-600 ">
-            Ayurveda Clinic
-          </a>
-        </div>
-        <div className=''>
-          <div className="flex flex-col justify-center items-center mb-4">
-            {isLogin ? (
-              <div className='text-2xl font-semibold'>
-                Sign in to your account
-              </div>
-            ) : (
-              <div className='text-2xl font-semibold'>
-                Create a new account
-              </div>
-            ) }
-          </div>
-          <div className='cross-button'>
-            <button
-              onClick={() => setModalIsOpen(false)}
-              className="absolute top-2 right-3 text-gray-500 hover:text-black font-bold text-3xl leading-none z-10"
-              aria-label="Close modal"
-            >
-              &times;
-            </button>
-          </div>
-          {isLogin ? (
-            <form onSubmit={handleLogin} className="">
-              <input
-                type="text"
-                placeholder="Email or Mobile Number"
-                value={loginEmail}
-                onChange={e => setLoginEmail(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md my-2"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={loginPassword}
-                onChange={e => setLoginPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md my-2"
-                required
-              />
-              {loginError && (
-                <div className="text-red-500 text-sm text-center mb-2">{loginError}</div>
-              )}
-              <button
-                type="submit"
-                className="w-full mt-4 bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
-                disabled={btnLoading}
-              >
-                {btnLoading ? 'Logging in...' : 'Login'}
-              </button>
-              <div className="text-center">
-                <button
-                  type="button"
-                  className="text-sky-600 text-md hover:underline m-0 mt-8"
-                  onClick={() => {
-                    setModalIsOpen(false);
-                    setForgotModalOpen(true);
-                    setForgotMsg('');
-                    setForgotError('');
-                    setForgotEmail('');
-                  }}
-                >
-                  Forgot Password?
-                </button>
-              </div>
-              <div className='mt-2 text-md text-center'>
-                Don't have an account? <span className="text-sky-600 cursor-pointer" onClick={() => { setIsLogin(false); resetAuthForms(); }}>Register here</span>
-              </div>
-              <div className='text-center mt-4'>
-                <button className='types-of-use text-sky-600 text-md hover:underline m-0 mt-6' onClick={() => {
-                  window.open('https://www.example.com/terms-of-use', '_blank');
-                }}>
-                  Terms of Use | Privacy Policy
-                </button>
-              </div>
-            </form>
-          ) : (
-            <form onSubmit={handleSignup} className="space-y-4">
-              <input
-                type="text"
-                placeholder="Full Name"
-                value={signupName}
-                onChange={e => setSignupName(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md"
-                required
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                value={signupEmail}
-                onChange={e => setSignupEmail(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Mobile Number"
-                value={signupMobile}
-                onChange={e => setSignupMobile(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={signupPassword}
-                onChange={e => setSignupPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                value={signupConfirmPassword}
-                onChange={e => setSignupConfirmPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md"
-                required
-              />
-              {signupError && (
-                <div className="text-red-500 text-sm">{signupError}</div>
-              )}
-              <button
-                type="submit"
-                className="w-full mt-4 bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
-                disabled={btnLoading}
-              >
-                {btnLoading ? 'Signing up...' : 'Sign Up'}
-              </button>
-              <div className='text-center'>
-                Already have an account? <span className="text-sky-600 cursor-pointer" onClick={() => { setIsLogin(true); resetAuthForms(); }}>Login</span>
-              </div>
-
-              <div className='text-center mt-6'>
-                <div className='text-grey-600'>By signing up, you agree to our </div>
-                <button className='types-of-use text-sky-600 text-md hover:underline m-0 mt-1' onClick={() => {
-                  window.open('https://www.example.com/terms-of-use', '_blank');
-                }}>
-                  
-                  Terms of Use | Privacy Policy
-                </button>
-              </div>
-              
-            </form>
-          )}
-        </div>
-      </Modal> */}
+      
 
       <Modal
         isOpen={modalIsOpen}
