@@ -215,7 +215,7 @@ const Appointment = () => {
     const completedOrCanceled = appointments.filter(a => ['completed', 'cancelled'].includes(a.status));
 
     return (
-        <section className="bg-gradient-to-br from-white to-sky-50 py-8 sm:py-10 px-4 sm:px-6 mx-auto rounded-3xl shadow-xl border border-gray-100 transition-all duration-300 ease-in-out">
+        <section className="bg-gradient-to-br from-white to-sky-50 py-8 sm:py-10 px-4 sm:px-6 mx-auto rounded-3xl shadow-xl border border-gray-100 transition-all duration-300 ease-in-out lg:max-w-3/4">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-sky-700 mb-10 tracking-tight">Book an Ayurvedic Consultation</h2>
             {isAuth && applicationload && (
                 <section className="mx-auto">

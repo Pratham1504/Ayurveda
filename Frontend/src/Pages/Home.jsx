@@ -1,48 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useProducts } from '../Context/ProductContext';
+import { useProducts } from "../Context/ProductContext";
 import { useBlogs } from "../Context/BlogContext";
 import HeroSection from "./Home/HeroSection";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
-  const [blogs, setBlogs] = useState([]);
+  //   const [products, setProducts] = useState([]);
+  //   const [blogs, setBlogs] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/api/products");
-        setProducts(response.data);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError(err);
-      }
-    };
-
-    const fetchBlogs = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/api/blogs");
-        setBlogs(response.data);
-      } catch (err) {
-        console.error("Error fetching blogs:", err);
-        setError(err);
-      }
-    };
-
-    const fetchData = async () => {
-      await Promise.all([fetchProducts(), fetchBlogs()]);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
+  const { products, productLoading, productError } = useProducts();
+  const { blogs, blogLoading, blogError } = useBlogs();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -76,9 +50,17 @@ const Home = () => {
     return discount.toFixed(0);
   };
 
-  if (loading)
+  //   if (loading)
+  //     return (
+  //       <div className="text-center py-20 text-gray-500 text-xl">Loading...</div>
+  //     );
+  if (productLoading || blogLoading)
     return (
       <div className="text-center py-20 text-gray-500 text-xl">Loading...</div>
+    );
+  if (productError || blogError)
+    return (
+      <div className="text-red-500 text-center py-20">Error fetching data</div>
     );
   if (error)
     return (
@@ -294,23 +276,25 @@ const Home = () => {
         </div>
       </section>
 
-            <section className="py-16 bg-[#f9f9f9]">
-                <div className="max-w-7xl mx-auto px-6">
-                    <h2 className="text-3xl md:text-4xl font-semibold mb-10">Featured Products</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                        {products?.slice(0, 8).map((product) => {
-                            const discount = calculateDiscount(product.price, product.MRP);
-                            return (
-                                <div
-                            key={product._id}
-                            className="bg-white rounded-xl shadow hover:shadow-lg transition duration-300 transform hover:-translate-y-1 p-5 flex flex-col cursor-pointer border border-sky-100 relative"
-                            onClick={() => navigate(`/products/${product._id}`)}
-                        >
-                            {discount > 0 && (
-                                <span className="absolute top-2 left-2 bg-sky-200 text-black text-xs px-2 py-1 rounded">
-                                    {discount}% OFF
-                                </span>
-                            )}
+      <section className="py-16 bg-[#f9f9f9]">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-10 text-[#1a365d] text-center">
+            Featured Products
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            {products.slice(0, 8).map((product) => {
+              const discount = calculateDiscount(product.price, product.MRP);
+              return (
+                <div
+                  key={product._id}
+                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-6 flex flex-col cursor-pointer border border-sky-100 relative group"
+                  onClick={() => navigate(`/products/${product._id}`)}
+                >
+                  {discount > 0 && (
+                    <span className="absolute top-4 left-4 bg-gradient-to-r from-sky-400 to-sky-200 text-white text-xs font-bold px-3 py-1 rounded-full shadow z-20">
+                      {discount}% OFF
+                    </span>
+                  )}
 
                   <div className="flex justify-center items-center mb-4 h-44">
                     <img
