@@ -265,7 +265,7 @@ const Products = () => {
     }, []);
 
     return (
-        <div className="font-sans container px-4 mx-auto max-w-screen-xl lg:py-10 lg:px-6 text-black">
+        <div className="font-sans container px-4 mx-auto max-w-screen-xl lg:py-10 lg:px-6 text-black lg:max-w-3/4 lg:mx-auto">
             <h1 className="text-4xl font-semibold text-center mb-10 text-black">Browse Our Products</h1>
 
             <div className="flex items-center mb-6 gap-4">

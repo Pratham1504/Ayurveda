@@ -54,7 +54,7 @@ const Ebooks = () => {
 
     if (loading) {
         return (
-            <div className="bg-white py-10 px-6 mx-auto max-w-screen-xl font-sans">
+            <div className="bg-white py-10 px-6 mx-auto max-w-screen-xl font-sans lg:max-w-3/4 lg:mx-auto">
                 <h2 className="text-3xl font-bold text-sky-600 mb-6 border-b-2 border-sky-200 inline-block">Ebooks</h2>
 
                 <div className="mb-6 h-10 bg-gray-200 rounded-md w-full animate-pulse" />

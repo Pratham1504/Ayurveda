@@ -56,7 +56,7 @@ const BlogList = () => {
     if (blogError) return <div className="text-red-500 font-sans">Error fetching blogs: {blogError.message}</div>;
 
     return (
-        <section className="bg-white font-sans text-gray-800">
+        <section className="bg-white font-sans text-gray-800 lg:max-w-3/4 lg:mx-auto">
             <div className="px-4 mx-auto max-w-screen-xl lg:py-8 lg:px-6">
                 <div className="bg-sky-50 p-4 sm:p-8 rounded-lg mb-8 text-center">
                     <h2 className="mb-4 text-2xl sm:text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900">Our Blogs</h2>

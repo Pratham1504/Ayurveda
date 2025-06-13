@@ -170,7 +170,7 @@ const ProdDetail = () => {
 
 
     return (
-        <div className="container mx-auto px-4 max-w-screen-xl py-10 font-sans text-black">
+        <div className="container mx-auto px-4 max-w-screen-xl py-10 font-sans text-black lg:max-w-3/4 lg:mx-auto">
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}

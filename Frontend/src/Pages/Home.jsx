@@ -70,10 +70,10 @@ const Home = () => {
     );
 
   return (
-    <div className="font-sans text-[#333] bg-white ">
+    <div className="font-sans text-[#333] bg-white">
       <HeroSection />
 
-      <section className="py-20 bg-[#f5faff] border-b">
+      <section className="py-20 bg-[#f5faff] border-b max-w-3/4 mx-auto">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 text-[#1a365d]">
             Why Choose Us?

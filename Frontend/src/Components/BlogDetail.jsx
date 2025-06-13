@@ -150,7 +150,7 @@ const BlogDetail = () => {
   if (!blog) return <div className="text-gray-600 py-10 text-center">Blog not found</div>;
 
   return (
-    <section className="font-sans px-4 py-10 mx-auto max-w-screen-xl">
+    <section className="font-sans px-4 py-10 mx-auto max-w-screen-xl lg:max-w-3/4 lg:mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content */}
         <div className="lg:col-span-2 bg-white rounded-xl shadow-lg p-6 border border-gray-100">
