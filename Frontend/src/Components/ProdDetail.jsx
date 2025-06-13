@@ -16,8 +16,9 @@ const ProdDetail = () => {
     const [relatedProducts, setRelatedProducts] = useState([]);
     const { cart, addToCart, updateQuantity } = useCart();
     const [rating, setRating] = useState({ name: '', email: '', review: '', rating: 0 });
-    const { user, modalIsOpen, setModalIsOpen } = UserData();
+    const { user, setModalIsOpen } = UserData();
     const [hasRated, setHasRated] = useState(false);
+    const [showAllReviews, setShowAllReviews] = useState(false);
 
     useEffect(() => {
         try {
@@ -86,7 +87,10 @@ const ProdDetail = () => {
     }, [user]);
 
     const handleReviewChange = (e) => {
-        setRating({ ...rating, [e.target.name]: e.target.value });
+        setRating((prev) => ({
+            ...prev,
+            review: e.target.value,
+        }));
     };
 
     const submitReview = async () => {
@@ -237,66 +241,121 @@ const ProdDetail = () => {
                 </div>
             </motion.div>
 
-            <div
-                className="mt-10 bg-white p-6 rounded-xl shadow bg-gradient-to-br from-white to-sky-50"
-            >
-                <h2 className="text-xl font-semibold mb-4">Customer Reviews</h2>
-                {product.ratings.length > 0 ? product.ratings.map((rev, idx) => (
-                    <div
-                        key={idx}
-                        className="mb-4 bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition"
-                    >
-                        <div className="flex justify-between items-center">
-                            <p className="font-semibold text-gray-800">{rev.name}</p>
-                            <span className="text-yellow-500">{'★'.repeat(rev.rating)}</span>
+            {/* import moment from "moment"; */}
+
+            {/* // Inside your component
+const [showAllReviews, setShowAllReviews] = useState(false); */}
+
+            <div className="mt-10">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Customer Reviews</h2>
+
+                {product.ratings && product.ratings.length > 0 ? (
+                    <>
+                        <div className="space-y-4 transition-all duration-300 ease-in-out overflow-hidden">
+                            {(showAllReviews ? product.ratings : product.ratings.slice(0, 3)).map((rev, index) => (
+                                <div
+                                    key={index}
+                                    className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 bg-sky-500 text-white text-xs flex items-center justify-center rounded-full font-bold uppercase">
+                                            {rev.name?.[0] || "U"}
+                                        </div>
+                                        <div>
+                                            <p className="font-medium text-gray-800">{rev.name || "Unnamed User"}</p>
+                                            <p className="text-sm text-yellow-500">
+                                                {"★".repeat(rev.rating)}{"☆".repeat(5 - rev.rating)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <p className="mt-3 text-gray-700 text-sm">{rev.review}</p>
+                                </div>
+                            ))}
                         </div>
-                        <p className="text-gray-600 text-sm mt-1">{rev.review}</p>
-                    </div>
-                )) : <p className="text-gray-500">No reviews yet.</p>}
+
+                        {product.ratings.length > 3 && (
+                            <div className="text-center mt-4">
+                                <button
+                                    onClick={() => setShowAllReviews(!showAllReviews)}
+                                    className="text-sm text-sky-600 font-medium hover:underline transition"
+                                >
+                                    {showAllReviews
+                                        ? "Show Less Reviews"
+                                        : `Show ${product.ratings.length - 3} More Review(s)`}
+                                </button>
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    <p className="text-gray-500">No reviews yet. Be the first to review!</p>
+                )}
             </div>
 
-            <div className="mt-10 bg-white p-6 rounded-xl shadow bg-gradient-to-br from-white to-sky-50">
-                <h2 className="text-xl font-semibold mb-4">Submit Your Review</h2>
+            <div className="mt-10">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Submit Your Review</h2>
 
                 {!user || Object.keys(user).length === 0 ? (
-                    <p className="text-red-500 text-sm">
-                        Please <span onClick={() => setModalIsOpen(true)} className="text-sky-600 underline cursor-pointer">log in</span> to submit a review.
-                    </p>
+                    <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 rounded-lg p-4 mb-6">
+                        Please{" "}
+                        <span
+                            onClick={() => setModalIsOpen(true)}
+                            className="text-blue-600 font-medium hover:underline cursor-pointer"
+                        >
+                            login
+                        </span>{" "}
+                        to submit a review.
+                    </div>
                 ) : hasRated ? (
-                    <p className="text-gray-600 text-sm">✅ You have already submitted a review for this product.</p>
+                    <div className="mt-6 p-4 border border-yellow-300 bg-yellow-50 text-yellow-700 rounded-lg shadow-sm">
+                        <p className="font-semibold">You have already reviewed this product.</p>
+                        <p className="text-sm mt-1">Thank you for your valuable feedback!</p>
+                    </div>
                 ) : (
-                    <form onSubmit={(e) => { e.preventDefault(); submitReview(); }} className="space-y-4">
-                        <div>
+                    <form onSubmit={(e) => { e.preventDefault(); submitReview(); }} className="space-y-6 mt-4">
+
+                        {/* Rating Stars */}
+                        <div className="relative">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Your Rating</label>
                             <StarRating
                                 value={rating.rating}
                                 onChange={(newRating) => setRating((prev) => ({ ...prev, rating: newRating }))}
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
+                        {/* Review Text */}
+                        <div className="relative">
                             <textarea
-                                name="review"
+                                id="review"
+                                rows="4"
                                 value={rating.review}
                                 onChange={handleReviewChange}
+                                placeholder=" "
+                                className="peer w-full px-3 pt-5 pb-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-400 outline-none resize-none"
                                 required
-                                placeholder="Write your thoughts..."
-                                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 resize-none"
-                                rows={4}
                             ></textarea>
+                            <label
+                                htmlFor="review"
+                                className={`absolute left-3 top-1.5 text-gray-400 text-sm transition-all 
+      peer-placeholder-shown:top-1.5 peer-placeholder-shown:text-base 
+      peer-focus:top-1 peer-focus:text-sm peer-focus:text-sky-500`}
+                            >
+                                Write your thoughts...
+                            </label>
                         </div>
 
+                        {/* Submit Button */}
                         <button
                             type="submit"
-                            className={`w-full py-2 rounded-lg font-semibold shadow-md transition
-                            ${!rating.review || rating.rating === 0
-                                    ? 'bg-gray-300 cursor-not-allowed text-gray-600'
+                            className={`w-full md:w-auto px-6 py-2 rounded-lg font-medium shadow transition
+          ${!rating.review || rating.rating === 0
+                                    ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
                                     : 'bg-sky-600 hover:bg-sky-700 text-white'}
-                                `}>
+        `}
+                            disabled={!rating.review || rating.rating === 0}
+                        >
                             Submit Review
                         </button>
                     </form>
-
                 )}
             </div>
 

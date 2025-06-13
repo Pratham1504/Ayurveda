@@ -26,6 +26,7 @@ import Appointment from './Pages/consulting';
 import AdminAppointments from './Pages/AdminAppointment'
 import HeroSection from './Pages/Home/HeroSection';
 import AboutUs from './Pages/AboutUs';
+import AdminOrders from './Pages/AdminOrders';
 
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/admin/blogs/edit/:id" element={isAdmin ? <BlogEditor /> : <Products />} />
                 <Route path="/admin/ebooks/" element={isAdmin ? <AdminEbooks /> : <Products />} />
                 <Route path="/admin/ebooks/create" element={isAdmin ? <CreateEbook /> : <Products />} />
+                <Route path="/admin/orders" element={isAdmin ? <AdminOrders /> : <Products />} />
                 <Route path="/ebooks" element={<Ebook />} />
                 <Route path="/my-orders" element={<MyOrders />} />
                 <Route path="/consulting" element={<Appointment />} />
