@@ -73,7 +73,7 @@ const Home = () => {
     <div className="font-sans text-[#333] bg-white">
       <HeroSection />
 
-      <section className="py-20 bg-[#f5faff] border-b max-w-3/4 mx-auto">
+      <section className="py-20 bg-[#f5faff] border-b lg:max-w-3/4 lg:mx-auto">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 text-[#1a365d]">
             Why Choose Us?
@@ -185,7 +185,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-16 lg:max-w-3/4 lg:mx-auto">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold text-[#1a365d]">
@@ -276,7 +276,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-16 bg-[#f9f9f9]">
+      <section className="py-16 bg-[#f9f9f9] lg:max-w-3/4 lg:mx-auto">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold mb-10 text-[#1a365d] text-center">
             Featured Products
