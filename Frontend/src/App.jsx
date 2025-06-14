@@ -27,6 +27,7 @@ import AdminAppointments from './Pages/AdminAppointment'
 import HeroSection from './Pages/Home/HeroSection';
 import AboutUs from './Pages/AboutUs';
 import AdminOrders from './Pages/AdminOrders';
+import ResetPassword from './Pages/ResetPassword';
 
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
@@ -60,6 +61,7 @@ function App() {
                 <Route path="/admin/appointments" element={<AdminAppointments />} />
                 <Route exact path="/my-orders/:id" element={<OrderDetail />} />
                 <Route path='/about' element={<AboutUs />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
               </Routes>
             </div>
             <Footer />

@@ -40,12 +40,25 @@ const Navbar = ({ setCartVisible }) => {
   const [otp, setOtp] = useState("");
   const [otpError, setOtpError] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [showSignupConfirmPassword, setShowSignupConfirmPassword] = useState(false);
 
   // Forgot Password states
   const [forgotModalOpen, setForgotModalOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotMsg, setForgotMsg] = useState("");
   const [forgotError, setForgotError] = useState("");
+  const [resendTimer, setResendTimer] = useState(0);
+
+  // Timer effect for resend link
+  useEffect(() => {
+    let timer;
+    if (resendTimer > 0) {
+      timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [resendTimer]);
 
   // Handle login
   const handleLogin = (e) => {
@@ -112,42 +125,51 @@ const Navbar = ({ setCartVisible }) => {
 
   // Resetting all form states
   const resetAuthForms = () => {
-    setLoginEmail('');
-    setLoginPassword('');
-    setSignupName('');
-    setSignupEmail('');
-    setSignupMobile('');
-    setSignupPassword('');
-    setSignupConfirmPassword('');
-    setSignupError('');
-    setOtp('');
-    setOtpError('');
+    setLoginEmail("");
+    setLoginPassword("");
+    setSignupName("");
+    setSignupEmail("");
+    setSignupMobile("");
+    setSignupPassword("");
+    setSignupConfirmPassword("");
+    setSignupError("");
+    setOtp("");
+    setOtpError("");
   };
 
   // Navbar background color state
-  const [navBg, setNavBg] = useState('bg-[#e7f7fe'); // initial color matches HeroSection
+  const [navBg, setNavBg] = useState("bg-[#e7f7fe"); // initial color matches HeroSection
 
   useEffect(() => {
-  // Only apply scroll effect on Home page
-  if (location.pathname === "/") {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setNavBg('bg-white shadow-lg');
-      } else {
-        setNavBg('bg-[#e7f7fe]');
-      }
-    };
-    // Set initial navbar color on mount
-    handleScroll();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  } else {
-    setNavBg('bg-white shadow-lg');
-  }
-}, [location.pathname]);
+    // Only apply scroll effect on Home page
+    if (location.pathname === "/") {
+      const handleScroll = () => {
+        if (window.scrollY > 20) {
+          setNavBg("bg-white shadow-lg");
+        } else {
+          setNavBg("bg-[#e7f7fe]");
+        }
+      };
+      // Set initial navbar color on mount
+      handleScroll();
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    } else {
+      setNavBg("bg-white shadow-lg");
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (location.state?.openLogin) {
+      setModalIsOpen(true);
+      window.history.replaceState({}, document.title); // Clean up state
+    }
+  }, [location.state]);
 
   return (
-    <nav className={`${navBg} transition-colors duration-300 mb-1 fixed w-full z-50`}>
+    <nav
+      className={`${navBg} transition-colors duration-300 mb-1 fixed w-full z-50`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-around h-16 ">
           <div className="w-full items-center flex justify-between ">
@@ -264,7 +286,6 @@ const Navbar = ({ setCartVisible }) => {
                   >
                     Logout
                   </button>
-                  
                 </div>
               </div>
             )}
@@ -381,7 +402,6 @@ const Navbar = ({ setCartVisible }) => {
       )}
 
       {/* Login/Signup Modal */}
-      
 
       <Modal
         isOpen={modalIsOpen}
@@ -393,7 +413,7 @@ const Navbar = ({ setCartVisible }) => {
       >
         <div className="flex-shrink-0 flex items-center justify-center mb-6">
           <a href="/" className="text-3xl sm:text-4xl font-bold text-sky-600 ">
-            Ayurveda Clinic
+            Swasthamana
           </a>
         </div>
         <div>
@@ -427,14 +447,35 @@ const Navbar = ({ setCartVisible }) => {
                 className="w-full border px-3 py-2 rounded-md my-2 text-sm"
                 required
               />
+              <div className="relative">
               <input
-                type="password"
+                type={showLoginPassword ? "text" : "password"}
                 placeholder="Password"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md my-2 text-sm"
+                className="w-full border px-3 py-2 rounded-md my-2 text-sm pr-12"
                 required
               />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-600"
+                onClick={() => setShowLoginPassword((prev) => !prev)}
+                tabIndex={-1}
+              >
+                {showLoginPassword ? (
+                  // Eye Off SVG
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-9 0-1.657.404-3.22 1.125-4.575M6.22 6.22A9.956 9.956 0 0112 5c5 0 9 4.03 9 9 0 1.657-.404 3.22-1.125 4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18" />
+                  </svg>
+                ) : (
+                  // Eye SVG
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                )}
+              </button>
+            </div>
               {loginError && (
                 <div className="text-red-500 text-xs text-center mb-2">
                   {loginError}
@@ -450,7 +491,7 @@ const Navbar = ({ setCartVisible }) => {
               <div className="text-center">
                 <button
                   type="button"
-                  className="text-sky-600 text-xs hover:underline m-0 mt-4"
+                  className="text-sky-600 text-sm hover:underline m-0 mt-4"
                   onClick={() => {
                     setModalIsOpen(false);
                     setForgotModalOpen(true);
@@ -462,7 +503,7 @@ const Navbar = ({ setCartVisible }) => {
                   Forgot Password?
                 </button>
               </div>
-              <div className="mt-2 text-xs text-center">
+              <div className="mt-2 text-sm text-center">
                 Don't have an account?{" "}
                 <span
                   className="text-sky-600 cursor-pointer"
@@ -476,7 +517,7 @@ const Navbar = ({ setCartVisible }) => {
               </div>
               <div className="text-center mt-4">
                 <button
-                  className="types-of-use text-sky-600 text-xs hover:underline m-0 mt-4"
+                  className="types-of-use text-sky-600 text-sm hover:underline m-0 mt-4"
                   onClick={() => {
                     window.open(
                       "https://www.example.com/terms-of-use",
@@ -514,22 +555,64 @@ const Navbar = ({ setCartVisible }) => {
                 className="w-full border px-3 py-2 rounded-md text-sm"
                 required
               />
+              <div className="relative">
               <input
-                type="password"
+                type={showSignupPassword ? "text" : "password"}
                 placeholder="Password"
                 value={signupPassword}
                 onChange={(e) => setSignupPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md text-sm"
+                className="w-full border px-3 py-2 rounded-md text-sm pr-12"
                 required
               />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-600"
+                onClick={() => setShowSignupPassword((prev) => !prev)}
+                tabIndex={-1}
+              >
+                {showSignupPassword ? (
+                  // Eye Off SVG
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-9 0-1.657.404-3.22 1.125-4.575M6.22 6.22A9.956 9.956 0 0112 5c5 0 9 4.03 9 9 0 1.657-.404 3.22-1.125 4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18" />
+                  </svg>
+                ) : (
+                  // Eye SVG
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                )}
+              </button>
+            </div>
+            <div className="relative">
               <input
-                type="password"
+                type={showSignupConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
                 value={signupConfirmPassword}
                 onChange={(e) => setSignupConfirmPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md text-sm"
+                className="w-full border px-3 py-2 rounded-md text-sm pr-12"
                 required
               />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-600"
+                onClick={() => setShowSignupConfirmPassword((prev) => !prev)}
+                tabIndex={-1}
+              >
+                {showSignupConfirmPassword ? (
+                  // Eye Off SVG
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-9 0-1.657.404-3.22 1.125-4.575M6.22 6.22A9.956 9.956 0 0112 5c5 0 9 4.03 9 9 0 1.657-.404 3.22-1.125 4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18" />
+                  </svg>
+                ) : (
+                  // Eye SVG
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                )}
+              </button>
+            </div>
               {signupError && (
                 <div className="text-red-500 text-xs">{signupError}</div>
               )}
@@ -553,11 +636,11 @@ const Navbar = ({ setCartVisible }) => {
                 </span>
               </div>
               <div className="text-center mt-4">
-                <div className="text-grey-600 text-xs">
+                <div className="text-grey-600 text-sm">
                   By signing up, you agree to our{" "}
                 </div>
                 <button
-                  className="types-of-use text-sky-600 text-xs hover:underline m-0 mt-1"
+                  className="types-of-use text-sky-600 text-sm hover:underline m-0 mt-1"
                   onClick={() => {
                     window.open(
                       "https://www.example.com/terms-of-use",
@@ -649,6 +732,7 @@ const Navbar = ({ setCartVisible }) => {
                 const data = await res.json();
                 if (res.ok) {
                   setForgotMsg("Reset link sent to your email.");
+                  setResendTimer(60); // 60 seconds timer
                 } else {
                   setForgotError(data.message || "Something went wrong.");
                 }
@@ -665,6 +749,7 @@ const Navbar = ({ setCartVisible }) => {
               onChange={(e) => setForgotEmail(e.target.value)}
               className="w-full border px-3 py-2 rounded-md"
               required
+              disabled={resendTimer > 0}
             />
             {forgotMsg && (
               <div className="text-green-600 text-sm">{forgotMsg}</div>
@@ -674,9 +759,14 @@ const Navbar = ({ setCartVisible }) => {
             )}
             <button
               type="submit"
-              className="w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700"
+              className={`w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700 ${
+                resendTimer > 0 ? "opacity-60 cursor-not-allowed" : ""
+              }`}
+              disabled={resendTimer > 0}
             >
-              Send Reset Link
+              {resendTimer > 0
+                ? `Resend in ${resendTimer}s`
+                : "Send Reset Link"}
             </button>
           </form>
         </div>
