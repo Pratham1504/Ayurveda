@@ -42,7 +42,8 @@ const Navbar = ({ setCartVisible }) => {
   const [loginError, setLoginError] = useState("");
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
-  const [showSignupConfirmPassword, setShowSignupConfirmPassword] = useState(false);
+  const [showSignupConfirmPassword, setShowSignupConfirmPassword] =
+    useState(false);
 
   // Forgot Password states
   const [forgotModalOpen, setForgotModalOpen] = useState(false);
@@ -180,7 +181,9 @@ const Navbar = ({ setCartVisible }) => {
               </a>
             </div>
             {/* Links for larger screens */}
-            <div className="hidden md:flex">
+
+            {/* NO EFFECT */}
+            {/* <div className="hidden md:flex">
               <button
                 onClick={() => navigate("/")}
                 className="text-gray-800 hover:text-sky-600 px-3 py-2 rounded-md text-sm font-medium"
@@ -217,6 +220,153 @@ const Navbar = ({ setCartVisible }) => {
               >
                 About
               </button>
+            </div> */}
+
+
+            {/* BOX EFFECT */}
+            {/* <div className="hidden md:flex">
+              <button
+                onClick={() => navigate("/")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition
+                  ${location.pathname === "/" ? "bg-sky-100 text-sky-700 font-bold shadow" : "text-gray-800 hover:text-sky-600"}
+                `}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => navigate("/products")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition
+                  ${location.pathname.startsWith("/products") ? "bg-sky-100 text-sky-700 font-bold shadow" : "text-gray-800 hover:text-sky-600"}
+                `}
+              >
+                Products
+              </button>
+              <button
+                onClick={() => navigate("/consulting")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition
+                  ${location.pathname.startsWith("/consulting") ? "bg-sky-100 text-sky-700 font-bold shadow" : "text-gray-800 hover:text-sky-600"}
+                `}
+              >
+                Consulting
+              </button>
+              <button
+                onClick={() => navigate("/blogs")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition
+                  ${location.pathname.startsWith("/blogs") ? "bg-sky-100 text-sky-700 font-bold shadow" : "text-gray-800 hover:text-sky-600"}
+                `}
+              >
+                Blogs
+              </button>
+              <button
+                onClick={() => navigate("/ebooks")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition
+                  ${location.pathname.startsWith("/ebooks") ? "bg-sky-100 text-sky-700 font-bold shadow" : "text-gray-800 hover:text-sky-600"}
+                `}
+              >
+                E-Books
+              </button>
+              <button
+                onClick={() => navigate("/about")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition
+                  ${location.pathname.startsWith("/about") ? "bg-sky-100 text-sky-700 font-bold shadow" : "text-gray-800 hover:text-sky-600"}
+                `}
+              >
+                About
+              </button>
+            </div> */}
+
+            {/* UNDERLINE EFFECT */}
+            <div className="hidden md:flex">
+              <button
+                onClick={() => navigate("/")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition relative
+      ${
+        location.pathname === "/"
+          ? "text-sky-700 font-bold"
+          : "text-gray-800 hover:text-sky-600"
+      }
+    `}
+              >
+                Home
+                {location.pathname === "/" && (
+                  <span className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-2/3 h-1 bg-sky-500 rounded-full transition-all duration-300"></span>
+                )}
+              </button>
+              <button
+                onClick={() => navigate("/products")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition relative
+      ${
+        location.pathname.startsWith("/products")
+          ? "text-sky-700 font-bold"
+          : "text-gray-800 hover:text-sky-600"
+      }
+    `}
+              >
+                Products
+                {location.pathname.startsWith("/products") && (
+                  <span className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-2/3 h-1 bg-sky-500 rounded-full transition-all duration-300"></span>
+                )}
+              </button>
+              <button
+                onClick={() => navigate("/consulting")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition relative
+      ${
+        location.pathname.startsWith("/consulting")
+          ? "text-sky-700 font-bold"
+          : "text-gray-800 hover:text-sky-600"
+      }
+    `}
+              >
+                Consulting
+                {location.pathname.startsWith("/consulting") && (
+                  <span className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-2/3 h-1 bg-sky-500 rounded-full transition-all duration-300"></span>
+                )}
+              </button>
+              <button
+                onClick={() => navigate("/blogs")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition relative
+      ${
+        location.pathname.startsWith("/blogs")
+          ? "text-sky-700 font-bold"
+          : "text-gray-800 hover:text-sky-600"
+      }
+    `}
+              >
+                Blogs
+                {location.pathname.startsWith("/blogs") && (
+                  <span className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-2/3 h-1 bg-sky-500 rounded-full transition-all duration-300"></span>
+                )}
+              </button>
+              <button
+                onClick={() => navigate("/ebooks")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition relative
+      ${
+        location.pathname.startsWith("/ebooks")
+          ? "text-sky-700 font-bold"
+          : "text-gray-800 hover:text-sky-600"
+      }
+    `}
+              >
+                E-Books
+                {location.pathname.startsWith("/ebooks") && (
+                  <span className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-2/3 h-1 bg-sky-500 rounded-full transition-all duration-300"></span>
+                )}
+              </button>
+              <button
+                onClick={() => navigate("/about")}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition relative
+      ${
+        location.pathname.startsWith("/about")
+          ? "text-sky-700 font-bold"
+          : "text-gray-800 hover:text-sky-600"
+      }
+    `}
+              >
+                About
+                {location.pathname.startsWith("/about") && (
+                  <span className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 w-2/3 h-1 bg-sky-500 rounded-full transition-all duration-300"></span>
+                )}
+              </button>
             </div>
 
             {/* Login Button or User/Cart Icons */}
@@ -244,7 +394,47 @@ const Navbar = ({ setCartVisible }) => {
                     className="h-6 w-6 cursor-pointer"
                     onClick={() => setProfileCardOpen((open) => !open)}
                   />
+
                   {profileCardOpen && (
+  <div className="absolute right-0 mt-2 w-72 bg-white shadow-2xl rounded-2xl p-5 z-50 border border-sky-100 animate-fade-in">
+    <button
+      className="absolute top-2 right-2 text-gray-400 hover:text-sky-600 font-bold text-2xl transition"
+      onClick={() => setProfileCardOpen(false)}
+      aria-label="Close"
+    >
+      &times;
+    </button>
+    <div className="flex flex-col items-center space-y-3 mt-2">
+      <div className="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center mb-2 shadow">
+        <UserCircleIcon className="h-12 w-12 text-sky-500" />
+      </div>
+      <div className="w-full">
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-gray-700">Name:</span>
+          <span className="truncate">{user.fullName || "-"}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-gray-700">Email:</span>
+          <span className="truncate">{user.email || "-"}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-gray-700">Mobile:</span>
+          <span>{user.mobileNo || "-"}</span>
+        </div>
+      </div>
+      <button
+        className="mt-4 w-full bg-gradient-to-r from-sky-600 to-sky-400 text-white py-2 rounded-lg hover:from-sky-700 hover:to-sky-500 shadow transition font-semibold"
+        onClick={() => {
+          setProfileCardOpen(false);
+          navigate("/my-orders");
+        }}
+      >
+        My Orders
+      </button>
+    </div>
+  </div>
+)}
+                  {/* {profileCardOpen && (
                     <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50 border">
                       <button
                         className="absolute top-2 right-2 text-gray-400 hover:text-black font-bold"
@@ -277,7 +467,7 @@ const Navbar = ({ setCartVisible }) => {
                         </button>
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
                 <div>
                   <button
@@ -448,34 +638,61 @@ const Navbar = ({ setCartVisible }) => {
                 required
               />
               <div className="relative">
-              <input
-                type={showLoginPassword ? "text" : "password"}
-                placeholder="Password"
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md my-2 text-sm pr-12"
-                required
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-600"
-                onClick={() => setShowLoginPassword((prev) => !prev)}
-                tabIndex={-1}
-              >
-                {showLoginPassword ? (
-                  // Eye Off SVG
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-9 0-1.657.404-3.22 1.125-4.575M6.22 6.22A9.956 9.956 0 0112 5c5 0 9 4.03 9 9 0 1.657-.404 3.22-1.125 4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18" />
-                  </svg>
-                ) : (
-                  // Eye SVG
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                )}
-              </button>
-            </div>
+                <input
+                  type={showLoginPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  className="w-full border px-3 py-2 rounded-md my-2 text-sm pr-12"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-600"
+                  onClick={() => setShowLoginPassword((prev) => !prev)}
+                  tabIndex={-1}
+                >
+                  {showLoginPassword ? (
+                    // Eye Off SVG
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-9 0-1.657.404-3.22 1.125-4.575M6.22 6.22A9.956 9.956 0 0112 5c5 0 9 4.03 9 9 0 1.657-.404 3.22-1.125 4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18"
+                      />
+                    </svg>
+                  ) : (
+                    // Eye SVG
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </div>
               {loginError && (
                 <div className="text-red-500 text-xs text-center mb-2">
                   {loginError}
@@ -556,63 +773,117 @@ const Navbar = ({ setCartVisible }) => {
                 required
               />
               <div className="relative">
-              <input
-                type={showSignupPassword ? "text" : "password"}
-                placeholder="Password"
-                value={signupPassword}
-                onChange={(e) => setSignupPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md text-sm pr-12"
-                required
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-600"
-                onClick={() => setShowSignupPassword((prev) => !prev)}
-                tabIndex={-1}
-              >
-                {showSignupPassword ? (
-                  // Eye Off SVG
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-9 0-1.657.404-3.22 1.125-4.575M6.22 6.22A9.956 9.956 0 0112 5c5 0 9 4.03 9 9 0 1.657-.404 3.22-1.125 4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18" />
-                  </svg>
-                ) : (
-                  // Eye SVG
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                )}
-              </button>
-            </div>
-            <div className="relative">
-              <input
-                type={showSignupConfirmPassword ? "text" : "password"}
-                placeholder="Confirm Password"
-                value={signupConfirmPassword}
-                onChange={(e) => setSignupConfirmPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded-md text-sm pr-12"
-                required
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-600"
-                onClick={() => setShowSignupConfirmPassword((prev) => !prev)}
-                tabIndex={-1}
-              >
-                {showSignupConfirmPassword ? (
-                  // Eye Off SVG
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-9 0-1.657.404-3.22 1.125-4.575M6.22 6.22A9.956 9.956 0 0112 5c5 0 9 4.03 9 9 0 1.657-.404 3.22-1.125 4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18" />
-                  </svg>
-                ) : (
-                  // Eye SVG
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                )}
-              </button>
-            </div>
+                <input
+                  type={showSignupPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={signupPassword}
+                  onChange={(e) => setSignupPassword(e.target.value)}
+                  className="w-full border px-3 py-2 rounded-md text-sm pr-12"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-600"
+                  onClick={() => setShowSignupPassword((prev) => !prev)}
+                  tabIndex={-1}
+                >
+                  {showSignupPassword ? (
+                    // Eye Off SVG
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-9 0-1.657.404-3.22 1.125-4.575M6.22 6.22A9.956 9.956 0 0112 5c5 0 9 4.03 9 9 0 1.657-.404 3.22-1.125 4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18"
+                      />
+                    </svg>
+                  ) : (
+                    // Eye SVG
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              <div className="relative">
+                <input
+                  type={showSignupConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  value={signupConfirmPassword}
+                  onChange={(e) => setSignupConfirmPassword(e.target.value)}
+                  className="w-full border px-3 py-2 rounded-md text-sm pr-12"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-600"
+                  onClick={() => setShowSignupConfirmPassword((prev) => !prev)}
+                  tabIndex={-1}
+                >
+                  {showSignupConfirmPassword ? (
+                    // Eye Off SVG
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9-4.03-9-9 0-1.657.404-3.22 1.125-4.575M6.22 6.22A9.956 9.956 0 0112 5c5 0 9 4.03 9 9 0 1.657-.404 3.22-1.125 4.575M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18"
+                      />
+                    </svg>
+                  ) : (
+                    // Eye SVG
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </div>
               {signupError && (
                 <div className="text-red-500 text-xs">{signupError}</div>
               )}
