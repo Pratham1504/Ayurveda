@@ -2,6 +2,28 @@ const Order = require("../models/orderModel");
 const Cart = require("../models/cartModel");
 const User = require("../models/userModel");
 const { uploadFile } = require("../middleware/cloudinary");
+const sendTelegramAlert = require("./sendMessageAlert");
+
+const generateOrderTelegramMessage = (user, order) => {
+  return `
+🛒 *New Order Placed!*
+
+👤 *User:* ${user.name} (${user.email})
+🆔 *User ID:* ${user._id}
+
+💰 *Amount Paid:* ₹${order.amountPaid}
+💳 *Payment Mode:* ${order.modeOfPayment}
+🧾 *Transaction ID:* ${order.transactionId || "N/A"}
+
+📦 *Items:*
+${order.items.map(
+  (item, i) => `  ${i + 1}. ${item.product.name} x${item.quantity}`
+).join("\n")}
+
+🕐 *Order Time:* ${new Date(order.createdAt).toLocaleString('en-IN')}
+🔗 link: http://localhost:5173/admin/orders
+`;
+};
 
 // Place an order
 exports.placeOrder = async (req, res) => {
@@ -65,6 +87,9 @@ exports.placeOrder = async (req, res) => {
     const user = await User.findById(userId);
     user.orderHistory.push(newOrder._id);
     await user.save();
+
+    const message = generateOrderTelegramMessage(user, newOrder);
+    sendTelegramAlert(message);
 
     res
       .status(201)

@@ -31,6 +31,12 @@ const Admin = () => {
                         <h2 className="text-xl font-semibold text-gray-700">Appointments</h2>
                         <p className="text-gray-500 text-center mt-2">View and manage customer appointments.</p>
                     </Link>
+
+                    {/* Appointments Tile */}
+                    <Link to="/admin/orders" className="admin-tile bg-gray-200 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow flex flex-col items-center">
+                        <h2 className="text-xl font-semibold text-gray-700">Orders</h2>
+                        <p className="text-gray-500 text-center mt-2">View and manage orders.</p>
+                    </Link>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 const Appointment = require('../models/appointmentModel');
+const sendTelegramAlert = require('./sendMessageAlert');
 
 // Create a new appointment
 const createAppointment = async (req, res) => {
@@ -47,6 +48,23 @@ const createAppointment = async (req, res) => {
         const savedAppointment = await newAppointment.save();
 
         // TODO: Send confirmation via email or WhatsApp=?manual
+         const message = `
+            <b>🆕 New Appointment Request</b>
+
+            👤 <b>${name}</b>
+            📅 <b>${preferred_date}</b> at <b>${preferred_time}</b>
+            📝 <b>Reason:</b> ${reason_for_appointment || 'Not provided'}
+
+            📱 <b>Phone:</b> ${phone_number}
+            📧 <b>Email:</b> ${email}
+            
+            💳 <b>Txn ID:</b> ${transactionId}
+            
+            🔗 <b>Link: https://www.youtube.com/</b>
+            `;
+
+        await sendTelegramAlert(message);
+
 
         res.status(201).json(savedAppointment);
     } catch (error) {
