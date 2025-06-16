@@ -15,14 +15,14 @@ const doctors = [
     name: 'Dr. Anju Garg',
     qualification: 'MD (Ayurveda)',
     experience: '18+ years',
-    description: 'Dedicated Ayurvedic practitioner with a focus on holistic healing and lifestyle integration.',
+    description: 'Specialist in gynaecological problems with a commitment to restoring women’s vitality through Ayurvedic wisdom.',
     image: '../assets/2.jpg'
   },
   {
     name: 'Dr. Ravinder',
     qualification: 'MD (Ayurveda)',
     experience: '15+ years',
-    description: 'Focused on integrating classical Ayurveda with modern wellness practices.',
+    description: 'Specialist in Panchakarma and Agnikarma therapies, with expertise in treating musculoskeletal, liver, and joint disorders.',
     image: '../assets/3.webp'
   }
 ];

@@ -437,10 +437,14 @@ import {
 import { UserData } from '../Context/UserContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
+import PaymentModal from '../Components/PaymentModal';
 
 const Appointment = () => {
     const { isAuth, user } = UserData();
     const [applicationload, setapplicationload] = useState(true);
+    const [showModal, setShowModal] = useState(false);
+    const [transactionId, setTransactionId] = useState("");
+
 
     const [formData, setFormData] = useState({
         name: '',
@@ -484,20 +488,27 @@ const Appointment = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setSubmitting(true);
-
+    
         if (!user?._id) {
             toast.error('You must be logged in to request an appointment.');
             setSubmitting(false);
             return;
         }
+        setShowModal(true); // Open modal instead of direct submit
+    };
+
+    const handlePaymentConfirm = async (txnId) => {
+        setTransactionId(txnId);
+        console.log('here');
 
         try {
             await axios.post('http://localhost:4000/api/appointment', {
                 ...formData,
                 user_id: user._id,
+                transactionId: txnId
             });
             toast.success('Appointment request submitted successfully!');
             setSubmitting(false);
@@ -827,7 +838,7 @@ const Appointment = () => {
                     className="bg-gradient-to-r from-sky-600 to-sky-400 hover:from-sky-700 hover:to-sky-500 text-white font-semibold px-8 py-3 rounded-xl w-full transition duration-300 ease-in-out hover:scale-[1.02] shadow-lg text-lg"
                     whileTap={{ scale: 0.97 }}
                 >
-                    {submitting ? 'Submitting...' : 'Submit Appointment Request'}
+                    {submitting ? 'Submitting...' : 'Proceed to Pay ₹300'}
                 </motion.button>
             </motion.form>
 
@@ -866,7 +877,15 @@ const Appointment = () => {
                     </AnimatePresence>
                 </div>
             )}
+            <PaymentModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                onConfirm={handlePaymentConfirm}
+                heading="Confirm ₹300 Ayurvedic Consultation"
+            />
+
         </section>
+
     );
 };
 

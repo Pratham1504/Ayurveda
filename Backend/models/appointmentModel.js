@@ -45,6 +45,10 @@ const appointmentSchema = new mongoose.Schema({
         enum: ['pending', 'confirmed', 'completed', 'cancelled'],
         default: 'pending',
     },
+    transactionId: {
+        type: String,
+        required: true,
+    },
     created_at: {
         type: Date,
         default: Date.now,

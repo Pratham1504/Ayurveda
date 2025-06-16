@@ -12,11 +12,12 @@ const createAppointment = async (req, res) => {
             preferred_date,
             preferred_time,
             communication_mode,
-            reason_for_appointment
+            reason_for_appointment,
+            transactionId
         } = req.body;
 
         // Validate required fields
-        if (!name || !email || !phone_number || !preferred_date || !preferred_time || !communication_mode || !age) {
+        if (!name || !email || !phone_number || !preferred_date || !preferred_time || !communication_mode || !age || !transactionId) {
             return res.status(400).json({ message: 'Please fill all required fields' });
         }
 
@@ -39,6 +40,7 @@ const createAppointment = async (req, res) => {
             preferred_time,
             communication_mode,
             reason_for_appointment,
+            transactionId,
             status: 'pending',
         });
 
