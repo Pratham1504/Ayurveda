@@ -9,21 +9,21 @@ const doctors = [
     qualification: 'MD (Ayurveda)',
     experience: '20+ years',
     description: `Specialized in chronic diseases and lifestyle disorders. Expert in Panchakarma, herbal medicine, and dietary regimens. Known for his compassionate and personalized approach.`,
-    image: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=500&q=80'
+    image: '../assets/1.jpg'
   },
   {
     name: 'Dr. Anju Garg',
     qualification: 'MD (Ayurveda)',
     experience: '18+ years',
     description: 'Dedicated Ayurvedic practitioner with a focus on holistic healing and lifestyle integration.',
-    image: 'https://images.unsplash.com/photo-1606813902914-7c4b5de3bd1f?auto=format&fit=crop&w=500&q=80'
+    image: '../assets/2.jpg'
   },
   {
     name: 'Dr. Ravinder',
     qualification: 'MD (Ayurveda)',
     experience: '15+ years',
     description: 'Focused on integrating classical Ayurveda with modern wellness practices.',
-    image: 'https://images.unsplash.com/photo-1626378427094-bcb3bfae3b0b?auto=format&fit=crop&w=500&q=80'
+    image: '../assets/3.webp'
   }
 ];
 
@@ -121,7 +121,7 @@ const AboutUs = () => {
         </p>
         <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
           <button 
-            onClick={() => navigate('/appointment')} 
+            onClick={() => navigate('/consulting')} 
             className="bg-sky-600 text-white px-6 py-3 rounded-xl font-medium shadow hover:bg-sky-700"
           >
             Book an Appointment
