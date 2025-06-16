@@ -178,7 +178,7 @@ const Products = () => {
                                                 e.stopPropagation();
                                                 updateQuantity(product._id, -1);
                                             }}
-                                            className="bg-sky-600 text-white px-3 py-1 rounded-l-md hover:bg-sky-700 text-sm"
+                                            className="bg-gradient-to-r from-sky-600 to-sky-400 hover:from-sky-700 hover:to-sky-500 text-white px-3 py-1 rounded-l-md text-sm transition"
                                         >
                                             -
                                         </button>
@@ -188,7 +188,7 @@ const Products = () => {
                                                 e.stopPropagation();
                                                 updateQuantity(product._id, 1);
                                             }}
-                                            className="bg-sky-600 text-white px-3 py-1 rounded-r-md hover:bg-sky-700 text-sm"
+                                            className="bg-gradient-to-r from-sky-600 to-sky-400 hover:from-sky-700 hover:to-sky-500 text-white px-3 py-1 rounded-r-md text-sm transition"
                                         >
                                             +
                                         </button>
@@ -199,7 +199,7 @@ const Products = () => {
                                             e.stopPropagation();
                                             addToCart(product);
                                         }}
-                                        className="mt-auto bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 rounded-lg shadow transition w-full"
+                                        className="mt-auto bg-gradient-to-r from-sky-600 to-sky-400 hover:from-sky-700 hover:to-sky-500 text-white font-semibold py-2 rounded-lg shadow transition w-full"
                                     >
                                         Add to Cart
                                     </button>
