@@ -48,6 +48,10 @@ const orderSchema = new mongoose.Schema({
   transactionId: {
     type: String // Transaction ID (optional)
   },
+  deliveryAddress: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Address',
+  },
   createdAt: {
     type: Date,
     default: Date.now

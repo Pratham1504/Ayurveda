@@ -3,6 +3,7 @@ const Product = require("../models/productModel");
 const User = require("../models/userModel");
 const { uploadFile } = require("../middleware/cloudinary");
 const sendTelegramAlert = require("./sendMessageAlert");
+const Address = require("../models/addressModel");
 
 const generateOrderTelegramMessage = (user, order) => {
   return `
@@ -28,7 +29,7 @@ ${order.items.map(
 // Place an order
 exports.placeOrder = async (req, res) => {
   const userId = req.user.id;
-  const { modeOfPayment, transactionId, items } = req.body;
+  const { modeOfPayment, transactionId, items, orderAdress } = req.body;
 
   if (
     modeOfPayment === "UPI" &&
@@ -45,6 +46,11 @@ exports.placeOrder = async (req, res) => {
     return res.status(400).json({
       message: "Order items are required",
     });
+  }
+
+  const address = await Address.findById(orderAdress);
+  if (!address) {
+    return res.status(404).json({ message: "Delivery address not found" });
   }
 
   try {
@@ -79,6 +85,7 @@ exports.placeOrder = async (req, res) => {
       modeOfPayment,
       paymentScreenshot: modeOfPayment === "UPI" ? fileRes.url : null,
       transactionId,
+      deliveryAddress: address._id,
     });
 
     await newOrder.save();
@@ -105,7 +112,7 @@ exports.getUserOrders = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const orders = await Order.find({ user: userId }).populate("items.product");
+    const orders = await Order.find({ user: userId }).populate("items.product").populate("deliveryAddress");
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -115,7 +122,7 @@ exports.getUserOrders = async (req, res) => {
 // Get all orders (Admin only)
 exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find().populate("items.product user");
+    const orders = await Order.find().populate("items.product user").populate("deliveryAddress");
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -150,7 +157,7 @@ exports.getUserOrdersById = async (req, res) => {
   try {
     const order = await Order.findOne({ _id: orderId, user: userId }).populate(
       "items.product"
-    );
+    ).populate("deliveryAddress");
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
