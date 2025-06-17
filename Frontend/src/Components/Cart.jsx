@@ -195,7 +195,7 @@ const Cart = ({ onClose }) => {
         </div>
       ) : (
         <>
-          <div className="flex-1 overflow-y-auto pb-44 px-2">
+          <div className="flex-1 overflow-y-auto pb-60 px-2">
             {cart.map((item) => (
               <div
                 key={item._id}
