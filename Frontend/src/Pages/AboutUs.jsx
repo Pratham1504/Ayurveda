@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaCheckCircle, FaCloudSun } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/SWASTHAMANA_no_bg.png';
 
 const doctors = [
   {
@@ -47,6 +48,7 @@ const AboutUs = () => {
         transition={{ duration: 0.8 }}
         className="text-center space-y-6"
       >
+        
         <h1 className="text-5xl font-bold leading-tight">
           Dedicated to Your Health & <span className="text-sky-600">Wellness</span>
         </h1>
@@ -57,6 +59,13 @@ const AboutUs = () => {
           Our platform integrates traditional wisdom with modern technology to offer medicines, blogs, eBooks, and consultations from expert MD (Ayurveda) doctors — your complete Ayurvedic wellness hub.
         </p>
       </motion.section>
+      {/* <img
+        src={logo}
+        alt="Swasthamana Logo"
+        className="absolute left-1/2 top-1/2 opacity-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none"
+        style={{ width: "400px", maxWidth: "80vw", zIndex: 0 }}
+        aria-hidden="true"
+      /> */}
 
       {/* Why Choose Section */}
       <section className="grid lg:grid-cols-2 gap-10 items-center">
@@ -65,6 +74,12 @@ const AboutUs = () => {
           alt="Ayurvedic care" 
           className="rounded-2xl shadow-xl w-full object-cover"
         />
+        {/* LOGO */}
+        {/* <img 
+          src={logo}
+          alt="Ayurvedic care" 
+          className="rounded-2xl shadow-xl w-[30rem] object-cover"
+        /> */}
         <div>
           <h2 className="text-4xl font-bold text-sky-700 mb-4">Why Choose Swasthamana?</h2>
           <p className="mb-6 text-lg">

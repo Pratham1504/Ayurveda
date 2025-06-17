@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-modal";
 import { UserCircleIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { UserData } from "../Context/UserContext";
+import logo from "../../assets/SWASTHAMANA_no_bg.png"
 
 Modal.setAppElement("#root"); // Make sure your root element id is 'root'
 
@@ -175,9 +176,19 @@ const Navbar = ({ setCartVisible }) => {
         <div className="flex justify-around h-16 ">
           <div className="w-full items-center flex justify-between ">
             {/* Logo */}
-            <div className="flex-shrink-0 flex items-center">
+            {/* <div className="flex-shrink-0 flex items-center">
               <a href="/" className="text-xl font-bold text-sky-600 ">
                 Swasthamana
+              </a>
+            </div> */}
+            <div className="flex-shrink-0 flex items-center">
+              <a href="/" className="flex items-center">
+                <img
+                  src={logo}
+                  alt="Swasthamana Logo"
+                  className="h-16 w-auto object-contain"
+                  style={{ maxHeight: "70px" }}
+                />
               </a>
             </div>
             {/* Links for larger screens */}
@@ -601,11 +612,21 @@ const Navbar = ({ setCartVisible }) => {
         overlayClassName="fixed inset-0 bg-black/60 flex items-center justify-center backdrop-blur-lg z-50"
         bodyOpenClassName="modal-open"
       >
-        <div className="flex-shrink-0 flex items-center justify-center mb-6">
+        {/* <div className="flex-shrink-0 flex items-center justify-center mb-6">
           <a href="/" className="text-3xl sm:text-4xl font-bold text-sky-600 ">
             Swasthamana
           </a>
-        </div>
+        </div> */}
+        <div className="flex-shrink-0 flex items-center justify-center mb-6">
+  <a href="/" className="flex items-center">
+    <img
+      src={logo}
+      alt="Swasthamana Logo"
+      className="h-[15vh] w-auto object-contain"
+      // style={{ maxHeight: "48px" }}
+    />
+  </a>
+</div>
         <div>
           <div className="flex flex-col justify-center items-center mb-4">
             {isLogin ? (
