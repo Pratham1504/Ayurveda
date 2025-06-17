@@ -12,4 +12,6 @@ router.post('/reset',userController.resetPassword);
 router.get('/me',isAuth,userController.profile);
 router.post('/addAddress',isAuth,addressController.addAddress);
 router.post('/removeAddress',isAuth,addressController.removeAddress);
+router.get('/getAddress',isAuth,addressController.getAddresses);
+router.patch('/updateAddress', isAuth, addressController.updateAddress);
 module.exports = router;

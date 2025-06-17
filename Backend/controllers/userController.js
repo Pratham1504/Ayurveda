@@ -1,8 +1,10 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const { sendMail, sendForgotMail } = require("../middleware/sendMail");
-
+const { createResetToken } = require("../utils/tokenHash");
+const ResetToken  = require("../models/tokenModel");
 // Register Controller
 exports.signup = async (req, res) => {
   try {
@@ -25,7 +27,6 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
       fullName,
       mobileNo,
-      // address, // embedded address array
     };
 
     const otp = Math.floor(Math.random() * 1000000);
@@ -97,7 +98,6 @@ exports.verifyotp = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, mobileNumber, password } = req.body;
-    console.log(req.body);
 
     // Find user
     if(!email && !mobileNumber){
@@ -168,9 +168,8 @@ exports.forgotPassword = async (req, res) => {
       return res.status(404).json({
         message: "No User with this email",
       });
-
-    const token = jwt.sign({ email }, process.env.Forgot_Secret);
-
+    
+    const token = await createResetToken(user._id);
     const data = { email, token };
 
     await sendForgotMail("Ayurveda Clinic", data);
@@ -190,9 +189,14 @@ exports.forgotPassword = async (req, res) => {
 
 exports.resetPassword = async (req, res) => {
   try {
-    const decodedData = jwt.verify(req.query.token, process.env.Forgot_Secret);
+    // const decodedData = jwt.verify(req.query.token, process.env.Forgot_Secret);
+    const hashedToken = crypto.createHash("sha256").update(req.query?.token).digest("hex");
+    const resetDoc = await ResetToken.findOne({ tokenHash: hashedToken });
+    if (!resetDoc || resetDoc.expiresAt < new Date() || resetDoc.used) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
 
-    const user = await User.findOne({ email: decodedData.email });
+    const user = await User.findById(resetDoc.userId);
 
     if (!user)
       return res.status(404).json({
@@ -216,6 +220,8 @@ exports.resetPassword = async (req, res) => {
 
     user.resetPasswordExpire = null;
 
+    resetDoc.used = true;
+    await resetDoc.save();
     await user.save();
 
     res.json({ message: "Password Reset" });

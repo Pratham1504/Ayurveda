@@ -91,3 +91,54 @@ exports.removeAddress = async (req, res) => {
     res.status(500).json({ message: "Error while deleting the address" });
   }
 };
+
+exports.updateAddress = async (req, res) => {
+  try {
+    const { addressId, ...updateData } = req.body;
+    const userId = req.user._id;
+
+    const user = await User.findById(userId); 
+    if (!user) {
+      return res.status(404).json({ message: "NO USER FOUND" });
+    }
+    const address = await Address.findById(addressId);
+    if (!address) {
+      return res.status(404).json({ message: "ADDRESS NOT FOUND" });
+    }
+    // Update address fields
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key] !== undefined) {
+        address[key] = updateData[key];
+      }
+    });
+    await address.save();
+    return res.status(200).json({
+      message: "Address updated successfully",
+      address,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error while updating the address" });
+  }
+}
+
+exports.getAddresses = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId).populate('address');
+    if (!user) {
+      return res.status(404).json({ message: "NO USER FOUND" });
+    }
+    if (user.address.length === 0) {
+      return res.status(404).json({ message: "No addresses found" });
+    }
+    return res.status(200).json({
+      message: "Addresses retrieved successfully",
+      addresses: user.address,
+    }); 
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error while retrieving addresses" });
+  }
+}

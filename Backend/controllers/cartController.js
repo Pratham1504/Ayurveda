@@ -113,4 +113,8 @@ const clearCart = async (req, res) => {
     res.status(500).json({ message: 'Something went wrong' });
   }
 };
+
+const updateCart = async(req,res) => {
+  
+}
 module.exports = { addItemToCart, removeItemFromCart, clearCart };
