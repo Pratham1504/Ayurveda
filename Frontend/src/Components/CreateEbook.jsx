@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
+import { server } from '../main';
 
 const CreateEbook = () => {
     const [formData, setFormData] = useState({ title: '', author: '', description: '' });
@@ -38,7 +39,7 @@ const CreateEbook = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:4000/api/ebooks/', formDataObj, {
+            const response = await axios.post(`${server}/api/ebooks/`, formDataObj, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setSuccess('Ebook uploaded successfully!');

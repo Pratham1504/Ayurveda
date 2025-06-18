@@ -12,7 +12,7 @@
 //     useEffect(() => {
 //         const fetchEbooks = async () => {
 //             try {
-//                 const response = await axios.get('http://localhost:4000/api/ebooks');
+//                 const response = await axios.get('${server}/api/ebooks');
 //                 setEbooks(response.data);
 //             } catch (err) {
 //                 console.error("Error fetching ebooks:", err);
@@ -120,7 +120,7 @@
 //                                     <td className="py-3 px-4 text-gray-700">{ebook.author}</td>
 //                                     <td className="py-3 px-4 text-right">
 //                                         <a
-//                                             href={`http://localhost:4000/api/ebooks/download/${ebook.fileName}`}
+//                                             href={`${server}/api/ebooks/download/${ebook.fileName}`}
 //                                             target="_blank"
 //                                             rel="noopener noreferrer"
 //                                             className="inline-flex items-center justify-center bg-sky-500 hover:bg-sky-600 text-white p-1.5 rounded-md"
@@ -153,6 +153,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ArrowDownTrayIcon, ChevronDownIcon, ChevronRightIcon, BookOpenIcon } from '@heroicons/react/24/solid';
+import { server } from '../main';
 
 const Ebooks = () => {
     const [ebooks, setEbooks] = useState([]);
@@ -164,7 +165,7 @@ const Ebooks = () => {
     useEffect(() => {
         const fetchEbooks = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/ebooks');
+                const response = await axios.get(`${server}/api/ebooks`);
                 setEbooks(response.data);
             } catch (err) {
                 console.error("Error fetching ebooks:", err);
@@ -281,7 +282,7 @@ const Ebooks = () => {
                                     <td className="py-3 px-4 text-gray-700">{ebook.author}</td>
                                     <td className="py-3 px-4 text-right">
                                         <a
-                                            href={`http://localhost:4000/api/ebooks/download/${ebook.fileName}`}
+                                            href={`${server}/api/ebooks/download/${ebook.fileName}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="inline-flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:from-sky-600 hover:to-sky-500 text-white p-2 rounded-lg shadow transition"

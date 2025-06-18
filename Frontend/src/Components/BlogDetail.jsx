@@ -11,6 +11,7 @@ import { HandThumbUpIcon, HandThumbDownIcon, ShareIcon, XMarkIcon } from '@heroi
 import BlogDescription from './BlogDescription';
 import toast from 'react-hot-toast';
 import { UserData } from '../Context/UserContext';
+import { server } from '../main';
 
 // import ReactQuill from 'react-quill';
 // import 'react-quill/dist/quill.snow.css';
@@ -87,7 +88,7 @@ const BlogDetail = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.patch(`http://localhost:4000/api/blogs/${id}/like`, {}, {
+      const response = await axios.patch(`${server}/api/blogs/${id}/like`, {}, {
         headers: {
           token: localStorage.getItem("token"),
         },
@@ -105,7 +106,7 @@ const BlogDetail = () => {
       return;
     }
     try {
-      const response = await axios.patch(`http://localhost:4000/api/blogs/${id}/dislike`, {}, {
+      const response = await axios.patch(`${server}/api/blogs/${id}/dislike`, {}, {
         headers: {
           token: localStorage.getItem("token"),
         },
@@ -126,7 +127,7 @@ const BlogDetail = () => {
     try {
       const newComment = { name, age, text: commentText };
       const response = await axios.post(
-        `http://localhost:4000/api/blogs/${id}/comment`,
+        `${server}/api/blogs/${id}/comment`,
         newComment,
         {
           headers: {

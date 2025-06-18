@@ -4,6 +4,7 @@ import Modal from "react-modal";
 import { UserCircleIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { UserData } from "../Context/UserContext";
 import logo from "../../assets/SWASTHAMANA_no_bg.png"
+import { server } from "../main";
 
 Modal.setAppElement("#root"); // Make sure your root element id is 'root'
 
@@ -1014,7 +1015,7 @@ const Navbar = ({ setCartVisible }) => {
               setForgotError("");
               try {
                 const res = await fetch(
-                  "http://localhost:4000/api/user/forgot",
+                  `${server}/api/user/forgot`,
                   {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

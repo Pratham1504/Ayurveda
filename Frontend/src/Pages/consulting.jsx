@@ -438,6 +438,7 @@ import { UserData } from '../Context/UserContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
 import PaymentModal from '../Components/PaymentModal';
+import { server } from '../main';
 
 const Appointment = () => {
     const { isAuth, user } = UserData();
@@ -463,7 +464,7 @@ const Appointment = () => {
     const fetchAppointments = async () => {
         if (!user?._id) return;
         try {
-            const response = await axios.get(`http://localhost:4000/api/appointment/user/${user._id}`);
+            const response = await axios.get(`${server}/api/appointment/user/${user._id}`);
             setAppointments(response.data);
             setapplicationload(false);
         } catch (error) {
@@ -505,7 +506,7 @@ const Appointment = () => {
         console.log('here');
 
         try {
-            await axios.post('http://localhost:4000/api/appointment', {
+            await axios.post(`${server}/api/appointment`, {
                 ...formData,
                 user_id: user._id,
                 transactionId: txnId
@@ -533,7 +534,7 @@ const Appointment = () => {
         if (!confirmed) return;
 
         try {
-            await axios.put(`http://localhost:4000/api/appointment/${id}/status`, {
+            await axios.put(`${server}/api/appointment/${id}/status`, {
                 status: 'cancelled',
             });
             toast.success('Appointment cancelled.');

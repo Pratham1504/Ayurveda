@@ -16,7 +16,7 @@
 //     setLoading(true);
 
 //     try {
-//       const response = await fetch(`http://localhost:4000/api/user/reset?token=${token}`, {
+//       const response = await fetch(`${server}/api/user/reset?token=${token}`, {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -100,6 +100,7 @@
 
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { server } from '../main';
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -117,7 +118,7 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:4000/api/user/reset?token=${token}`, {
+      const response = await fetch(`${server}/api/user/reset?token=${token}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { NotificationContext } from '../Context/NotificationContext'; // Import context
+import { server } from '../main';
 
 const AdminBlogs = () => {
     const [blogs, setBlogs] = useState([]);
@@ -15,7 +16,7 @@ const AdminBlogs = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/blogs');
+                const response = await axios.get(`${server}/api/blogs`);
                 setBlogs(response.data);
                 setLoading(false);
             } catch (err) {
@@ -32,7 +33,7 @@ const AdminBlogs = () => {
         const deletedBlog = blogs.find(blog => blog._id === id);
         setDeletedBlog(deletedBlog);
         try {
-            await axios.delete(`http://localhost:4000/api/blogs/${id}`);
+            await axios.delete(`${server}/api/blogs/${id}`);
             setBlogs(blogs.filter(blog => blog._id !== id)); // Remove the deleted blog from state
             setMessage('Blog deleted.'); // Show success message
         } catch (err) {
@@ -45,7 +46,7 @@ const AdminBlogs = () => {
     const handleUndoDelete = async () => {
         if (deletedBlog) {
             try {
-                await axios.post('http://localhost:4000/api/blogs', deletedBlog);
+                await axios.post(`${server}/api/blogs`, deletedBlog);
                 setBlogs([...blogs, deletedBlog]);
                 setDeletedBlog(null); // Clear the deleted blog after undo
                 setMessage('Blog restored.');

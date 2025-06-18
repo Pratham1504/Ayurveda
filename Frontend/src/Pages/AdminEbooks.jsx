@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { server } from '../main';
 
 const AdminEbooks = () => {
     const [ebooks, setEbooks] = useState([]);
@@ -13,7 +14,7 @@ const AdminEbooks = () => {
     useEffect(() => {
         const fetchEbooks = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/ebooks');
+                const response = await axios.get(`${server}/api/ebooks`);
                 setEbooks(response.data);
             } catch (err) {
                 console.error("Error fetching ebooks:", err);
@@ -30,7 +31,7 @@ const AdminEbooks = () => {
         if (!window.confirm('Are you sure you want to delete this ebook?')) return;
         setLoading(true); // Start loading state
         try {
-            await axios.delete(`http://localhost:4000/api/ebooks/${id}`);
+            await axios.delete(`${server}/api/ebooks/${id}`);
             setEbooks(ebooks.filter(ebook => ebook._id !== id)); // Remove from UI
             setMessage('Ebook deleted successfully!');
         } catch (err) {
@@ -43,7 +44,7 @@ const AdminEbooks = () => {
 
     // Handle download
     const handleDownload = (fileName) => {
-        const downloadUrl = `http://localhost:4000/api/ebooks/download/${fileName}`; // Construct the download URL
+        const downloadUrl = `${server}/api/ebooks/download/${fileName}`; // Construct the download URL
         window.open(downloadUrl, '_blank');
     };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { server } from "../main";
 
 const AdminProduct = () => {
   const [products, setProducts] = useState([]);
@@ -24,7 +25,7 @@ const AdminProduct = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/products");
+        const response = await axios.get(`${server}/api/products`);
         setProducts(response.data);
       } catch (err) {
         setMessage({ text: "Error fetching products", type: "error" });
@@ -84,7 +85,7 @@ const AdminProduct = () => {
     try {
       if (editingProductId) {
         await axios.put(
-          `http://localhost:4000/api/products/${editingProductId}`,
+          `${server}/api/products/${editingProductId}`,
           form,
           {
             headers: {
@@ -95,7 +96,7 @@ const AdminProduct = () => {
         );
         setMessage({ text: "Product updated successfully", type: "success" });
       } else {
-        await axios.post("http://localhost:4000/api/products", form, {
+        await axios.post(`${server}/api/products`, form, {
           headers: {
             "Content-Type": "multipart/form-data",
             token: localStorage.getItem("token"),
@@ -104,7 +105,7 @@ const AdminProduct = () => {
         setMessage({ text: "Product added successfully", type: "success" });
       }
       resetForm();
-      const response = await axios.get("http://localhost:4000/api/products");
+      const response = await axios.get(`${server}/api/products`);
       setProducts(response.data);
     } catch (err) {
       setMessage({ text: "Error adding/updating product", type: "error" });
@@ -136,7 +137,7 @@ const AdminProduct = () => {
 
       setUndoTimeout(
         setTimeout(async () => {
-          await axios.delete(`http://localhost:4000/api/products/${id}`, {
+          await axios.delete(`${server}/api/products/${id}`, {
             headers: {
               token: localStorage.getItem("token"),
             },

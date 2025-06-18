@@ -7,6 +7,7 @@ import { UserData } from '../Context/UserContext';
 import { Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useProducts } from '../Context/ProductContext';
+import { server } from '../main';
 
 const ProdDetail = () => {
     const { id } = useParams();
@@ -100,7 +101,7 @@ const ProdDetail = () => {
         }
         try {
             const newReview = { ...rating };
-            const response = await axios.post(`http://localhost:4000/api/products/${id}/rating`, newReview);
+            const response = await axios.post(`${server}/api/products/${id}/rating`, newReview);
             setProduct(response.data.product);
             setRating({ name: '', email: '', review: '', rating: 0 });
             setHasRated(true);

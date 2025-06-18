@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { server } from '../main';
 
 const ProductContext = createContext();
 
@@ -13,7 +14,7 @@ export const ProductProvider = ({ children }) => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await axios.get('http://localhost:4000/api/products');
+                const res = await axios.get(`${server}/api/products`);
                 setProducts(res.data);
             } catch (err) {
                 console.error("Error fetching products:", err);

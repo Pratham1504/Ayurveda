@@ -4,6 +4,7 @@ import axios from 'axios';
 // import ReactQuill from 'react-quill';
 // import 'react-quill/dist/quill.snow.css';
 import { NotificationContext } from '../Context/NotificationContext';
+import { server } from '../main';
 
 const BlogEditor = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ const BlogEditor = () => {
       try {
         if (id) {
           setIsEditMode(true);
-          const response = await axios.get(`http://localhost:4000/api/blogs/${id}`);
+          const response = await axios.get(`${server}/api/blogs/${id}`);
           const blogData = response.data;
           setFormData({
             title: blogData.title || '',
@@ -37,7 +38,7 @@ const BlogEditor = () => {
         } else {
           setIsEditMode(false);
         }
-        const productResponse = await axios.get('http://localhost:4000/api/products');
+        const productResponse = await axios.get(`${server}/api/products`);
         setProducts(productResponse.data);
         setLoading(false);
       } catch (err) {
@@ -62,10 +63,10 @@ const BlogEditor = () => {
     e.preventDefault();
     try {
       if (isEditMode) {
-        await axios.put(`http://localhost:4000/api/blogs/${id}`, formData);
+        await axios.put(`${server}/api/blogs/${id}`, formData);
         setMessage('Blog updated successfully.');
       } else {
-        await axios.post('http://localhost:4000/api/blogs', formData);
+        await axios.post(`${server}/api/blogs`, formData);
         setMessage('Blog created successfully.');
       }
       navigate('/admin/blogs');

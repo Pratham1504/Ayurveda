@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {server} from '../main';
 
 const AdminAppointmentsPage = () => {
     const [appointments, setAppointments] = useState([]);
@@ -11,7 +12,7 @@ const AdminAppointmentsPage = () => {
 
     const fetchAppointments = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/appointment/admin/all');
+            const response = await axios.get('${server}/api/appointment/admin/all');
             setAppointments(response.data);
         } catch (error) {
             console.error('Error fetching appointments:', error);
@@ -25,7 +26,7 @@ const AdminAppointmentsPage = () => {
 
     const handleStatusChange = async (id, status) => {
         try {
-            await axios.put(`http://localhost:4000/api/appointment/${id}/status`, { status });
+            await axios.put(`${server}/api/appointment/${id}/status`, { status });
             fetchAppointments();
             showNotification('Appointment status updated!');
         } catch (error) {
@@ -42,7 +43,7 @@ const AdminAppointmentsPage = () => {
 
     const handleSaveGMeetLink = async (id, link) => {
         try {
-            await axios.put(`http://localhost:4000/api/appointment/${id}/gmeet_link`, { gmeet_link: link });
+            await axios.put(`${server}/api/appointment/${id}/gmeet_link`, { gmeet_link: link });
             fetchAppointments();
             showNotification('GMeet link saved!');
         } catch (error) {
