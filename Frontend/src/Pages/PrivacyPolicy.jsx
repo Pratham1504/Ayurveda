@@ -2,6 +2,11 @@ import React from 'react';
 
 const PrivacyPolicy = () => (
   <div className="max-w-4xl mx-auto px-6 py-12 text-black space-y-10">
+    <img
+        src="https://res.cloudinary.com/dkzcankyc/image/upload/v1750364419/lezme8r3sqzjbyzwnpea.png"
+        alt="Swasthamana Logo Background"
+        className="absolute fixed inset-0 w-full h-full object-contain opacity-5 z-0 pointer-events-none"
+      />
     <div>
       <h1 className="text-4xl font-bold text-sky-700 mb-4">Privacy Policy (English)</h1>
       <p>At Swasthamana, we are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and safeguard your data when you use our platform.</p>

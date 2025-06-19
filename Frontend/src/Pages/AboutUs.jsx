@@ -41,6 +41,11 @@ const AboutUs = () => {
 
   return (
     <div className="max-w-[1400px] mx-auto px-6 py-12 space-y-24 bg-white text-black">
+      <img
+        src="https://res.cloudinary.com/dkzcankyc/image/upload/v1750364419/lezme8r3sqzjbyzwnpea.png"
+        alt="Swasthamana Logo Background"
+        className="absolute fixed inset-0 w-full h-full object-contain opacity-5 z-0 pointer-events-none"
+      />
       {/* Hero Section */}
       <motion.section 
         initial={{ opacity: 0, y: 40 }} 
@@ -106,7 +111,7 @@ const AboutUs = () => {
               whileInView={{ opacity: 1, y: 0 }} 
               transition={{ delay: i * 0.2, duration: 0.6 }}
               viewport={{ once: true }}
-              className="bg-white rounded-2xl shadow-lg p-6 space-y-4 border border-sky-100 text-center hover:shadow-2xl transition duration-300"
+              className="bg-white backdrop-blur-md rounded-2xl bg-opacity-80 bg-blur-md shadow-lg p-6 space-y-4 border border-sky-100 text-center hover:shadow-2xl transition duration-300"
             >
               <img 
                 src={doc.image} 
@@ -127,7 +132,7 @@ const AboutUs = () => {
         whileInView={{ opacity: 1, y: 0 }} 
         viewport={{ once: true }}
         transition={{ duration: 0.7 }}
-        className="text-center bg-sky-50 p-12 rounded-xl"
+        className="text-center bg-sky-50 p-12 rounded-xl backdrop-blur-md"
       >
         <FaCloudSun className="text-5xl text-sky-500 mx-auto mb-4" />
         <h3 className="text-3xl font-bold text-sky-700">Get Expert Ayurvedic Care at Your Fingertips!</h3>

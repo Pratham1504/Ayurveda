@@ -9,8 +9,29 @@ const AdminBlogs = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [deletedBlog, setDeletedBlog] = useState(null); // Track deleted blog for undo
-    const { state, setMessage ,clearMessage} = useContext(NotificationContext); // Access global message state
+    const { state, setMessage, clearMessage } = useContext(NotificationContext); // Access global message state
     const navigate = useNavigate();
+
+    // Inside AdminBlogs component
+
+    useEffect(() => {
+        if (state.showMessage) {
+            const timer = setTimeout(() => {
+                clearMessage();
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [state.showMessage, clearMessage]);
+
+    useEffect(() => {
+        if (deletedBlog) {
+            const undoTimer = setTimeout(() => {
+                setDeletedBlog(null);
+            }, 5000);
+            return () => clearTimeout(undoTimer);
+        }
+    }, [deletedBlog]);
+
 
     // Fetch all blogs
     useEffect(() => {
@@ -33,7 +54,11 @@ const AdminBlogs = () => {
         const deletedBlog = blogs.find(blog => blog._id === id);
         setDeletedBlog(deletedBlog);
         try {
-            await axios.delete(`${server}/api/blogs/${id}`);
+            await axios.delete(`${server}/api/blogs/${id}`, {
+                headers: {
+                    token: localStorage.getItem("token"),
+                },
+            });
             setBlogs(blogs.filter(blog => blog._id !== id)); // Remove the deleted blog from state
             setMessage('Blog deleted.'); // Show success message
         } catch (err) {
@@ -46,7 +71,11 @@ const AdminBlogs = () => {
     const handleUndoDelete = async () => {
         if (deletedBlog) {
             try {
-                await axios.post(`${server}/api/blogs`, deletedBlog);
+                await axios.post(`${server}/api/blogs`, deletedBlog, {
+                    headers: {
+                        token: localStorage.getItem("token"),
+                    },
+                });
                 setBlogs([...blogs, deletedBlog]);
                 setDeletedBlog(null); // Clear the deleted blog after undo
                 setMessage('Blog restored.');
@@ -73,7 +102,7 @@ const AdminBlogs = () => {
 
             {/* Success/Error Message */}
             {state.showMessage && (
-                <div className="fixed top-4 right-4 p-4 bg-green-500 text-white rounded shadow animate-pulse">
+                <div className="fixed bottom-4 right-4 p-4 bg-green-500 text-white rounded shadow animate-pulse">
                     <span>{state.message}</span>
                     <button onClick={() => clearMessage()} className="ml-2">x</button>
                 </div>
@@ -95,14 +124,14 @@ const AdminBlogs = () => {
                             <td className="py-2 px-4 border-b">{blog.topic}</td>
                             <td className="py-2 px-4 border-b">{new Date(blog.createdAt).toLocaleDateString()}</td>
                             <td className="py-2 px-4 border-b">
-                                <button 
-                                    onClick={() => handleEdit(blog._id)} 
+                                <button
+                                    onClick={() => handleEdit(blog._id)}
                                     className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2"
                                 >
                                     Edit
                                 </button>
-                                <button 
-                                    onClick={() => handleDelete(blog._id)} 
+                                <button
+                                    onClick={() => handleDelete(blog._id)}
                                     className="bg-red-500 text-white px-3 py-1 rounded-md"
                                 >
                                     Delete
@@ -115,7 +144,7 @@ const AdminBlogs = () => {
 
             {/* Undo Delete Button */}
             {deletedBlog && (
-                <div className="fixed top-4 right-4 p-4 bg-yellow-500 text-white rounded shadow animate-bounce">
+                <div className="fixed bottom-4 right-4 p-4 bg-yellow-500 text-white rounded shadow animate-bounce">
                     <p>Blog deleted. <button onClick={handleUndoDelete} className="underline">Undo</button></p>
                 </div>
             )}

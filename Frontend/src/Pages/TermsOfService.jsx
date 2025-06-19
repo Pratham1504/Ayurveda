@@ -2,6 +2,11 @@ import React from 'react';
 
 const TermsOfService = () => (
   <div className="max-w-4xl mx-auto px-6 py-12 text-black space-y-10">
+    <img
+        src="https://res.cloudinary.com/dkzcankyc/image/upload/v1750364419/lezme8r3sqzjbyzwnpea.png"
+        alt="Swasthamana Logo Background"
+        className="absolute fixed inset-0 w-full h-full object-contain opacity-5 z-0 pointer-events-none"
+      />
     <div>
       <h1 className="text-4xl font-bold text-sky-700 mb-4">Terms of Service (English)</h1>
       <p>Welcome to Swasthamana. By using our site and services, you agree to the following terms:</p>

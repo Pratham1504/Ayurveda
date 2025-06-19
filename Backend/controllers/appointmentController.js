@@ -60,7 +60,7 @@ const createAppointment = async (req, res) => {
             
             💳 <b>Txn ID:</b> ${transactionId}
             
-            🔗 <b>Link: https://www.youtube.com/</b>
+            🔗 <b>Link: https://swasthamana.netlify.app/admin/appointments/ </b>
             `;
 
         await sendTelegramAlert(message);

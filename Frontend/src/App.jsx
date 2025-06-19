@@ -33,6 +33,7 @@ import ScrollToTop from "./Components/ScrollToTop";
 import PrivacyPolicy from './Pages/PrivacyPolicy';
 import RefundPolicy from './Pages/RefundPolicy';
 import TermsOfService from './Pages/TermsOfService';
+import ContactUs from './Pages/ContactUs';
 
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
@@ -72,7 +73,7 @@ function App() {
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/refund-policy" element={<RefundPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
-
+                <Route path="/contact" element={<ContactUs />} />
               </Routes>
             </div>
             <Footer />

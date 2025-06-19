@@ -53,8 +53,8 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4">Connect With Us</h3>
             <p>Follow us on social media or reach us directly:</p>
             <ul className="mt-2">
-              <li>Email: swasthamana@gmail.com</li>
-              <li>Phone: +91 98550 01178</li>
+              <li>Email: <a href="mailto:swasthamana@gmail.com" className=" hover:text-sky-200">swasthamana@gmail.com</a></li>
+              <li>Phone: <a href="tel:+919855001178" className="hover:text-sky-200">+91-98550 01178</a></li>
               <li>
                 <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-green-400">
                   Facebook
