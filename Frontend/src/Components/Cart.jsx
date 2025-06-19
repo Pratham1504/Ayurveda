@@ -306,6 +306,7 @@ const Cart = ({ onClose }) => {
                 }));
                 // Save to localStorage
                 localStorage.setItem("checkoutItems", JSON.stringify(items));
+                onClose();
                 // Navigate to checkout page
                 navigate('/checkout');
               }}
