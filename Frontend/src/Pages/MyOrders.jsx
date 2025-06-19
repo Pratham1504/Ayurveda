@@ -72,8 +72,6 @@
 
 // export default MyOrders;
 
-
-
 // import { useEffect, useState } from "react";
 // import axios from "axios";
 // import { server } from "../main";
@@ -158,9 +156,7 @@
 
 // export default MyOrders;
 
-
 // *************************************************************************
-
 
 // import { useEffect, useState } from "react";
 // import axios from "axios";
@@ -275,8 +271,6 @@
 
 // export default MyOrders;
 
-
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { server } from "../main";
@@ -311,15 +305,35 @@ const MyOrders = () => {
     <div className="max-w-5xl mx-auto py-10 px-2 sm:px-6">
       <div className="flex items-center gap-3 mb-8">
         <CubeTransparentIcon className="h-8 w-8 text-sky-600" />
-        <h2 className="text-3xl font-extrabold text-sky-700 tracking-tight">My Orders</h2>
+        <h2 className="text-3xl font-extrabold text-sky-700 tracking-tight">
+          My Orders
+        </h2>
       </div>
       {loading ? (
         <div className="flex justify-center items-center py-16">
-          <svg className="animate-spin h-8 w-8 text-sky-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+          <svg
+            className="animate-spin h-8 w-8 text-sky-500 mr-2"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v8z"
+            ></path>
           </svg>
-          <span className="text-sky-600 font-semibold">Loading your orders...</span>
+          <span className="text-sky-600 font-semibold">
+            Loading your orders...
+          </span>
         </div>
       ) : error ? (
         <div className="text-red-500 text-center">{error}</div>
@@ -339,7 +353,9 @@ const MyOrders = () => {
               <div className="flex-1">
                 <div className="flex flex-wrap gap-8 items-center mb-2 text-gray-700 text-sm">
                   <div>
-                    <span className="font-semibold text-sky-700">ORDER PLACED</span>
+                    <span className="font-semibold text-sky-700">
+                      ORDER PLACED
+                    </span>
                     <div>{new Date(order.createdAt).toLocaleDateString()}</div>
                   </div>
                   <div>
@@ -351,18 +367,22 @@ const MyOrders = () => {
                     <div className="text-sky-700 font-medium">You</div>
                   </div>
                   <div className="ml-auto">
-                    <span className="font-semibold text-sky-700">ORDER #</span>
-                    <div className="text-xs break-all">{order._id}</div>
+                    <span className="font-semibold text-sky-700">ORDER ID</span>
+                      <div className="text-sm break-all">
+                        #{order._id?.slice(-6) || ""}
+                      </div>
                   </div>
                 </div>
                 <hr className="my-2 border-sky-100" />
-                <div className={`mb-2 font-semibold ${
-                  order.orderStatus === "Delivered"
-                    ? "text-green-700"
-                    : order.orderStatus === "Cancelled"
-                    ? "text-red-600"
-                    : "text-yellow-600"
-                }`}>
+                <div
+                  className={`mb-2 font-semibold ${
+                    order.orderStatus === "Delivered"
+                      ? "text-green-700"
+                      : order.orderStatus === "Cancelled"
+                      ? "text-red-600"
+                      : "text-yellow-600"
+                  }`}
+                >
                   {order.orderStatus === "Order Placed"
                     ? "Arriving Soon"
                     : order.orderStatus}
@@ -371,7 +391,10 @@ const MyOrders = () => {
                 <div className="flex flex-wrap gap-6 items-center">
                   {order.items &&
                     order.items.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-3 mb-2 bg-sky-50 rounded-xl p-2 pr-4 shadow-sm">
+                      <div
+                        key={idx}
+                        className="flex items-center gap-3 mb-2 bg-sky-50 rounded-xl p-2 pr-4 shadow-sm"
+                      >
                         <img
                           src={item.product?.image}
                           alt={item.product?.name}
@@ -399,7 +422,10 @@ const MyOrders = () => {
                   View Details
                 </Link>
                 <div className="mt-2 text-xs text-gray-500 text-center">
-                  Payment: <span className="font-semibold text-gray-700">{order.modeOfPayment}</span>
+                  Payment:{" "}
+                  <span className="font-semibold text-gray-700">
+                    {order.modeOfPayment}
+                  </span>
                 </div>
               </div>
             </div>

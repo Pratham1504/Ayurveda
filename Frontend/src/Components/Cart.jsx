@@ -172,6 +172,8 @@ const Cart = ({ onClose }) => {
 
   const { cart, updateQuantity } = useCart();
   const { user } = UserData(); // if you need auth
+  const { isAuth, setModalIsOpen } = UserData(); // add isAuth and setModalIsOpen
+
 
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -297,22 +299,25 @@ const Cart = ({ onClose }) => {
               </span>
             </div>
             <button
-              className="bg-gradient-to-r from-sky-600 to-sky-400 hover:from-sky-700 hover:to-sky-500 text-white w-full py-2 rounded-lg shadow font-semibold text-lg transition"
-              onClick={() => {
-                // Prepare array of { productId, quantity }
-                const items = cart.map(item => ({
-                  productId: item._id,
-                  quantity: item.quantity
-                }));
-                // Save to localStorage
-                localStorage.setItem("checkoutItems", JSON.stringify(items));
-                onClose();
-                // Navigate to checkout page
-                navigate('/checkout');
-              }}
-            >
-              Checkout
-            </button>
+      className="bg-gradient-to-r from-sky-600 to-sky-400 hover:from-sky-700 hover:to-sky-500 text-white w-full py-2 rounded-lg shadow font-semibold text-lg transition"
+      onClick={() => {
+        const items = cart.map(item => ({
+          productId: item._id,
+          quantity: item.quantity
+        }));
+        localStorage.setItem("checkoutItems", JSON.stringify(items));
+        onClose();
+        if (isAuth) {
+          // User is logged in, go to checkout
+          navigate('/checkout');
+        } else {
+          // User not logged in, open login modal
+          setModalIsOpen(true);
+        }
+      }}
+    >
+      Checkout
+    </button>
           </div>
         </>
       )}

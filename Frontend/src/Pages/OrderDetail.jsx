@@ -192,8 +192,10 @@ const OrderDetail = () => {
             <div>{order.modeOfPayment}</div>
           </div>
           <div className="ml-auto">
-            <span className="font-semibold text-sky-700">ORDER #</span>
-            <div className="text-xs break-all">{order._id}</div>
+            <span className="font-semibold text-sky-700">ORDER ID</span>
+            <div className="text-sm break-all">
+              #{order._id?.slice(-6) || ""}
+            </div>
           </div>
         </div>
         <div className={`mb-2 font-semibold ${statusColor}`}>

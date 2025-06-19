@@ -290,7 +290,7 @@ const Home = () => {
   </button>
 
   {/* Card */}
-  <div className="w-full max-w-md sm:mx-12">
+  <div className="w-full sm:mx-12">
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 flex flex-col gap-2 transition-all duration-300">
       <Link to={`/blogs/${blogs[currentSlide]._id}`}>
         <h3 className="text-2xl font-bold text-[#1a365d] mb-2 hover:text-sky-600 transition">

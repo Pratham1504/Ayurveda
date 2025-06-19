@@ -380,8 +380,15 @@ const Navbar = ({ setCartVisible }) => {
                 )}
               </button>
             </div>
+            <div  className="flex items-center gap-4 ml-8">
 
             {/* Login Button or User/Cart Icons */}
+            <div>
+                  <ShoppingCartIcon
+                    className="h-6 w-6 cursor-pointer"
+                    onClick={() => setCartVisible(true)}
+                  />
+            </div>
             {!isAuth ? (
               <button
                 onClick={() => {
@@ -395,12 +402,12 @@ const Navbar = ({ setCartVisible }) => {
               </button>
             ) : (
               <div className="cart-user-logout flex items-center gap-4 ml-10">
-                <div>
+                {/* <div>
                   <ShoppingCartIcon
                     className="h-6 w-6 cursor-pointer"
                     onClick={() => setCartVisible(true)}
                   />
-                </div>
+                </div> */}
                 <div className="relative inline-block">
                   <div
                     className="h-8 w-8 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold text-lg cursor-pointer select-none"
@@ -499,6 +506,7 @@ const Navbar = ({ setCartVisible }) => {
               </div>
             )}
           </div>
+            </div>
 
           {/* Mobile menu button */}
           <div className="-mr-2 flex md:hidden">
