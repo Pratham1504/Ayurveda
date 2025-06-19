@@ -160,9 +160,18 @@
 import React from "react";
 import { useCart } from "../Context/CartContext";
 import { XMarkIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
+import { server } from "../main"; // adjust if your server URL is elsewhere
+import { UserData } from "../Context/UserContext"; // if you need user token
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Cart = ({ onClose }) => {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const { cart, updateQuantity } = useCart();
+  const { user } = UserData(); // if you need auth
 
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -170,6 +179,25 @@ const Cart = ({ onClose }) => {
   );
   const gst = (totalPrice * 0.18).toFixed(2); // 18% GST
   const grandTotal = (totalPrice + Number(gst)).toFixed(2);
+
+  const handleCheckout = async () => {
+    const orderItems = cart.map(item => ({
+      productId: item._id,
+      quantity: item.quantity
+    }));
+
+    try {
+      // If you need auth, add headers with token
+      // const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      await axios.post(`${server}/api/orders/place`, { items: orderItems } /*, config */);
+      // Optionally clear cart here
+      // on success, show success message or redirect
+      alert("Order placed successfully!");
+      // Optionally clear cart here
+    } catch (err) {
+      alert("Order failed!");
+    }
+  };
 
   return (
     <div className="fixed top-0 right-0 w-[370px] max-w-full bg-white shadow-2xl h-full flex flex-col z-50 border-l border-sky-100 animate-slide-in">
@@ -270,7 +298,17 @@ const Cart = ({ onClose }) => {
             </div>
             <button
               className="bg-gradient-to-r from-sky-600 to-sky-400 hover:from-sky-700 hover:to-sky-500 text-white w-full py-2 rounded-lg shadow font-semibold text-lg transition"
-              onClick={() => console.log("Checkout")}
+              onClick={() => {
+                // Prepare array of { productId, quantity }
+                const items = cart.map(item => ({
+                  productId: item._id,
+                  quantity: item.quantity
+                }));
+                // Save to localStorage
+                localStorage.setItem("checkoutItems", JSON.stringify(items));
+                // Navigate to checkout page
+                navigate('/checkout');
+              }}
             >
               Checkout
             </button>

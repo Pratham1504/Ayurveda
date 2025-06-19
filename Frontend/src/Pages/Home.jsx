@@ -199,74 +199,144 @@ const Home = () => {
             </Link>
           </div>
           {blogs.length > 0 && (
-            <div className="relative overflow-visible">
-              {/* Slider Controls */}
-              <button
-                onClick={handlePrevSlide}
-                className="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-gray-200 hover:bg-sky-100 text-sky-600 p-3 rounded-full shadow z-10 transition"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
+            // <div className="relative overflow-visible">
+            //   {/* Slider Controls */}
+            //   <button
+            //     onClick={handlePrevSlide}
+            //     className="absolute left-0 top-1/2 -translate-y-1/2 bg-white border border-gray-200 hover:bg-sky-100 text-sky-600 p-3 rounded-full shadow z-10 transition"
+            //   >
+            //     <svg
+            //       className="w-5 h-5"
+            //       fill="none"
+            //       stroke="currentColor"
+            //       strokeWidth="2"
+            //       viewBox="0 0 24 24"
+            //     >
+            //       <path
+            //         strokeLinecap="round"
+            //         strokeLinejoin="round"
+            //         d="M15 19l-7-7 7-7"
+            //       />
+            //     </svg>
+            //   </button>
 
-              <div className="mx-12">
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 flex flex-col gap-2 transition-all duration-300">
-                  <Link to={`/blogs/${blogs[currentSlide]._id}`}>
-                    <h3 className="text-2xl font-bold text-[#1a365d] mb-2 hover:text-sky-600 transition">
-                      {blogs[currentSlide].title}
-                    </h3>
-                    <span className="inline-block bg-sky-100 text-sky-700 text-xs font-semibold px-3 py-1 rounded mb-2">
-                      {blogs[currentSlide].topic}
-                    </span>
-                    <p className="text-xs text-gray-400 mb-3">
-                      {new Date(
-                        blogs[currentSlide].createdAt
-                      ).toLocaleDateString()}
-                    </p>
-                    <p className="text-gray-600 mb-4 text-base leading-relaxed line-clamp-4">
-                      {truncateHtml(blogs[currentSlide].description, 300)}
-                    </p>
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
-                      <span>👍 {blogs[currentSlide].likes}</span>
-                      <span>👎 {blogs[currentSlide].dislikes}</span>
-                      <span>
-                        💬 {blogs[currentSlide].comments.length} Comments
-                      </span>
-                    </div>
-                  </Link>
-                </div>
-              </div>
+            //   <div className="mx-12">
+            //     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 flex flex-col gap-2 transition-all duration-300">
+            //       <Link to={`/blogs/${blogs[currentSlide]._id}`}>
+            //         <h3 className="text-2xl font-bold text-[#1a365d] mb-2 hover:text-sky-600 transition">
+            //           {blogs[currentSlide].title}
+            //         </h3>
+            //         <span className="inline-block bg-sky-100 text-sky-700 text-xs font-semibold px-3 py-1 rounded mb-2">
+            //           {blogs[currentSlide].topic}
+            //         </span>
+            //         <p className="text-xs text-gray-400 mb-3">
+            //           {new Date(
+            //             blogs[currentSlide].createdAt
+            //           ).toLocaleDateString()}
+            //         </p>
+            //         <p className="text-gray-600 mb-4 text-base leading-relaxed line-clamp-4">
+            //           {truncateHtml(blogs[currentSlide].description, 300)}
+            //         </p>
+            //         <div className="flex items-center gap-4 text-xs text-gray-500">
+            //           <span>👍 {blogs[currentSlide].likes}</span>
+            //           <span>👎 {blogs[currentSlide].dislikes}</span>
+            //           <span>
+            //             💬 {blogs[currentSlide].comments.length} Comments
+            //           </span>
+            //         </div>
+            //       </Link>
+            //     </div>
+            //   </div>
 
-              <button
-                onClick={handleNextSlide}
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-gray-200 hover:bg-sky-100 text-sky-600 p-3 rounded-full shadow z-10 transition"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </div>
+            //   <button
+            //     onClick={handleNextSlide}
+            //     className="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-gray-200 hover:bg-sky-100 text-sky-600 p-3 rounded-full shadow z-10 transition"
+            //   >
+            //     <svg
+            //       className="w-5 h-5"
+            //       fill="none"
+            //       stroke="currentColor"
+            //       strokeWidth="2"
+            //       viewBox="0 0 24 24"
+            //     >
+            //       <path
+            //         strokeLinecap="round"
+            //         strokeLinejoin="round"
+            //         d="M9 5l7 7-7 7"
+            //       />
+            //     </svg>
+            //   </button>
+            // </div>
+            <div className="relative flex justify-center items-center">
+  {/* Left Arrow */}
+  <button
+    onClick={handlePrevSlide}
+  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 border border-white/20 hover:bg-white/40 text-sky-600 p-3 rounded-full shadow-2xl z-10 transition sm:-left-6"
+  style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
+  >
+    <svg
+      className="w-5 h-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15 19l-7-7 7-7"
+      />
+    </svg>
+  </button>
+
+  {/* Card */}
+  <div className="w-full max-w-md sm:mx-12">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 flex flex-col gap-2 transition-all duration-300">
+      <Link to={`/blogs/${blogs[currentSlide]._id}`}>
+        <h3 className="text-2xl font-bold text-[#1a365d] mb-2 hover:text-sky-600 transition">
+          {blogs[currentSlide].title}
+        </h3>
+        <span className="inline-block bg-sky-100 text-sky-700 text-xs font-semibold px-3 py-1 rounded mb-2">
+          {blogs[currentSlide].topic}
+        </span>
+        <p className="text-xs text-gray-400 mb-3">
+          {new Date(blogs[currentSlide].createdAt).toLocaleDateString()}
+        </p>
+        <p className="text-gray-600 mb-4 text-base leading-relaxed line-clamp-4">
+          {truncateHtml(blogs[currentSlide].description, 300)}
+        </p>
+        <div className="flex items-center gap-4 text-xs text-gray-500">
+          <span>👍 {blogs[currentSlide].likes}</span>
+          <span>👎 {blogs[currentSlide].dislikes}</span>
+          <span>
+            💬 {blogs[currentSlide].comments.length} Comments
+          </span>
+        </div>
+      </Link>
+    </div>
+  </div>
+
+  {/* Right Arrow */}
+  <button
+    onClick={handleNextSlide}
+  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md border border-white/20 hover:bg-white/40 text-sky-600 p-3 rounded-full shadow z-10 transition sm:-right-6"
+  style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
+  >
+    <svg
+      className="w-5 h-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 5l7 7-7 7"
+      />
+    </svg>
+  </button>
+</div>
           )}
           {blogs.length === 0 && (
             <div className="text-center text-gray-400 py-12">

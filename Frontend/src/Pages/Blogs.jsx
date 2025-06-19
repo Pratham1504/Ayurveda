@@ -59,7 +59,7 @@ const BlogList = () => {
         <section className="bg-white font-sans text-gray-800 lg:max-w-3/4 lg:mx-auto">
             <div className="px-4 mx-auto max-w-screen-xl lg:py-8 lg:px-6">
                 <div className="bg-sky-50 p-4 sm:p-8 rounded-lg mb-8 text-center">
-                    <h2 className="mb-4 text-2xl sm:text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900">Our Blogs</h2>
+                    <h2 className="mb-4 mt-4 text-2xl sm:text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900">Our Blogs</h2>
                     <p className="font-light text-gray-800 text-sm sm:text-lg">
                         Explore our collection of articles and insights on Ayurveda, where ancient wisdom meets modern wellness practices.
                     </p>
@@ -75,7 +75,7 @@ const BlogList = () => {
                 {blogLoading ? (
                     <section className="bg-white font-sans text-gray-800">
                 <div className="px-4 mx-auto max-w-screen-xl py-8">
-                    <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
+                    <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 mb-8">
                         {Array.from({ length: 4 }).map((_, index) => (
                             <SkeletonCard key={index} />
                         ))}
@@ -83,7 +83,7 @@ const BlogList = () => {
                 </div>
             </section>
                 ) : (
-                <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
+                <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 mb-8">
                     {filteredBlogs.map((blog) => (
                         <article key={blog._id} className="p-4 sm:p-6 bg-white rounded-lg border border-gray-200 shadow hover:shadow-md transition">
                             <div className="flex justify-between items-center mb-3 sm:mb-5 text-gray-500">

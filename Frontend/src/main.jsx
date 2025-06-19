@@ -6,7 +6,10 @@ import { UserContextProvider } from './Context/UserContext.jsx';
 import { ProductProvider } from './Context/ProductContext';
 import { BlogProvider } from './Context/BlogContext';
 
+
 export const server = "https://ayurveda-35ad.onrender.com";
+// export const server = "http://localhost:4000";
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

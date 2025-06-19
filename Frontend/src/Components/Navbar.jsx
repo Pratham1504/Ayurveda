@@ -402,10 +402,13 @@ const Navbar = ({ setCartVisible }) => {
                   />
                 </div>
                 <div className="relative inline-block">
-                  <UserCircleIcon
-                    className="h-6 w-6 cursor-pointer"
+                  <div
+                    className="h-8 w-8 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold text-lg cursor-pointer select-none"
                     onClick={() => setProfileCardOpen((open) => !open)}
-                  />
+                    title={user.fullName || user.email || "Profile"}
+                  >
+                    {(user.fullName?.[0] || user.email?.[0] || "U").toUpperCase()}
+                  </div>
 
                   {profileCardOpen && (
   <div className="absolute right-0 mt-2 w-72 bg-white shadow-2xl rounded-2xl p-5 z-50 border border-sky-100 animate-fade-in">
@@ -417,9 +420,13 @@ const Navbar = ({ setCartVisible }) => {
       &times;
     </button>
     <div className="flex flex-col items-center space-y-3 mt-2">
-      <div className="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center mb-2 shadow">
-        <UserCircleIcon className="h-12 w-12 text-sky-500" />
-      </div>
+      <div className="flex justify-center items-center w-full">
+  <div className="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center shadow px-1 py-1">
+    <div className="w-14 h-14 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold text-3xl select-none">
+      {(user.fullName?.[0] || user.email?.[0] || "U").toUpperCase()}
+    </div>
+  </div>
+</div>
       <div className="w-full">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-gray-700">Name:</span>

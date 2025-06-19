@@ -271,7 +271,7 @@ const Ebooks = () => {
                                     onClick={() => handleRowClick(ebook._id)}
                                     className={`cursor-pointer transition hover:bg-sky-50 ${index % 2 === 0 ? 'bg-white' : 'bg-sky-50'}`}
                                 >
-                                    <td className="py-3 px-4 flex items-center gap-2 text-gray-900 font-medium">
+                                    <td className="py-3 px-4 flex items-center gap-2 text-gray-900 md:font-medium sm:font-normal">
                                         {expandedRow === ebook._id ? (
                                             <ChevronDownIcon className="h-5 w-5 text-sky-600" />
                                         ) : (

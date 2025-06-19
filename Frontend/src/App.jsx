@@ -28,6 +28,8 @@ import HeroSection from './Pages/Home/HeroSection';
 import AboutUs from './Pages/AboutUs';
 import AdminOrders from './Pages/AdminOrders';
 import ResetPassword from './Pages/ResetPassword';
+import Checkout from './Pages/Checkout';
+import ScrollToTop from "./Components/ScrollToTop";
 
 function App() {
   const [cartVisible, setCartVisible] = useState(false); // State for cart visibility
@@ -35,6 +37,7 @@ function App() {
   return (
     <div className="App min-h-screen flex flex-col">
       <BrowserRouter>
+        <ScrollToTop /> {/* Scroll to top on route change */}
         <CartProvider> {/* Wrap with CartProvider */}
           <NotificationProvider>
             <Navbar setCartVisible={setCartVisible} />
@@ -62,6 +65,7 @@ function App() {
                 <Route exact path="/my-orders/:id" element={<OrderDetail />} />
                 <Route path='/about' element={<AboutUs />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
+                <Route path="/checkout" element={<Checkout />} />
               </Routes>
             </div>
             <Footer />
