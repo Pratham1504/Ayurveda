@@ -31,7 +31,11 @@ const AdminEbooks = () => {
         if (!window.confirm('Are you sure you want to delete this ebook?')) return;
         setLoading(true); // Start loading state
         try {
-            await axios.delete(`${server}/api/ebooks/${id}`);
+            await axios.delete(`${server}/api/ebooks/${id}`, {
+            headers: {
+              token: localStorage.getItem("token"),
+            },
+          });
             setEbooks(ebooks.filter(ebook => ebook._id !== id)); // Remove from UI
             setMessage('Ebook deleted successfully!');
         } catch (err) {
@@ -43,8 +47,8 @@ const AdminEbooks = () => {
     };
 
     // Handle download
-    const handleDownload = (fileName) => {
-        const downloadUrl = `${server}/api/ebooks/download/${fileName}`; // Construct the download URL
+    const handleDownload = (fileUrl) => {
+        const downloadUrl = `${fileUrl}`; // Construct the download URL
         window.open(downloadUrl, '_blank');
     };
 
@@ -74,7 +78,7 @@ const AdminEbooks = () => {
                             <td className="py-2 px-4 border-b">{ebook.author}</td>
                             <td className="py-2 px-4 border-b text-center">
                                 <button
-                                    onClick={() => handleDownload(ebook.fileName)}
+                                    onClick={() => handleDownload(ebook.fileUrl)}
                                     className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2"
                                 >
                                     Download

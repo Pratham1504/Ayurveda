@@ -10,21 +10,21 @@ const doctors = [
     qualification: 'MD (Ayurveda)',
     experience: '20+ years',
     description: `Specialized in chronic diseases and lifestyle disorders. Expert in Panchakarma, herbal medicine, and dietary regimens. Known for his compassionate and personalized approach.`,
-    image: '../assets/1.jpg'
+    image: 'https://res.cloudinary.com/dkzcankyc/image/upload/v1750364205/s2f1jqk2g8qbt28t0wnl.jpg'
   },
   {
     name: 'Dr. Anju Garg',
     qualification: 'MD (Ayurveda)',
     experience: '18+ years',
     description: 'Specialist in gynaecological problems with a commitment to restoring women’s vitality through Ayurvedic wisdom.',
-    image: '../assets/2.jpg'
+    image: 'https://res.cloudinary.com/dkzcankyc/image/upload/v1750364224/a6imt5rtn9nf36ibwm4m.jpg'
   },
   {
     name: 'Dr. Ravinder',
     qualification: 'MD (Ayurveda)',
     experience: '15+ years',
     description: 'Specialist in Panchakarma and Agnikarma therapies, with expertise in treating musculoskeletal, liver, and joint disorders.',
-    image: '../assets/3.webp'
+    image: 'https://res.cloudinary.com/dkzcankyc/image/upload/v1750363808/fijy7fo5msclcn6k5xqz.webp'
   }
 ];
 

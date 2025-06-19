@@ -192,7 +192,7 @@ const AdminProduct = () => {
       {/* Top Left - Success/Error Messages */}
       {message && (
         <div
-          className={`fixed top-4 right-4 mt-4 ml-4 p-4 rounded text-white flex items-center ${
+          className={`fixed top-10 right-4 mt-4 ml-4 p-4 rounded text-white flex items-center ${
             message.type === "success" ? "bg-green-500" : "bg-red-500"
           } animate-pulse`}
         >
@@ -381,7 +381,7 @@ const AdminProduct = () => {
 
       {/* Undo Delete Button */}
       {deletedProduct && (
-        <div className="fixed right-4 top-4 p-4 bg-yellow-500 text-white rounded shadow animate-bounce">
+        <div className="fixed right-4 bottom-10 p-4 bg-yellow-500 text-white rounded shadow animate-bounce">
           <p>
             Product deleted.{" "}
             <button onClick={handleUndoDelete} className="underline">

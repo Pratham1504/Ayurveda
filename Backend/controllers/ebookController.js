@@ -4,11 +4,11 @@ require('dotenv').config();
 // Create ebook function
 const createEbook = async (req, res) => {
     try {
-        const { title, author, description, url } = req.body;
+        const { title, author, description, fileUrl } = req.body;
         // const file = req.file;
 
         // Validate input
-        if (!url) {
+        if (!fileUrl) {
             return res.status(400).json({ message: 'No file uploaded.' });
         }
 
@@ -17,7 +17,7 @@ const createEbook = async (req, res) => {
             title,
             author,
             description,
-            fileUrl: url, // Use the URL directly from the request body
+            fileUrl, // Use the URL directly from the request body
             dateUploaded: new Date(),
         });
         await ebook.save();

@@ -93,7 +93,7 @@ const HeroSection = () => {
         >
           <div className="flex items-center justify-end lg:w-[55vh] md:w-[20rem] sm:w-[15rem]">
             <img
-              src="../assets/456.png"
+              src="https://res.cloudinary.com/dkzcankyc/image/upload/v1750364379/lobtqbgeecxid3ev7orm.png"
               className="w-full h-full drop-shadow-2xl"
               alt="Doctor"
             />

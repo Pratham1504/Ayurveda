@@ -18,7 +18,10 @@ const Footer = () => {
                 <Link to="/blogs" className="hover:text-green-400">Blogs</Link>
               </li>
               <li>
-                <Link to="/consultation" className="hover:text-green-400">Consultation</Link>
+                <Link to="/consulting" className="hover:text-green-400">Consultation</Link>
+              </li>
+              <li>
+                <Link to="/ebooks" className="hover:text-green-400">E-Books</Link>
               </li>
             </ul>
           </div>
@@ -50,15 +53,15 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4">Connect With Us</h3>
             <p>Follow us on social media or reach us directly:</p>
             <ul className="mt-2">
-              <li>Email: contact@yourclinic.com</li>
-              <li>Phone: +123 456 7890</li>
+              <li>Email: swasthamana@gmail.com</li>
+              <li>Phone: +91 98550 01178</li>
               <li>
                 <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-green-400">
                   Facebook
                 </a>
               </li>
               <li>
-                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-green-400">
+                <a href="https://www.instagram.com/swasthamana_" target="_blank" rel="noopener noreferrer" className="hover:text-green-400">
                   Instagram
                 </a>
               </li>

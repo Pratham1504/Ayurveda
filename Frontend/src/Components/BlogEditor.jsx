@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
 import { NotificationContext } from '../Context/NotificationContext';
 import { server } from '../main';
+
+// Tiptap imports
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 
 const BlogEditor = () => {
   const { id } = useParams();
@@ -21,6 +23,14 @@ const BlogEditor = () => {
   const [loading, setLoading] = useState(true);
   const { setMessage } = useContext(NotificationContext);
 
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: '',
+    onUpdate: ({ editor }) => {
+      setFormData((prev) => ({ ...prev, description: editor.getHTML() }));
+    },
+  });
+
   useEffect(() => {
     const fetchBlogAndProducts = async () => {
       try {
@@ -35,6 +45,11 @@ const BlogEditor = () => {
             youtubeLink: blogData.youtubeLink || '',
             productId: blogData.productId || ''
           });
+
+          // Set description in the editor
+          if (editor) {
+            editor.commands.setContent(blogData.description || '');
+          }
         } else {
           setIsEditMode(false);
         }
@@ -48,33 +63,36 @@ const BlogEditor = () => {
     };
 
     fetchBlogAndProducts();
-  }, [id]);
+  }, [id, editor]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDescriptionChange = (content) => {
-    setFormData((prev) => ({ ...prev, description: content }));
-  };
-
   const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (isEditMode) {
-        await axios.put(`${server}/api/blogs/${id}`, formData);
-        setMessage('Blog updated successfully.');
-      } else {
-        await axios.post(`${server}/api/blogs`, formData);
-        setMessage('Blog created successfully.');
-      }
-      navigate('/admin/blogs');
-    } catch (err) {
-      console.error('Error submitting form:', err);
-      setMessage('Error submitting form.');
+  e.preventDefault();
+  try {
+    const config = {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    };
+
+    if (isEditMode) {
+      await axios.put(`${server}/api/blogs/${id}`, formData, config);
+      setMessage('Blog updated successfully.');
+    } else {
+      await axios.post(`${server}/api/blogs`, formData, config);
+      setMessage('Blog created successfully.');
     }
-  };
+
+    navigate('/admin/blogs');
+  } catch (err) {
+    console.error('Error submitting form:', err);
+    setMessage('Error submitting form.');
+  }
+};
 
   if (loading) {
     return <div>Loading...</div>;
@@ -101,12 +119,9 @@ const BlogEditor = () => {
 
         <div className="mb-10">
           <label className="block font-bold mb-4">Description</label>
-          {/* <ReactQuill
-            value={formData.description}
-            onChange={handleDescriptionChange}
-            className="w-full h-64 p-2"
-            theme="snow"
-          /> */}
+          <div className="border rounded p-2 min-h-[200px]">
+            <EditorContent editor={editor} />
+          </div>
         </div>
 
         <div className="mb-4">

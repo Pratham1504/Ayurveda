@@ -12,7 +12,7 @@ const AdminAppointmentsPage = () => {
 
     const fetchAppointments = async () => {
         try {
-            const response = await axios.get('${server}/api/appointment/admin/all');
+            const response = await axios.get(`${server}/api/appointment/admin/all`);
             setAppointments(response.data);
         } catch (error) {
             console.error('Error fetching appointments:', error);

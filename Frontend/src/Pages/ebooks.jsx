@@ -282,7 +282,7 @@ const Ebooks = () => {
                                     <td className="py-3 px-4 text-gray-700">{ebook.author}</td>
                                     <td className="py-3 px-4 text-right">
                                         <a
-                                            href={`${server}/api/ebooks/download/${ebook.fileName}`}
+                                            href={`${ebook.fileUrl}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="inline-flex items-center justify-center bg-gradient-to-r from-sky-500 to-sky-400 hover:from-sky-600 hover:to-sky-500 text-white p-2 rounded-lg shadow transition"
