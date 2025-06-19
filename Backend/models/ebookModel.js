@@ -13,11 +13,7 @@ const ebookSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    fileName: {
-        type: String,
-        required: true,
-    },
-    fileId: {
+    fileUrl : {
         type: String,
         required: true,
     },

@@ -18,8 +18,7 @@ const createProduct = async (req, res) => {
       image: result.secure_url // Store the Cloudinary URL
     });
     await product.save();
-    // Cleanup: Remove the temporary file after upload
-    fs.unlinkSync(req.file.path);
+  
     res.status(201).json(product);
   } catch (error) {
     console.error('Error creating product:', error);

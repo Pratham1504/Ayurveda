@@ -13,19 +13,24 @@ cloudinary.config({
 
 const uploadFile = async (localFilePath) => {
     try {
+        console.log("aaya")
         if (!localFilePath) return null;
-
+        console.log("localFilePath", localFilePath);
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto"
         });
-
-        fs.unlinkSync(localFilePath); // delete local file after upload
+        console.log("response", response);
+        console.log("File uploaded and local copy deleted successfully");
         return response;
 
     } catch (error) {
         console.error(error);
-        fs.unlinkSync(localFilePath); // remove even on failure
+         
         return null;
+    }
+    finally{
+        fs.unlinkSync(localFilePath); // remove even on failure
+        console.log("Local file deleted successfully");
     }
 };
 
