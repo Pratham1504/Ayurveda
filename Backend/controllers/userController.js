@@ -10,6 +10,12 @@ exports.signup = async (req, res) => {
   try {
     const { email, password, fullName, mobileNo } = req.body;
 
+    // Check if mobile number is 10 digits
+    const mobileRegex = /^\d{10}$/;
+    if (!mobileRegex.test(mobileNo)) {
+      return res.status(400).json({ message: "Mobile number must be 10 digits" });
+    }
+    
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {

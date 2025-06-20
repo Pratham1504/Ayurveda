@@ -54,20 +54,20 @@ const Home = () => {
   //     return (
   //       <div className="text-center py-20 text-gray-500 text-xl">Loading...</div>
   //     );
-  if (productLoading || blogLoading)
-    return (
-      <div className="text-center py-20 text-gray-500 text-xl">Loading...</div>
-    );
-  if (productError || blogError)
-    return (
-      <div className="text-red-500 text-center py-20">Error fetching data</div>
-    );
-  if (error)
-    return (
-      <div className="text-red-500 text-center py-20">
-        Error fetching data: {error.message}
-      </div>
-    );
+  // if (productLoading || blogLoading)
+  //   return (
+  //     <div className="text-center py-20 text-gray-500 text-xl">Loading...</div>
+  //   );
+  // if (productError || blogError)
+  //   return (
+  //     <div className="text-red-500 text-center py-20">Error fetching data</div>
+  //   );
+  // if (error)
+  //   return (
+  //     <div className="text-red-500 text-center py-20">
+  //       Error fetching data: {error.message}
+  //     </div>
+  //   );
 
   return (
     <div className="font-sans text-[#333] bg-white">
