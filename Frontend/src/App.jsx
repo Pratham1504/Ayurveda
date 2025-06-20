@@ -30,7 +30,7 @@ import AdminOrders from './Pages/AdminOrders';
 import ResetPassword from './Pages/ResetPassword';
 import Checkout from './Pages/Checkout';
 import ScrollToTop from "./Components/ScrollToTop";
-import PrivacyPolicy from './Pages/PrivacyPolicy';
+import PP from './Pages/PP';
 import RefundPolicy from './Pages/RefundPolicy';
 import TermsOfService from './Pages/TermsOfService';
 import ContactUs from './Pages/ContactUs';
@@ -70,7 +70,7 @@ function App() {
                 <Route path='/about' element={<AboutUs />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path="/checkout" element={<Checkout />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/privacy-policy" element={<PP />} />
                 <Route path="/refund-policy" element={<RefundPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
                 <Route path="/contact" element={<ContactUs />} />

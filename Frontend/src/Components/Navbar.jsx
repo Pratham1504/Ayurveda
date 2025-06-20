@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "react-modal";
 import { UserCircleIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { UserData } from "../Context/UserContext";
-import logo from "../../assets/SWASTHAMANA_no_bg.png"
+import logo from "../../assets/SWASTHAMANA_no_bg.png";
 import { server } from "../main";
 
 Modal.setAppElement("#root"); // Make sure your root element id is 'root'
@@ -234,7 +234,6 @@ const Navbar = ({ setCartVisible }) => {
               </button>
             </div> */}
 
-
             {/* BOX EFFECT */}
             {/* <div className="hidden md:flex">
               <button
@@ -380,173 +379,164 @@ const Navbar = ({ setCartVisible }) => {
                 )}
               </button>
             </div>
-            <div  className="flex items-center gap-4 ml-8">
+            <div className="flex items-center gap-4 ml-8">
+              {/* Login Button or User/Cart Icons */}
+              
+              {!isAuth ? (
+                <>
 
-            {/* Login Button or User/Cart Icons */}
-            <div>
-                  <ShoppingCartIcon
-                    className="h-6 w-6 cursor-pointer"
-                    onClick={() => setCartVisible(true)}
-                  />
-            </div>
-            {!isAuth ? (
-              <button
-                onClick={() => {
-                  resetAuthForms();
-                  setModalIsOpen(true);
-                  setIsLogin(true);
-                }}
-                className="hidden md:inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition duration-200 ml-10"
-              >
-                Login
-              </button>
-            ) : (
-              <div className="cart-user-logout flex items-center gap-4 ml-10">
-                {/* <div>
-                  <ShoppingCartIcon
-                    className="h-6 w-6 cursor-pointer"
-                    onClick={() => setCartVisible(true)}
-                  />
-                </div> */}
-                <div className="relative inline-block">
-                  <div
-                    className="h-8 w-8 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold text-lg cursor-pointer select-none"
-                    onClick={() => setProfileCardOpen((open) => !open)}
-                    title={user.fullName || user.email || "Profile"}
-                  >
-                    {(user.fullName?.[0] || user.email?.[0] || "U").toUpperCase()}
+                <div className="shopping-cart-icon mr-2">
+                    <ShoppingCartIcon
+                      className="h-6 w-6 cursor-pointer"
+                      onClick={() => setCartVisible(true)}
+                    />
                   </div>
-
-                  {profileCardOpen && (
-  <div className="absolute right-0 mt-2 w-72 bg-white shadow-2xl rounded-2xl p-5 z-50 border border-sky-100 animate-fade-in">
-    <button
-      className="absolute top-2 right-2 text-gray-400 hover:text-sky-600 font-bold text-2xl transition"
-      onClick={() => setProfileCardOpen(false)}
-      aria-label="Close"
-    >
-      &times;
-    </button>
-    <div className="flex flex-col items-center space-y-3 mt-2">
-      <div className="flex justify-center items-center w-full">
-  <div className="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center shadow px-1 py-1">
-    <div className="w-14 h-14 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold text-3xl select-none">
-      {(user.fullName?.[0] || user.email?.[0] || "U").toUpperCase()}
-    </div>
-  </div>
-</div>
-      <div className="w-full">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-gray-700">Name:</span>
-          <span className="truncate">{user.fullName || "-"}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-gray-700">Email:</span>
-          <span className="truncate">{user.email || "-"}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-gray-700">Mobile:</span>
-          <span>{user.mobileNo || "-"}</span>
-        </div>
-      </div>
-      <button
-        className="mt-4 w-full bg-gradient-to-r from-sky-600 to-sky-400 text-white py-2 rounded-lg hover:from-sky-700 hover:to-sky-500 shadow transition font-semibold"
-        onClick={() => {
-          setProfileCardOpen(false);
-          navigate("/my-orders");
-        }}
-      >
-        My Orders
-      </button>
-    </div>
-  </div>
-)}
-                  {/* {profileCardOpen && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-50 border">
-                      <button
-                        className="absolute top-2 right-2 text-gray-400 hover:text-black font-bold"
-                        onClick={() => setProfileCardOpen(false)}
-                        aria-label="Close"
-                      >
-                        &times;
-                      </button>
-                      <div className="space-y-2 mt-2">
-                        <div>
-                          <span className="font-semibold">Name:</span>{" "}
-                          {user.fullName || "-"}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Email:</span>{" "}
-                          {user.email || "-"}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Mobile:</span>{" "}
-                          {user.mobileNo || "-"}
-                        </div>
-                        <button
-                          className="mt-4 w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700 transition"
-                          onClick={() => {
-                            setProfileCardOpen(false);
-                            navigate("/my-orders");
-                          }}
-                        >
-                          My Orders
-                        </button>
-                      </div>
+                <button
+                  onClick={() => {
+                    resetAuthForms();
+                    setModalIsOpen(true);
+                    setIsLogin(true);
+                  }}
+                  className="hidden md:inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition duration-200"
+                >
+                  Login
+                </button>
+                </>
+              ) : (
+                <div className="cart-user-logout flex items-center gap-4 ml-10">
+                  
+                  <div className="profile-icon-card relative inline-block">
+                    <div
+                      className="h-8 w-8 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold text-lg cursor-pointer select-none"
+                      onClick={() => setProfileCardOpen((open) => !open)}
+                      title={user.fullName || user.email || "Profile"}
+                    >
+                      {(
+                        user.fullName?.[0] ||
+                        user.email?.[0] ||
+                        "U"
+                      ).toUpperCase()}
                     </div>
-                  )} */}
+
+                    {profileCardOpen && (
+                      <div className="absolute right-0 mt-2 w-72 bg-white shadow-2xl rounded-2xl p-5 z-50 border border-sky-100 animate-fade-in">
+                        <button
+                          className="absolute top-2 right-2 text-gray-400 hover:text-sky-600 font-bold text-2xl transition"
+                          onClick={() => setProfileCardOpen(false)}
+                          aria-label="Close"
+                        >
+                          &times;
+                        </button>
+                        <div className="flex flex-col items-center space-y-3 mt-2">
+                          <div className="flex justify-center items-center w-full">
+                            <div className="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center shadow px-1 py-1">
+                              <div className="w-14 h-14 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold text-3xl select-none">
+                                {(
+                                  user.fullName?.[0] ||
+                                  user.email?.[0] ||
+                                  "U"
+                                ).toUpperCase()}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="w-full">
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-gray-700">
+                                Name:
+                              </span>
+                              <span className="truncate">
+                                {user.fullName || "-"}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-gray-700">
+                                Email:
+                              </span>
+                              <span className="truncate">
+                                {user.email || "-"}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-gray-700">
+                                Mobile:
+                              </span>
+                              <span>{user.mobileNo || "-"}</span>
+                            </div>
+                          </div>
+                          <button
+                            className="mt-4 w-full bg-gradient-to-r from-sky-600 to-sky-400 text-white py-2 rounded-lg hover:from-sky-700 hover:to-sky-500 shadow transition font-semibold"
+                            onClick={() => {
+                              setProfileCardOpen(false);
+                              navigate("/my-orders");
+                            }}
+                          >
+                            My Orders
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="shopping-cart-icon">
+                    <ShoppingCartIcon
+                      className="h-6 w-6 cursor-pointer"
+                      onClick={() => setCartVisible(true)}
+                    />
+                  </div>
+                  <div className="logout-button">
+                    <button
+                      onClick={handleLogout}
+                      className="hidden md:inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition duration-200"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <button
-                    onClick={handleLogout}
-                    className="hidden md:inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition duration-200"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+              )}
             </div>
+          </div>
 
           {/* Mobile menu button */}
           <div className="-mr-2 flex md:hidden">
             <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="bg-gray-100 p-2 rounded-md inline-flex items-center justify-center text-gray-600 hover:bg-gray-200 focus:outline-none"
-            >
-              <span className="sr-only">Open main menu</span>
-              {!isOpen ? (
-                <svg
-                  className="h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16m-7 6h7"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              )}
-            </button>
+  onClick={() => setIsOpen(!isOpen)}
+  className={`relative bg-white border border-gray-200 shadow-md m-2 rounded-md inline-flex items-center justify-center text-sky-600 hover:bg-sky-100 hover:border-sky-300 transition-all duration-200 focus:outline-none group w-12`}
+  aria-label="Open main menu"
+>
+  <span className="sr-only">Open main menu</span>
+  <span className="inline-block transition-transform duration-300 ease-in-out group-hover:scale-110">
+    {!isOpen ? (
+      <svg
+        className="h-7 w-7"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M4 6h16M4 12h16m-7 6h7"
+        />
+      </svg>
+    ) : (
+      <svg
+        className="h-7 w-7 rotate-90 transition-transform duration-300"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    )}
+  </span>
+</button>
           </div>
         </div>
       </div>
@@ -634,15 +624,15 @@ const Navbar = ({ setCartVisible }) => {
           </a>
         </div> */}
         <div className="flex-shrink-0 flex items-center justify-center mb-6">
-  <a href="/" className="flex items-center">
-    <img
-      src={logo}
-      alt="Swasthamana Logo"
-      className="h-[15vh] w-auto object-contain"
-      // style={{ maxHeight: "48px" }}
-    />
-  </a>
-</div>
+          <a href="/" className="flex items-center">
+            <img
+              src={logo}
+              alt="Swasthamana Logo"
+              className="h-[15vh] w-auto object-contain"
+              // style={{ maxHeight: "48px" }}
+            />
+          </a>
+        </div>
         <div>
           <div className="flex flex-col justify-center items-center mb-4">
             {isLogin ? (
@@ -1029,14 +1019,11 @@ const Navbar = ({ setCartVisible }) => {
               setForgotMsg("");
               setForgotError("");
               try {
-                const res = await fetch(
-                  `${server}/api/user/forgot`,
-                  {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email: forgotEmail }),
-                  }
-                );
+                const res = await fetch(`${server}/api/user/forgot`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email: forgotEmail }),
+                });
                 const data = await res.json();
                 if (res.ok) {
                   setForgotMsg("Reset link sent to your email.");
