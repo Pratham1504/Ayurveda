@@ -10,7 +10,7 @@ const Products = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [companyFilter, setCompanyFilter] = useState('');
     const [ratingFilter, setRatingFilter] = useState(0);
-    const [priceRange, setPriceRange] = useState([0, 10000]);
+    const [priceRange, setPriceRange] = useState(['', '']);
     const [showFilters, setShowFilters] = useState(false);
     const { cart, addToCart, updateQuantity } = useCart();
     const navigate = useNavigate();
@@ -22,7 +22,10 @@ const Products = () => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || product.description.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCompany = !companyFilter || product.company === companyFilter;
         const matchesRating = (product.ratings.reduce((acc, r) => acc + r.rating, 0) / (product.ratings.length || 1)) >= ratingFilter;
-        const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+        const matchesPrice = (
+            (priceRange[0] === '' || product.price >= Number(priceRange[0])) &&
+            (priceRange[1] === '' || product.price <= Number(priceRange[1]))
+        );
         return matchesSearch && matchesCompany && matchesRating && matchesPrice;
     });
 
@@ -109,19 +112,33 @@ const Products = () => {
                                 min="0"
                                 max="10000"
                                 value={priceRange[0]}
-                                onChange={(e) => setPriceRange([+e.target.value, priceRange[1]])}
+                                onChange={(e) => {
+                                    setPriceRange([e.target.value, priceRange[1]]);
+                                }}
+                                onBlur={(e) => {
+                                    const cleaned = e.target.value.replace(/^0+(?!$)/, '');
+                                    setPriceRange([cleaned, priceRange[1]]);
+                                }}
                                 className="border border-sky-300 rounded-md p-2 w-full focus:outline-none"
                                 placeholder="Min ₹"
                             />
+
                             <input
                                 type="number"
                                 min="0"
                                 max="10000"
                                 value={priceRange[1]}
-                                onChange={(e) => setPriceRange([priceRange[0], +e.target.value])}
+                                onChange={(e) => {
+                                    setPriceRange([priceRange[0], e.target.value]);
+                                }}
+                                onBlur={(e) => {
+                                    const cleaned = e.target.value.replace(/^0+(?!$)/, '');
+                                    setPriceRange([priceRange[0], cleaned]);
+                                }}
                                 className="border border-sky-300 rounded-md p-2 w-full focus:outline-none"
                                 placeholder="Max ₹"
                             />
+
                         </div>
                     </div>
                 </div>

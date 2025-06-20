@@ -880,7 +880,7 @@ const Appointment = () => {
             )}
             <PaymentModal
                 isOpen={showModal}
-                onClose={() => setShowModal(false)}
+                onClose={() => {setShowModal(false); setSubmitting(false);}}
                 onConfirm={handlePaymentConfirm}
                 heading="Confirm ₹300 Ayurvedic Consultation"
             />

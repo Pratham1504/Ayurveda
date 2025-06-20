@@ -291,11 +291,10 @@ const Navbar = ({ setCartVisible }) => {
               <button
                 onClick={() => navigate("/")}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition relative
-      ${
-        location.pathname === "/"
-          ? "text-sky-700 font-bold"
-          : "text-gray-800 hover:text-sky-600"
-      }
+      ${location.pathname === "/"
+                    ? "text-sky-700 font-bold"
+                    : "text-gray-800 hover:text-sky-600"
+                  }
     `}
               >
                 Home
@@ -306,11 +305,10 @@ const Navbar = ({ setCartVisible }) => {
               <button
                 onClick={() => navigate("/products")}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition relative
-      ${
-        location.pathname.startsWith("/products")
-          ? "text-sky-700 font-bold"
-          : "text-gray-800 hover:text-sky-600"
-      }
+      ${location.pathname.startsWith("/products")
+                    ? "text-sky-700 font-bold"
+                    : "text-gray-800 hover:text-sky-600"
+                  }
     `}
               >
                 Products
@@ -321,11 +319,10 @@ const Navbar = ({ setCartVisible }) => {
               <button
                 onClick={() => navigate("/consulting")}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition relative
-      ${
-        location.pathname.startsWith("/consulting")
-          ? "text-sky-700 font-bold"
-          : "text-gray-800 hover:text-sky-600"
-      }
+      ${location.pathname.startsWith("/consulting")
+                    ? "text-sky-700 font-bold"
+                    : "text-gray-800 hover:text-sky-600"
+                  }
     `}
               >
                 Consulting
@@ -336,11 +333,10 @@ const Navbar = ({ setCartVisible }) => {
               <button
                 onClick={() => navigate("/blogs")}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition relative
-      ${
-        location.pathname.startsWith("/blogs")
-          ? "text-sky-700 font-bold"
-          : "text-gray-800 hover:text-sky-600"
-      }
+      ${location.pathname.startsWith("/blogs")
+                    ? "text-sky-700 font-bold"
+                    : "text-gray-800 hover:text-sky-600"
+                  }
     `}
               >
                 Blogs
@@ -351,11 +347,10 @@ const Navbar = ({ setCartVisible }) => {
               <button
                 onClick={() => navigate("/ebooks")}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition relative
-      ${
-        location.pathname.startsWith("/ebooks")
-          ? "text-sky-700 font-bold"
-          : "text-gray-800 hover:text-sky-600"
-      }
+      ${location.pathname.startsWith("/ebooks")
+                    ? "text-sky-700 font-bold"
+                    : "text-gray-800 hover:text-sky-600"
+                  }
     `}
               >
                 E-Books
@@ -366,11 +361,10 @@ const Navbar = ({ setCartVisible }) => {
               <button
                 onClick={() => navigate("/about")}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition relative
-      ${
-        location.pathname.startsWith("/about")
-          ? "text-sky-700 font-bold"
-          : "text-gray-800 hover:text-sky-600"
-      }
+      ${location.pathname.startsWith("/about")
+                    ? "text-sky-700 font-bold"
+                    : "text-gray-800 hover:text-sky-600"
+                  }
     `}
               >
                 About
@@ -381,30 +375,30 @@ const Navbar = ({ setCartVisible }) => {
             </div>
             <div className="flex items-center gap-4 ml-8">
               {/* Login Button or User/Cart Icons */}
-              
+
               {!isAuth ? (
                 <>
 
-                <div className="shopping-cart-icon mr-2">
+                  <div className="shopping-cart-icon mr-2">
                     <ShoppingCartIcon
                       className="h-6 w-6 cursor-pointer"
                       onClick={() => setCartVisible(true)}
                     />
                   </div>
-                <button
-                  onClick={() => {
-                    resetAuthForms();
-                    setModalIsOpen(true);
-                    setIsLogin(true);
-                  }}
-                  className="hidden md:inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition duration-200"
-                >
-                  Login
-                </button>
+                  <button
+                    onClick={() => {
+                      resetAuthForms();
+                      setModalIsOpen(true);
+                      setIsLogin(true);
+                    }}
+                    className="hidden md:inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition duration-200"
+                  >
+                    Login
+                  </button>
                 </>
               ) : (
                 <div className="cart-user-logout flex items-center gap-4 ml-10">
-                  
+
                   <div className="profile-icon-card relative inline-block">
                     <div
                       className="h-8 w-8 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold text-lg cursor-pointer select-none"
@@ -498,45 +492,45 @@ const Navbar = ({ setCartVisible }) => {
           {/* Mobile menu button */}
           <div className="-mr-2 flex md:hidden">
             <button
-  onClick={() => setIsOpen(!isOpen)}
-  className={`relative bg-white border border-gray-200 shadow-md m-2 rounded-md inline-flex items-center justify-center text-sky-600 hover:bg-sky-100 hover:border-sky-300 transition-all duration-200 focus:outline-none group w-12`}
-  aria-label="Open main menu"
->
-  <span className="sr-only">Open main menu</span>
-  <span className="inline-block transition-transform duration-300 ease-in-out group-hover:scale-110">
-    {!isOpen ? (
-      <svg
-        className="h-7 w-7"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M4 6h16M4 12h16m-7 6h7"
-        />
-      </svg>
-    ) : (
-      <svg
-        className="h-7 w-7 rotate-90 transition-transform duration-300"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
-    )}
-  </span>
-</button>
+              onClick={() => setIsOpen(!isOpen)}
+              className={`relative bg-white border border-gray-200 shadow-md m-2 rounded-md inline-flex items-center justify-center text-sky-600 hover:bg-sky-100 hover:border-sky-300 transition-all duration-200 focus:outline-none group w-12`}
+              aria-label="Open main menu"
+            >
+              <span className="sr-only">Open main menu</span>
+              <span className="inline-block transition-transform duration-300 ease-in-out group-hover:scale-110">
+                {!isOpen ? (
+                  <svg
+                    className="h-7 w-7"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16m-7 6h7"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="h-7 w-7 rotate-90 transition-transform duration-300"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                )}
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -629,7 +623,7 @@ const Navbar = ({ setCartVisible }) => {
               src={logo}
               alt="Swasthamana Logo"
               className="h-[15vh] w-auto object-contain"
-              // style={{ maxHeight: "48px" }}
+            // style={{ maxHeight: "48px" }}
             />
           </a>
         </div>
@@ -792,12 +786,19 @@ const Navbar = ({ setCartVisible }) => {
                 required
               />
               <input
-                type="text"
+                type="tel"
+                inputMode="numeric"
                 placeholder="Mobile Number"
                 value={signupMobile}
-                onChange={(e) => setSignupMobile(e.target.value)}
+                onChange={(e) => {
+                  const onlyDigits = e.target.value.replace(/\D/g, ''); // remove non-digits
+                  if (onlyDigits.length <= 10) {
+                    setSignupMobile(onlyDigits);
+                  }
+                }}
                 className="w-full border px-3 py-2 rounded-md text-sm"
                 required
+                pattern="^\d{10}$"
               />
               <div className="relative">
                 <input
@@ -1054,9 +1055,8 @@ const Navbar = ({ setCartVisible }) => {
             )}
             <button
               type="submit"
-              className={`w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700 ${
-                resendTimer > 0 ? "opacity-60 cursor-not-allowed" : ""
-              }`}
+              className={`w-full bg-sky-600 text-white py-2 rounded-md hover:bg-sky-700 ${resendTimer > 0 ? "opacity-60 cursor-not-allowed" : ""
+                }`}
               disabled={resendTimer > 0}
             >
               {resendTimer > 0
