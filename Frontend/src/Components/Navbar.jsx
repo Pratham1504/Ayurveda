@@ -114,6 +114,7 @@ const Navbar = ({ setCartVisible }) => {
   // Handle OTP verification
   const handleOtpVerify = async (e) => {
     e.preventDefault();
+
     if (!otp) {
       setOtpError("Please enter the OTP");
       return;
@@ -122,7 +123,7 @@ const Navbar = ({ setCartVisible }) => {
     await verifyOtp(parseInt(otp), () => {
       setOtpModalOpen(false);
       setIsLogin(true);
-      setModalIsOpen(false);
+      setModalIsOpen(true);
     });
   };
 

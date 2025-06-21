@@ -444,8 +444,6 @@
 
 // export default MyOrders;
 
-
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { server } from "../main";
@@ -491,14 +489,14 @@ const MyOrders = () => {
   }, []);
 
   // Filtered and searched orders
-  const filteredOrders = orders.filter(order => {
+  const filteredOrders = orders.filter((order) => {
     // Status filter
     const statusMatch =
       statusFilter === "All" || order.orderStatus === statusFilter;
     // Search filter (by order id or product name)
     const searchLower = search.toLowerCase();
     const idMatch = order._id?.toLowerCase().includes(searchLower);
-    const productMatch = order.items?.some(item =>
+    const productMatch = order.items?.some((item) =>
       item.product?.name?.toLowerCase().includes(searchLower)
     );
     return statusMatch && (idMatch || productMatch || !search);
@@ -514,23 +512,27 @@ const MyOrders = () => {
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
-        <input
-          type="text"
-          placeholder="Search by Order ID or Product Name"
-          className="border border-sky-200 rounded-lg px-4 py-2 w-full sm:w-1/2 focus:outline-none focus:ring-2 focus:ring-sky-300"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-        <select
-          className="border border-sky-200 rounded-lg px-4 py-2 w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-sky-300"
-          value={statusFilter}
-          onChange={e => setStatusFilter(e.target.value)}
-        >
-          {statusOptions.map(opt => (
-            <option key={opt} value={opt}>{opt}</option>
-          ))}
-        </select>
+      <div className="w-full mb-8">
+        <div className="flex flex-col sm:flex-row gap-4 w-full">
+          <input
+            type="text"
+            placeholder="Search by Order ID or Product Name"
+            className="border border-sky-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-sky-300"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select
+            className="border border-sky-300 rounded-lg px-4 py-2 w-full sm:w-48 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            {statusOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {loading ? (
